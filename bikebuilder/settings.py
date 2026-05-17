@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ai',
-    'builds',
-    'catalog',
-    'users',
+    'corsheaders',
+    'rest_framework',
+    'apps.ai',
+    'apps.builds',
+    'apps.catalog',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
@@ -119,3 +121,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+AUTH_USER_MODEL = 'users.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'auth.authentication.FirebaseAuthentication',
+    ],
+}
+
+FIREBASE_CREDENTIALS_PATH = BASE_DIR / 'firebase' / 'firebase-credentials.json'
