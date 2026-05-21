@@ -16,7 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from apps.users.views import MyView
+from apps.category.views import ComponentsList
+from apps.builds.views import BuildListView, BuildDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/users/me/', MyView.as_view()),
+    path('api/components/', ComponentsList.as_view()),
+    path('api/builds/', BuildListView.as_view()),
+    path('api/builds/<int:pk>/', BuildDetailView.as_view()),
 ]
