@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithRedirect, getRedirectResult } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../../firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -18,15 +18,6 @@ const Login = () => {
         if (currentUser) navigate('/');
     }, [currentUser]);
 
-    useEffect(() => {
-        getRedirectResult(auth).then(async (result) => {
-            if (result) {
-                await api.get('/api/users/me/');
-                navigate('/');
-            }
-        }).catch(() => setError("Google sign-in failed"));
-    }, []);
-
     if (loading) return (
         <div>loading</div>
     );
@@ -41,7 +32,6 @@ const Login = () => {
                 await signInWithEmailAndPassword(auth, email, password);
             }
             await api.get("/api/users/me/");
-            navigate("/");
         } catch (err) {
             if (err.code === "auth/email-already-in-use") setError("An account with this email already exists.");
             else if (err.code === "auth/weak-password") setError("Password must be at least 6 characters.");
@@ -49,8 +39,13 @@ const Login = () => {
         }
     };
 
-    const handleGoogleLogin = () => {
-        signInWithRedirect(auth, googleProvider);
+    const handleGoogleLogin = async () => {
+        try {
+            await signInWithPopup(auth, googleProvider);
+            await api.get('/api/users/me/');
+        } catch {
+            setError("Google sign-in failed");
+        }
     };
 
     return (
