@@ -2,6 +2,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import ProtectedRoute from './components/ProtextedRoute/ProtectedRoute'
 import Login from './pages/LoginPage/Login'
 import HomePage from './pages/HomePage/Home'
+import Components from './pages/ComponentsPage/Components'
+import Builds from './pages/BuildsPage/Builds'
 import './App.css'
 
 function App() {
@@ -12,6 +14,8 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/components" element={<Components />}/>
+          <Route path="/builds" element={<Builds />}/>
         </Route>
       </Routes>
     </BrowserRouter>

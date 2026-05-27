@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'apps.ai',
-    'apps.builds',
     'apps.category',
     'apps.users',
 ]
