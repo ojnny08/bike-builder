@@ -11,5 +11,5 @@ class BikeTypeList(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        bike_types = BikeType.objects.prefetch_related("component_rules").all()
+        bike_types = BikeType.objects.all()
         return Response(BikeTypeSerializer(bike_types, many=True).data)

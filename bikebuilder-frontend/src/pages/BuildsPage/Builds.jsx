@@ -27,8 +27,8 @@ const Builds = () => {
 
     const handleSelectBikeType = (bikeType) => {
         updateBuild({ bikeType });
-        const firstRule = bikeType.component_rules?.[0];
-        if (firstRule) setActiveCategory(firstRule.component_type);
+        const first = bikeType.rules?.required?.[0];
+        if (first) setActiveCategory(first);
     };
 
     if (!build.bikeType) {
@@ -48,7 +48,7 @@ const Builds = () => {
                             >
                                 <span className="bike-type-name">{bt.name}</span>
                                 <span className="bike-type-count">
-                                    {bt.component_rules?.length ?? 0} components
+                                    {bt.rules?.required?.length ?? 0} components
                                 </span>
                             </button>
                         ))}
@@ -58,12 +58,12 @@ const Builds = () => {
         );
     }
 
-    const rules = build.bikeType.component_rules ?? [];
+    const { required = [], optional = [] } = build.bikeType.rules ?? {};
+    const allCategories = [...required, ...optional];
     const selectedByCategory = Object.fromEntries(
-        build.components.map(c => [c.category, c])
+        build.components.map(c => [c.component_type, c])
     );
-    const requiredCount = rules.filter(r => r.is_required).length;
-    const filledRequired = rules.filter(r => r.is_required && selectedByCategory[r.component_type]).length;
+    const filledRequired = required.filter(t => selectedByCategory[t]).length;
 
     return (
         <div className="builds-page">
@@ -71,7 +71,7 @@ const Builds = () => {
                 <div>
                     <h2 className="builds-title">{build.bikeType.name} Build</h2>
                     <span className="progress-text">
-                        {filledRequired} / {requiredCount} required components selected
+                        {filledRequired} / {required.length} required components selected
                     </span>
                 </div>
                 <button className="start-over-btn" onClick={startNewBuild}>Start Over</button>
@@ -79,18 +79,19 @@ const Builds = () => {
 
             <div className="builder-layout">
                 <aside className="category-sidebar">
-                    {rules.map(rule => {
-                        const isFilled = !!selectedByCategory[rule.component_type];
-                        const isActive = activeCategory === rule.component_type;
+                    {allCategories.map(type => {
+                        const isFilled = !!selectedByCategory[type];
+                        const isActive = activeCategory === type;
+                        const isRequired = required.includes(type);
                         return (
                             <button
-                                key={rule.component_type}
+                                key={type}
                                 className={`category-btn${isActive ? " active" : ""}${isFilled ? " filled" : ""}`}
-                                onClick={() => setActiveCategory(rule.component_type)}
+                                onClick={() => setActiveCategory(type)}
                             >
-                                <span className="category-label">{rule.component_type}</span>
+                                <span className="category-label">{type.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</span>
                                 <span className="category-status">
-                                    {isFilled ? "✓" : rule.is_required ? "required" : "optional"}
+                                    {isFilled ? "✓" : isRequired ? "required" : "optional"}
                                 </span>
                             </button>
                         );
@@ -106,7 +107,7 @@ const Builds = () => {
                     ) : (
                         <div className="component-list">
                             {components.map(comp => {
-                                const isSelected = selectedByCategory[comp.category]?.id === comp.id;
+                                const isSelected = selectedByCategory[comp.component_type]?.id === comp.id;
                                 return (
                                     <div
                                         key={comp.id}
@@ -135,7 +136,7 @@ const Builds = () => {
                         <ul className="summary-list">
                             {build.components.map(c => (
                                 <li key={c.id} className="summary-item">
-                                    <span className="summary-category">{c.category}</span>
+                                    <span className="summary-category">{c.component_type}</span>
                                     <span className="summary-name">{c.name}</span>
                                 </li>
                             ))}
