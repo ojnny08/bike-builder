@@ -1,0 +1,274 @@
+.builds-page {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.builds-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.builds-subtitle {
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.loading-text {
+    color: #999;
+}
+
+.empty-state {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+/* Bike Type Selection */
+.bike-type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.bike-type-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 32px 24px;
+    background: #fff;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.bike-type-card:hover {
+    border-color: #0a0a0a;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.bike-type-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.bike-type-count {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+/* Builder Layout */
+.builder-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.progress-text {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 4px;
+    display: block;
+}
+
+.start-over-btn {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #666;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.start-over-btn:hover {
+    border-color: #0a0a0a;
+    color: #1a1a1a;
+}
+
+.builder-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr 260px;
+    gap: 16px;
+    align-items: start;
+}
+
+/* Category Sidebar */
+.category-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: #fff;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.category-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: background 0.12s;
+}
+
+.category-btn:hover {
+    background: #f4f4f4;
+}
+
+.category-btn.active {
+    background: #0a0a0a;
+}
+
+.category-btn.active .category-label,
+.category-btn.active .category-status {
+    color: #fff;
+}
+
+.category-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.category-status {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.category-btn.filled .category-status {
+    color: #22c55e;
+    font-weight: 600;
+}
+
+.category-btn.active.filled .category-status {
+    color: #86efac;
+}
+
+/* Component Panel */
+.component-panel {
+    background: #fff;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 400px;
+}
+
+.panel-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+}
+
+.component-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.component-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s;
+}
+
+.component-card:hover {
+    border-color: #0a0a0a;
+}
+
+.component-card.selected {
+    border-color: #0a0a0a;
+    background: #f9f9f9;
+}
+
+.component-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+}
+
+.component-brand {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.selected-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    background: #0a0a0a;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+/* Build Summary */
+.build-summary {
+    background: #fff;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 20px;
+    position: sticky;
+    top: 106px;
+}
+
+.summary-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+}
+
+.summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.summary-category {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #999;
+    font-weight: 600;
+}
+
+.summary-name {
+    font-size: 0.875rem;
+    color: #1a1a1a;
+    font-weight: 500;
+}
