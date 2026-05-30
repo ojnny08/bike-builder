@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import BikeType, BikeTypeComponentRule, Component
+from .models import BikeType, BikeTypeComponentRule
 
 
 def _get_specs(obj):
@@ -86,18 +86,6 @@ def _get_specs(obj):
     except Exception:
         pass
     return {}
-
-
-class ComponentSerializer(serializers.ModelSerializer):
-    specs = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Component
-        fields = ["id", "name", "brand", "price", "weight_grams", "category", "in_stock", "image_url", "specs"]
-
-    def get_specs(self, obj):
-        return _get_specs(obj)
-
 
 class BikeTypeComponentRuleSerializer(serializers.ModelSerializer):
     component_type = serializers.CharField(source="get_component_type_display")

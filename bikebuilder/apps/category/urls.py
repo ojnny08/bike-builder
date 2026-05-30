@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import BikeTypeList, ComponentsList
+from .views import BikeTypeList
 
 urlpatterns = [
-    path("components/", ComponentsList.as_view()),
     path("bike-types/", BikeTypeList.as_view()),
 ]

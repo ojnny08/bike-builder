@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.ai',
     'apps.builds',
     'apps.category',
+    'apps.components',
     'apps.users',
 ]
 

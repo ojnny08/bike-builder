@@ -20,7 +20,7 @@ const Builds = () => {
     useEffect(() => {
         if (!activeCategory) return;
         setLoadingComponents(true);
-        api.get("/api/category/components/", { params: { category: activeCategory } })
+        api.get("/api/components/components/", { params: { category: activeCategory } })
             .then(res => setComponents(res.data))
             .finally(() => setLoadingComponents(false));
     }, [activeCategory]);

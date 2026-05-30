@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/users/me/', MyView.as_view()),
     path('api/', include('apps.category.urls')),
+    path('api/', include('apps.components.urls')),
     path('api/builds/', include('apps.builds.urls')),
 ]
