@@ -1,8 +1,8 @@
-from rest_framework.serializers import serializer
+from rest_framework import serializers
 from .models import Components
 
-class ComponentsSerializer(serializer.ModelSerializer):
+class ComponentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Components
-        fields = ['id', 'category', 'bike_type', 'name', 'brand', 'weight_grams', 'price', "in_stock", "image_url", "specs"]
+        fields = ['id', 'component_type', 'name', 'brand', 'weight_grams', 'price', 'in_stock', 'image_url']
         

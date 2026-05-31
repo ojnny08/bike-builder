@@ -11,3 +11,6 @@ class BikeTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = BikeType
         fields = ["id", "name", "slug", "rules"]
+
+
+        

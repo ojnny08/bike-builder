@@ -1,12 +1,28 @@
 from django.db import models
-from ..category.models import Category, BikeType
-# Create your models here.
+from ..category.models import BikeType
+
+
+class ComponentType(models.TextChoices):
+    FRAME = "frame", "Frame"
+    FORK = "fork", "Fork"
+    BOTTOM_BRACKET = "bottom_bracket", "Bottom Bracket"
+    CRANKSET = "crankset", "Crankset"
+    CASSETTE = "cassette", "Cassette"
+    REAR_DERAILLEUR = "rear_derailleur", "Rear Derailleur"
+    FRONT_DERAILLEUR = "front_derailleur", "Front Derailleur"
+    WHEEL = "wheel", "Wheel"
+    TIRE = "tire", "Tire"
+    HANDLEBAR = "handlebar", "Handlebar"
+    STEM = "stem", "Stem"
+    BRAKE = "brake", "Brake"
+    SADDLE = "saddle", "Saddle"
+    SEATPOST = "seatpost", "Seatpost"
+
 
 class Components(models.Model):
-    category = models.Model(Category, on_delete=models.CASCADE)
-    bike_type = models.Model(BikeType, on_delete=models.CASCADE)
-    name = models.CharField(max_length=20)
-    brand = models.CharField(max_length=20)
+    component_type = models.CharField(max_length=30, choices=ComponentType.choices)
+    name = models.CharField(max_length=200)
+    brand = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     weight_grams = models.PositiveIntegerField(help_text="Weight in grams")
     description = models.TextField(blank=True)
@@ -53,23 +69,24 @@ class Frame(Components):
     rear_axle_standard = models.CharField(max_length=20, choices=RearAxleFit.choices)
     max_tire_clearance_mm = models.PositiveSmallIntegerField()
 
-    class BottomBracket(Components):
-        class ShellType(models.TextChoices):
-            THREADED = "threaded", "Threaded (BSA)"
-            PRESS_FIT = "press_fit", "Press Fit"
-            T47 = "t47", "T47"
-            BB30 = "bb30", "BB30"
 
-        class SpindleInterface(models.TextChoices):
-            SQUARE_TAPER = "square_taper", "Square Taper"
-            ISIS = "isis", "ISIS/Octalink"
-            MM_24 = "24mm", "24mm (Shimano/SRAM)"
-            MM_30 = "30mm", "30mm (BB30)"
-            DUB = "dub", "SRAM DUB"
+class BottomBracket(Components):
+    class ShellType(models.TextChoices):
+        THREADED = "threaded", "Threaded (BSA)"
+        PRESS_FIT = "press_fit", "Press Fit"
+        T47 = "t47", "T47"
+        BB30 = "bb30", "BB30"
 
-        shell_type = models.CharField(max_length=20, choices=ShellType.choices)
-        spindle_interface = models.CharField(max_length=20, choices=SpindleInterface.choices)
-        shell_width_mm = models.PositiveSmallIntegerField()
+    class SpindleInterface(models.TextChoices):
+        SQUARE_TAPER = "square_taper", "Square Taper"
+        ISIS = "isis", "ISIS/Octalink"
+        MM_24 = "24mm", "24mm (Shimano/SRAM)"
+        MM_30 = "30mm", "30mm (BB30)"
+        DUB = "dub", "SRAM DUB"
+
+    shell_type = models.CharField(max_length=20, choices=ShellType.choices)
+    spindle_interface = models.CharField(max_length=20, choices=SpindleInterface.choices)
+    shell_width_mm = models.PositiveSmallIntegerField()
 
 
 class Crankset(Components):

@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from auth.authentication import FirebaseAuthentication
-from .serializer import ComponentSerializer
+from .serializer import ComponentsSerializer
 from .models import Components
 # Create your views here.
 class ComponentsList(APIView):
@@ -11,18 +11,14 @@ class ComponentsList(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        components = Components.objects.select_related(
-            "frame", "fork", "bottombracket", "crankset", "cassette",
-            "rearderailleur", "frontderailleur", "wheel", "tire",
-            "handlebar", "stem", "brake", "saddle", "seatpost",
-        ).all()
+        components = Components.objects.all()
 
-        category = request.query_params.get("category", "")
-        if category:
-            components = components.filter(category__slug=category)
+        component_type = request.query_params.get("category", "")
+        if component_type:
+            components = components.filter(component_type=component_type)
 
         search = request.query_params.get("search", "")
         if search:
             components = components.filter(name__icontains=search)
 
-        return Response(ComponentSerializer(components, many=True).data)
+        return Response(ComponentsSerializer(components, many=True).data)
