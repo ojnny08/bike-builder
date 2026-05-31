@@ -4,4 +4,4 @@ from .models import Build
 class BuildsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Build
-        fields = ['id', 'user', 'bikeType', 'components', 'status', 'created_at', 'updated_at']
+        fields = ['id', 'bikeType', 'components', 'status', 'created_at', 'updated_at']

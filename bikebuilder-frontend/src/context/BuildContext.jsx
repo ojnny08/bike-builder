@@ -19,7 +19,7 @@ export const BuildProvider = ({ children }) => {
         setBuild((prev) => ({
             ...prev,
             components: [
-                ...prev.components.filter((c) => c.category !== component.category),
+                ...prev.components.filter((c) => c.component_type !== component.component_type),
                 component,
             ],
         }));

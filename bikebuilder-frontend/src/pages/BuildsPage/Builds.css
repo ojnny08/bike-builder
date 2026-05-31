@@ -75,6 +75,31 @@
     display: block;
 }
 
+.builder-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.save-build-btn {
+    padding: 8px 20px;
+    background: #0a0a0a;
+    border: 1.5px solid #0a0a0a;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.save-build-btn:hover:not(:disabled) {
+    background: #333;
+}
+
+.save-build-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
 .start-over-btn {
     padding: 8px 20px;
     background: transparent;
