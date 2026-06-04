@@ -1,0 +1,6 @@
+.page-wrapper {
+    margin-top: 90px;
+    padding: 32px;
+    min-height: calc(100vh - 90px);
+    box-sizing: border-box;
+}

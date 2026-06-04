@@ -1,6 +1,154 @@
-.builds-page {
+.builder-wrapper {
+    height: calc(100vh - 90px);
+    margin: -32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Progress bar — fixed below navbar */
+.progress-bar-container {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+    z-index: 90;
+    padding: 12px 32px;
+    overflow-x: auto;
+}
+
+.progress-steps {
+    display: flex;
+    align-items: stretch;
     max-width: 1200px;
     margin: 0 auto;
+    height: 40px;
+}
+
+.progress-step {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px 0 28px;
+    background: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%, 14px 50%);
+    margin-right: -1px;
+    transition: background 0.15s;
+    position: relative;
+}
+
+.progress-step.first {
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
+    padding-left: 16px;
+}
+
+.progress-step.last {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 14px 50%);
+}
+
+.progress-step.active {
+    background: #0a0a0a;
+}
+
+.progress-step.filled {
+    background: #22c55e;
+}
+
+.step-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.progress-step.active .step-label {
+    color: #fff;
+    font-weight: 600;
+}
+
+.progress-step.filled .step-label {
+    color: #fff;
+}
+
+/* Step navigation */
+.step-nav {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid #e5e5e5;
+}
+
+.step-back-btn {
+    padding: 10px 24px;
+    background: transparent;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #666;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.step-back-btn:hover:not(:disabled) {
+    border-color: #0a0a0a;
+    color: #1a1a1a;
+}
+
+.step-back-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.step-next-btn {
+    padding: 10px 32px;
+    background: #0a0a0a;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.step-next-btn:hover {
+    background: #333;
+}
+
+/* Step layout — no sidebar */
+.step-layout {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 16px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.progress-bar-spacer {
+    flex-shrink: 0;
+    height: 65px;
+}
+
+.builds-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px 32px 0;
 }
 
 .builds-title {
@@ -203,7 +351,7 @@
     border: 1.5px solid #e5e5e5;
     border-radius: 12px;
     padding: 20px;
-    min-height: 400px;
+    overflow-y: auto;
 }
 
 .panel-title {
@@ -267,8 +415,7 @@
     border: 1.5px solid #e5e5e5;
     border-radius: 12px;
     padding: 20px;
-    position: sticky;
-    top: 106px;
+    overflow-y: auto;
 }
 
 .summary-title {

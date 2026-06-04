@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import NavBar from '../Bars/NavBar'
+import './ProtectedRoute.css'
 
 const ProtectedRoute = ({ children }) => {
     const { currentUser, loading } = useAuth();
@@ -11,7 +12,7 @@ const ProtectedRoute = ({ children }) => {
     return (
         <div>
             <NavBar />
-            <main style={{ marginTop: '90px', padding: '32px' }}>
+            <main className="page-wrapper">
                 <Outlet />
             </main>
         </div>
