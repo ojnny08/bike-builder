@@ -14,6 +14,7 @@ const NavBar = () => {
                 <NavLink to="/">Home</NavLink>
                 <NavLink to="/components">Components</NavLink>
                 <NavLink to="/builds">Builds</NavLink>
+                <NavLink to="/builds-all">Public Builds</NavLink>
                 <button onClick={logout}>Logout</button>
             </div>
         </nav>

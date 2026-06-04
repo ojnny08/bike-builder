@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import { useBuild } from "../../context/BuildContext";
 import { api } from "../../api/axios";
+import { useNavigate } from "react-router-dom";
 import "./Builds.css";
 
 const Builds = () => {
-    const { build, startNewBuild, updateBuild, addComponent } = useBuild();
+    const { build, emptyBuild, updateBuild, addComponent } = useBuild();
+    const [name, setName] = useState("");
     const [bikeTypes, setBikeTypes] = useState([]);
     const [loadingTypes, setLoadingTypes] = useState(true);
     const [activeCategory, setActiveCategory] = useState(null);
     const [components, setComponents] = useState([]);
+    const [status, setStatus] = useState(null);
     const [loadingComponents, setLoadingComponents] = useState(false);
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         api.get("/api/category/bike-types/")
@@ -29,14 +33,21 @@ const Builds = () => {
 
     const handleSaveBuild = async () => {
         setSaving(true);
+        const requiredTypes = build.bikeType.rules?.required ?? [];
+        const selectedTypes = new Set(build.components.map(c => c.component_type));
+        const allRequiredFilled = requiredTypes.every(t => selectedTypes.has(t));
         try {
             await api.post("/api/builds/build/", {
+                name: name || `${build.bikeType.name} Build`,
                 bikeType: build.bikeType.id,
                 components: build.components.map(c => c.id),
+                status: allRequiredFilled ? "complete" : "in_progress",
             });
             setSaved(true);
+            navigate("/builds-all")
         } finally {
             setSaving(false);
+            emptyBuild();
         }
     };
 
@@ -89,12 +100,19 @@ const Builds = () => {
                 <div className="builder-header">
                     <div>
                         <h2 className="builds-title">{build.bikeType.name} Build</h2>
+                        <input
+                            className="build-name-input"
+                            type="text"
+                            placeholder="Name your build..."
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                        />
                         <span className="progress-text">
                             {filledRequired} / {required.length} required components selected
                         </span>
                     </div>
                     <div className="builder-actions">
-                    <button className="start-over-btn" onClick={startNewBuild}>Start Over</button>
+                    <button className="start-over-btn" onClick={emptyBuild}>Start Over</button>
                     <button className="save-build-btn" onClick={handleSaveBuild} disabled={saving || saved}>
                         {saved ? "Saved!" : saving ? "Saving..." : "Save Build"}
                     </button>

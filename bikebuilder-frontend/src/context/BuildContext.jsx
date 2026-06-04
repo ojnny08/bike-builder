@@ -4,14 +4,16 @@ const BuildContext = createContext();
 
 const EMPTY_BUILD = {
     id: null,
+    name: "",
     bikeType: null,
     steps: null,
-    components: []
+    components: [],
+    status: null
 };
 export const BuildProvider = ({ children }) => {
     const [build, setBuild] = useState(EMPTY_BUILD);
 
-    const startNewBuild = () => setBuild(EMPTY_BUILD);
+    const emptyBuild = () => setBuild(EMPTY_BUILD);
 
     const updateBuild = (patch) => setBuild((prev) => ({ ...prev, ...patch }));
 
@@ -26,7 +28,7 @@ export const BuildProvider = ({ children }) => {
     };
 
     return (
-        <BuildContext.Provider value={{ build, startNewBuild, updateBuild, addComponent }}>
+        <BuildContext.Provider value={{ build, emptyBuild, updateBuild, addComponent }}>
             {children}
         </BuildContext.Provider>
     );

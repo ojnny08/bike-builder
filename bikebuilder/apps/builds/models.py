@@ -11,8 +11,9 @@ class Build(models.Model):
         COMPLETE = 'complete', 'Complete'
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=40, default="New Build")
     bikeType = models.ForeignKey(BikeType, on_delete=models.CASCADE)
     components = models.ManyToManyField(Components, blank=True)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.IN_PROGRESS)
-    created_at = models.DateTimeField(auto_created=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

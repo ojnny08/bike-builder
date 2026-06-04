@@ -4,6 +4,7 @@ import Login from './pages/LoginPage/Login'
 import HomePage from './pages/HomePage/Home'
 import Components from './pages/ComponentsPage/Components'
 import Builds from './pages/BuildsPage/Builds'
+import PublicBuilds from './pages/BuildsPage/PublicBuilds'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/components" element={<Components />}/>
           <Route path="/builds" element={<Builds />}/>
+          <Route path="/builds-all" element={<PublicBuilds />}/>
         </Route>
       </Routes>
     </BrowserRouter>

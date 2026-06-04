@@ -68,6 +68,22 @@
     margin-bottom: 24px;
 }
 
+.build-name-input {
+    display: block;
+    margin: 8px 0 6px;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 8px;
+    outline: none;
+    width: 260px;
+    transition: border-color 0.15s;
+}
+
+.build-name-input:focus {
+    border-color: #0a0a0a;
+}
+
 .progress-text {
     font-size: 0.85rem;
     color: #666;
