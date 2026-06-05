@@ -8,13 +8,9 @@
 }
 
 .progress-bar-container {
-    position: fixed;
-    top: 110px;
-    left: 0;
-    right: 0;
+    flex-shrink: 0;
     background: var(--bg);
     border-bottom: 1px solid var(--border);
-    z-index: 90;
     padding: 12px 32px;
     overflow-x: auto;
 }
@@ -52,11 +48,11 @@
 }
 
 .progress-step.active {
-    background: var(--accent);
+    background: #888;
 }
 
 .progress-step.filled {
-    background: var(--green-dark);
+    background: var(--accent);
 }
 
 .step-label {
@@ -70,7 +66,7 @@
 
 .progress-step.active .step-label,
 .progress-step.filled .step-label {
-    color: var(--text);
+    color: #fff;
     font-weight: 600;
 }
 
@@ -170,7 +166,7 @@
     font-size: 0.9rem;
 }
 
-/* Bike Type Selection */
+
 .bike-type-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -216,7 +212,7 @@
     font-weight: 500;
 }
 
-/* Builder Layout */
+
 .builder-header {
     display: flex;
     align-items: flex-start;
@@ -300,7 +296,7 @@
     align-items: start;
 }
 
-/* Category Sidebar */
+
 .category-sidebar {
     display: flex;
     flex-direction: column;
@@ -358,7 +354,7 @@
     color: #bbf7d0;
 }
 
-/* Component Panel */
+
 .component-panel {
     background: var(--surface);
     border: 1.5px solid var(--border);
@@ -423,7 +419,7 @@
     white-space: nowrap;
 }
 
-/* Build Summary */
+
 .build-summary {
     background: var(--surface);
     border: 1.5px solid var(--border);

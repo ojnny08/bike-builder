@@ -67,7 +67,6 @@ const Builder = () => {
                 selectedByCategory={selectedByCategory}
                 onStepClick={setCurrentStep}
             />
-            <div className="progress-bar-spacer" />
 
             <div className="builds-page">
                 <div className="builder-header">
