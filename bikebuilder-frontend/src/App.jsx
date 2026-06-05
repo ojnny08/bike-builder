@@ -16,8 +16,8 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/components" element={<Components />}/>
-          <Route path="/builds" element={<Builds />}/>
-          <Route path="/builds-all" element={<PublicBuilds />}/>
+          <Route path="/builds/new" element={<Builds />}/>
+          <Route path="/builds" element={<PublicBuilds />}/>
         </Route>
       </Routes>
     </BrowserRouter>

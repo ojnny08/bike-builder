@@ -49,7 +49,7 @@ const PublicBuilds = () => {
                             </div>
                             <p className="build-component-count">{build.components.length} components</p>
                             <p className="build-date">{new Date(build.created_at).toLocaleDateString()}</p>
-                            <button onClick={() => handleDelete(build.id)}>Delete</button>
+                            <button className="delete-btn" onClick={() => handleDelete(build.id)}>Delete</button>
                         </div>
                     ))}
                 </div>

@@ -1,24 +1,36 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./NavBar.css";
 
 const NavBar = () => {
-
-    const { logout } = useAuth();
-
+    const { currentUser, logout } = useAuth();
 
     return (
         <nav className="navbar">
-            <span className="navbar-brand">BikeBuilder</span>
+            <div className="navbar-top">
+                <NavLink to="/" className="navbar-brand">
+                    <span className="navbar-brand-icon">&#x1F6B4;</span>
+                    BUILD A BIKE
+                </NavLink>
+                <div className="navbar-auth">
+                    {currentUser ? (
+                        <button className="navbar-auth-btn" onClick={logout}>Log Out</button>
+                    ) : (
+                        <>
+                            <Link to="/login" className="navbar-auth-link">Log In</Link>
+                            <span className="navbar-auth-sep">|</span>
+                            <Link to="/signup" className="navbar-auth-link">Sign Up</Link>
+                        </>
+                    )}
+                </div>
+            </div>
             <div className="navbar-links">
-                <NavLink to="/">Home</NavLink>
-                <NavLink to="/components">Components</NavLink>
-                <NavLink to="/builds">Builds</NavLink>
-                <NavLink to="/builds-all">Public Builds</NavLink>
-                <button onClick={logout}>Logout</button>
+                <NavLink to="/builds/new">Bike Builder</NavLink>
+                <NavLink to="/components">Products</NavLink>
+                <NavLink to="/builds" end>Completed Builds</NavLink>
             </div>
         </nav>
-    )
-}
+    );
+};
 
 export default NavBar;

@@ -1,19 +1,19 @@
 .builder-wrapper {
     height: calc(100vh - 90px);
-    margin: -32px;
+    margin: -32px -64px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    background: var(--bg);
 }
 
-/* Progress bar — fixed below navbar */
 .progress-bar-container {
     position: fixed;
-    top: 90px;
+    top: 110px;
     left: 0;
     right: 0;
-    background: #fff;
-    border-bottom: 1px solid #e5e5e5;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
     z-index: 90;
     padding: 12px 32px;
     overflow-x: auto;
@@ -33,7 +33,7 @@
     align-items: center;
     justify-content: center;
     padding: 0 20px 0 28px;
-    background: #f0f0f0;
+    background: var(--surface);
     border: none;
     cursor: pointer;
     clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%, 14px 50%);
@@ -52,55 +52,50 @@
 }
 
 .progress-step.active {
-    background: #0a0a0a;
+    background: var(--accent);
 }
 
 .progress-step.filled {
-    background: #22c55e;
+    background: var(--green-dark);
 }
 
 .step-label {
     font-size: 0.72rem;
     font-weight: 500;
-    color: #666;
+    color: var(--text-secondary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.progress-step.active .step-label {
-    color: #fff;
+.progress-step.active .step-label,
+.progress-step.filled .step-label {
+    color: var(--text);
     font-weight: 600;
 }
 
-.progress-step.filled .step-label {
-    color: #fff;
-}
-
-/* Step navigation */
 .step-nav {
     flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 16px 0;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid var(--border);
 }
 
 .step-back-btn {
     padding: 10px 24px;
     background: transparent;
-    border: 1.5px solid #e5e5e5;
-    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 0;
     font-size: 0.875rem;
-    color: #666;
+    color: var(--text-secondary);
     cursor: pointer;
     transition: border-color 0.15s, color 0.15s;
 }
 
 .step-back-btn:hover:not(:disabled) {
-    border-color: #0a0a0a;
-    color: #1a1a1a;
+    background: var(--surface-hover);
 }
 
 .step-back-btn:disabled {
@@ -110,21 +105,20 @@
 
 .step-next-btn {
     padding: 10px 32px;
-    background: #0a0a0a;
+    background: var(--accent);
     border: none;
-    border-radius: 8px;
+    border-radius: 0;
     font-size: 0.875rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--on-accent);
     cursor: pointer;
     transition: background 0.15s;
 }
 
 .step-next-btn:hover {
-    background: #333;
+    background: var(--accent-hover);
 }
 
-/* Step layout — no sidebar */
 .step-layout {
     flex: 1;
     min-height: 0;
@@ -148,64 +142,78 @@
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
-    padding: 24px 32px 0;
+    padding: 24px 0 0;
+}
+
+.builder-wrapper .builds-page {
+    padding: 24px 64px 0;
 }
 
 .builds-title {
     font-size: 1.8rem;
     font-weight: 800;
-    color: #1a1a1a;
+    color: var(--text);
     margin-bottom: 8px;
 }
 
 .builds-subtitle {
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 40px;
 }
 
 .loading-text {
-    color: #999;
+    color: var(--text-muted);
 }
 
 .empty-state {
-    color: #999;
+    color: var(--text-muted);
     font-size: 0.9rem;
 }
 
 /* Bike Type Selection */
 .bike-type-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
 .bike-type-card {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 32px 24px;
-    background: #fff;
-    border: 1.5px solid #e5e5e5;
-    border-radius: 12px;
+    gap: 12px;
+    padding: 40px 32px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 0;
     cursor: pointer;
     text-align: left;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition: border-color 0.15s, background 0.15s;
+    min-height: 180px;
 }
 
 .bike-type-card:hover {
-    border-color: #0a0a0a;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    background: var(--surface-hover);
 }
 
 .bike-type-name {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #1a1a1a;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.bike-type-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex: 1;
 }
 
 .bike-type-count {
-    font-size: 0.85rem;
-    color: #999;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
 }
 
 /* Builder Layout */
@@ -221,20 +229,26 @@
     margin: 8px 0 6px;
     padding: 6px 10px;
     font-size: 0.9rem;
-    border: 1.5px solid #e5e5e5;
-    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 0;
     outline: none;
     width: 260px;
+    background: var(--surface);
+    color: var(--text);
     transition: border-color 0.15s;
 }
 
+.build-name-input::placeholder {
+    color: var(--text-muted);
+}
+
 .build-name-input:focus {
-    border-color: #0a0a0a;
+    border-color: var(--accent);
 }
 
 .progress-text {
     font-size: 0.85rem;
-    color: #666;
+    color: var(--text-secondary);
     margin-top: 4px;
     display: block;
 }
@@ -246,17 +260,17 @@
 
 .save-build-btn {
     padding: 8px 20px;
-    background: #0a0a0a;
-    border: 1.5px solid #0a0a0a;
-    border-radius: 8px;
+    background: var(--accent);
+    border: 1.5px solid var(--accent);
+    border-radius: 0;
     font-size: 0.875rem;
-    color: #fff;
+    color: var(--on-accent);
     cursor: pointer;
-    transition: background 0.15s;
+    transition: background 0.15s, border-color 0.15s;
 }
 
 .save-build-btn:hover:not(:disabled) {
-    background: #333;
+    background: var(--accent-hover);
 }
 
 .save-build-btn:disabled {
@@ -267,17 +281,16 @@
 .start-over-btn {
     padding: 8px 20px;
     background: transparent;
-    border: 1.5px solid #e5e5e5;
-    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 0;
     font-size: 0.875rem;
-    color: #666;
+    color: var(--text-secondary);
     cursor: pointer;
     transition: border-color 0.15s, color 0.15s;
 }
 
 .start-over-btn:hover {
-    border-color: #0a0a0a;
-    color: #1a1a1a;
+    background: var(--surface-hover);
 }
 
 .builder-layout {
@@ -292,9 +305,9 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    background: #fff;
-    border: 1.5px solid #e5e5e5;
-    border-radius: 12px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 0;
     padding: 12px;
 }
 
@@ -305,7 +318,7 @@
     padding: 10px 12px;
     background: transparent;
     border: none;
-    border-radius: 8px;
+    border-radius: 0;
     cursor: pointer;
     text-align: left;
     width: 100%;
@@ -313,43 +326,43 @@
 }
 
 .category-btn:hover {
-    background: #f4f4f4;
+    background: var(--surface-hover);
 }
 
 .category-btn.active {
-    background: #0a0a0a;
+    background: var(--accent);
 }
 
 .category-btn.active .category-label,
 .category-btn.active .category-status {
-    color: #fff;
+    color: var(--text);
 }
 
 .category-label {
     font-size: 0.875rem;
     font-weight: 500;
-    color: #1a1a1a;
+    color: var(--text);
 }
 
 .category-status {
     font-size: 0.75rem;
-    color: #999;
+    color: var(--text-muted);
 }
 
 .category-btn.filled .category-status {
-    color: #22c55e;
+    color: var(--green);
     font-weight: 600;
 }
 
 .category-btn.active.filled .category-status {
-    color: #86efac;
+    color: #bbf7d0;
 }
 
 /* Component Panel */
 .component-panel {
-    background: #fff;
-    border: 1.5px solid #e5e5e5;
-    border-radius: 12px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 0;
     padding: 20px;
     overflow-y: auto;
 }
@@ -357,7 +370,7 @@
 .panel-title {
     font-size: 1rem;
     font-weight: 700;
-    color: #1a1a1a;
+    color: var(--text);
     margin-bottom: 16px;
 }
 
@@ -372,48 +385,49 @@
     justify-content: space-between;
     align-items: center;
     padding: 14px 16px;
-    border: 1.5px solid #e5e5e5;
-    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 0;
     cursor: pointer;
+    background: var(--bg);
     transition: border-color 0.12s, background 0.12s;
 }
 
 .component-card:hover {
-    border-color: #0a0a0a;
+    background: var(--surface-hover);
 }
 
 .component-card.selected {
-    border-color: #0a0a0a;
-    background: #f9f9f9;
+    border-color: var(--accent);
+    background: var(--accent-bg);
 }
 
 .component-name {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #1a1a1a;
+    color: var(--text);
     margin-bottom: 2px;
 }
 
 .component-brand {
     font-size: 0.8rem;
-    color: #999;
+    color: var(--text-muted);
 }
 
 .selected-badge {
     font-size: 0.75rem;
     font-weight: 600;
-    color: #fff;
-    background: #0a0a0a;
+    color: var(--on-accent);
+    background: var(--accent);
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: 0;
     white-space: nowrap;
 }
 
 /* Build Summary */
 .build-summary {
-    background: #fff;
-    border: 1.5px solid #e5e5e5;
-    border-radius: 12px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 0;
     padding: 20px;
     overflow-y: auto;
 }
@@ -421,7 +435,7 @@
 .summary-title {
     font-size: 1rem;
     font-weight: 700;
-    color: #1a1a1a;
+    color: var(--text);
     margin-bottom: 16px;
 }
 
@@ -439,7 +453,7 @@
     flex-direction: column;
     gap: 2px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--border);
 }
 
 .summary-item:last-child {
@@ -451,12 +465,12 @@
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #999;
+    color: var(--text-muted);
     font-weight: 600;
 }
 
 .summary-name {
     font-size: 0.875rem;
-    color: #1a1a1a;
+    color: var(--text);
     font-weight: 500;
 }
