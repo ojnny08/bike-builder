@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../../api/axios";
+import { useBuild } from "../../context/BuildContext";
+import { useNavigate } from "react-router-dom";
 import "./PublicBuilds.css";
 
 const PublicBuilds = () => {
     const [buildsList, setBuildsList] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { editBuild } = useBuild();
+    const navigate = useNavigate("");
 
     useEffect(() => {
         api.get("/api/builds/build-all/")
@@ -20,6 +24,14 @@ const PublicBuilds = () => {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const handleEdit = (pk) => {
+        api.get(`/api/builds/build/${pk}/`)
+            .then(res => {
+                editBuild({ build: res.data });
+                navigate("/builds/new");
+            });
     }
 
     return (
@@ -50,6 +62,7 @@ const PublicBuilds = () => {
                             <p className="build-component-count">{build.components.length} components</p>
                             <p className="build-date">{new Date(build.created_at).toLocaleDateString()}</p>
                             <button className="delete-btn" onClick={() => handleDelete(build.id)}>Delete</button>
+                            <button className="delete-btn" onClick={() => handleEdit(build.id)}>Edit</button>
                         </div>
                     ))}
                 </div>

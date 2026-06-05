@@ -15,6 +15,8 @@ export const BuildProvider = ({ children }) => {
 
     const emptyBuild = () => setBuild(EMPTY_BUILD);
 
+    const editBuild = ({ build }) => setBuild(build);
+
     const updateBuild = (patch) => setBuild((prev) => ({ ...prev, ...patch }));
 
     const addComponent = (component) => {
@@ -28,7 +30,7 @@ export const BuildProvider = ({ children }) => {
     };
 
     return (
-        <BuildContext.Provider value={{ build, emptyBuild, updateBuild, addComponent }}>
+        <BuildContext.Provider value={{ build, emptyBuild, updateBuild, addComponent, editBuild }}>
             {children}
         </BuildContext.Provider>
     );

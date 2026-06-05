@@ -27,6 +27,15 @@ class BuildView(APIView):
         build = Build.objects.get(id=pk, user=request.user)
         build.delete()
         return Response(status=204)
+    
+    def patch(self, request, pk):
+        build = Build.objects.get(id=pk, user=request.user)
+        serializer = BuildsSerializer(build, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
 
 
 class BuildViewAll(APIView):

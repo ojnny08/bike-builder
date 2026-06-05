@@ -9,7 +9,7 @@ const fmt = str => str.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
 
 const Builder = () => {
     const { build, emptyBuild, addComponent } = useBuild();
-    const [name, setName] = useState("");
+    const [name, setName] = useState(build.name || "");
     const [currentStep, setCurrentStep] = useState(0);
     const [components, setComponents] = useState([]);
     const [loadingComponents, setLoadingComponents] = useState(false);
@@ -45,14 +45,19 @@ const Builder = () => {
         setSaving(true);
         const selectedTypes = new Set(build.components.map(c => c.component_type));
         const allRequiredFilled = required.every(t => selectedTypes.has(t));
+        const payload = {
+            name: name || `${build.bikeType.name} Build`,
+            bikeType: build.bikeType.id,
+            components: build.components.map(c => c.id),
+            status: allRequiredFilled ? "complete" : "in_progress",
+        };
         try {
-            await api.post("/api/builds/build/", {
-                name: name || `${build.bikeType.name} Build`,
-                bikeType: build.bikeType.id,
-                components: build.components.map(c => c.id),
-                status: allRequiredFilled ? "complete" : "in_progress",
-            });
-            navigate("/builds-all");
+            if (build.id) {
+                await api.patch(`/api/builds/build/${build.id}/`, payload);
+            } else {
+                await api.post("/api/builds/build/", payload);
+            }
+            navigate("/builds");
         } finally {
             setSaving(false);
             emptyBuild();
@@ -83,6 +88,9 @@ const Builder = () => {
                             onChange={e => setName(e.target.value)}
                         />
                         <button className="start-over-btn" onClick={emptyBuild}>Start Over</button>
+                        <button className="save-build-btn" onClick={handleSaveBuild}>
+                            {"Save Build"}
+                        </button>
                     </div>
                 </div>
 
