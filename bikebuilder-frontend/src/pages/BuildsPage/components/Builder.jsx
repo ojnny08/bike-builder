@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../../api/axios";
 import { useBuild } from "../../../context/BuildContext";
 import ProgressBar from "./ProgressBar";
 import "../Builds.css";
+import { fetchComponents, createBuild, updateBuild } from "../../../services/buildService";
 
 const fmt = str => str.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 
@@ -25,12 +25,21 @@ const Builder = () => {
         build.components.map(c => [c.component_type, c])
     );
 
-    useEffect(() => {
+    const componentSelection = async ( currentCategory ) => {
         if (!activeCategory) return;
         setLoadingComponents(true);
-        api.get("/api/components/components/", { params: { category: activeCategory } })
-            .then(res => setComponents(res.data))
-            .finally(() => setLoadingComponents(false));
+        try {
+            const data = await fetchComponents( currentCategory );
+            setComponents(data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoadingComponents(false);
+        }
+    }
+    useEffect(() => {
+        componentSelection(activeCategory);
+        
     }, [activeCategory]);
 
     const handleNext = () => {
@@ -53,9 +62,9 @@ const Builder = () => {
         };
         try {
             if (build.id) {
-                await api.patch(`/api/builds/build/${build.id}/`, payload);
+                await updateBuild(build.id, payload);
             } else {
-                await api.post("/api/builds/build/", payload);
+                await createBuild(payload);
             }
             navigate("/builds");
         } finally {

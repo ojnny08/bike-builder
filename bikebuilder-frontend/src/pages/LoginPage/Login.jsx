@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithP
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../../firebase";
 import { useAuth } from "../../context/AuthContext";
-import {api} from "../../api/axios";
+import { fetchCurrentUser } from "../../services/userService";
 import "./Login.css";
 
 const Login = () => {
@@ -31,7 +31,7 @@ const Login = () => {
             } else {
                 await signInWithEmailAndPassword(auth, email, password);
             }
-            await api.get("/api/users/me/");
+            await fetchCurrentUser();
         } catch (err) {
             if (err.code === "auth/email-already-in-use") setError("An account with this email already exists.");
             else if (err.code === "auth/weak-password") setError("Password must be at least 6 characters.");

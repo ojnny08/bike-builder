@@ -1,38 +1,39 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { api } from "../../api/axios";
+import { Link, useNavigate } from "react-router-dom";
 import { useBuild } from "../../context/BuildContext";
-import { useNavigate } from "react-router-dom";
+import { fetchBuilds, deleteBuild, getBuild } from "../../services/buildService";
 import "./PublicBuilds.css";
 
 const PublicBuilds = () => {
     const [buildsList, setBuildsList] = useState([]);
     const [loading, setLoading] = useState(true);
     const { editBuild } = useBuild();
-    const navigate = useNavigate("");
+    const navigate = useNavigate();
 
     useEffect(() => {
-        api.get("/api/builds/build-all/")
-            .then(res => setBuildsList(res.data))
+        fetchBuilds()
+            .then(data => setBuildsList(data))
             .finally(() => setLoading(false));
     }, []);
 
     const handleDelete = async (pk) => {
         try {
-            await api.delete(`/api/builds/build/${pk}/`);
+            await deleteBuild(pk);
             setBuildsList(prev => prev.filter(b => b.id !== pk));
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
-    const handleEdit = (pk) => {
-        api.get(`/api/builds/build/${pk}/`)
-            .then(res => {
-                editBuild({ build: res.data });
-                navigate("/builds/new");
-            });
-    }
+    const handleEdit = async (pk) => {
+        try {
+            const data = await getBuild(pk);
+            editBuild({ build: data });
+            navigate("/builds/new");
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <div className="public-builds-page">

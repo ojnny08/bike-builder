@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../api/axios";
 import "../Builds.css";
+import { fetchBikeTypes } from "../../../services/bikeTypeService";
 
 const DESCRIPTIONS = {
     road: "Built for speed on paved surfaces. Lightweight frames, drop handlebars, and narrow tires optimised for long-distance rides and racing.",
@@ -13,10 +14,18 @@ const BikeTypeSelection = ({ onSelect }) => {
     const [bikeTypes, setBikeTypes] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const loadBikeTypes = async () => {
+        try {
+            const data = await fetchBikeTypes();
+            setBikeTypes(data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
     useEffect(() => {
-        api.get("/api/category/bike-types/")
-            .then(res => setBikeTypes(res.data))
-            .finally(() => setLoading(false));
+        loadBikeTypes();
     }, []);
 
     return (

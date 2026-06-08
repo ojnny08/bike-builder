@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { api } from "../../api/axios";
+import { fetchComponentsByCategory } from "../../services/componentService";
 import "./Components.css";
 
 const COMPONENT_TYPES = [
@@ -27,8 +27,8 @@ const Components = () => {
     useEffect(() => {
         if (!selectedType) return;
         setLoading(true);
-        api.get("/api/components/components/", { params: { category: selectedType } })
-            .then(res => setComponents(res.data))
+        fetchComponentsByCategory(selectedType)
+            .then(data => setComponents(data))
             .finally(() => setLoading(false));
     }, [selectedType]);
 
