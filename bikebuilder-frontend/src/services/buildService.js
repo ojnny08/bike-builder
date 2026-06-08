@@ -11,7 +11,7 @@ export const fetchComponents = async (currentCategory) => {
 
 export const fetchBuilds = async () => {
     try {
-        const res = await api.get("/api/builds/build-all/");
+        const res = await api.get("/api/builds/");
         return res.data;
     } catch (error) {
         throw new Error("Failed to get builds");
@@ -20,7 +20,7 @@ export const fetchBuilds = async () => {
 
 export const deleteBuild = async (id) => {
     try {
-        const res = await api.delete(`/api/builds/build/${id}/`);
+        const res = await api.delete(`/api/builds/${id}/`);
         return res.data;
     } catch (error) {
         throw new Error("Failed to delete build");
@@ -29,7 +29,7 @@ export const deleteBuild = async (id) => {
 
 export const getBuild = async (id) => {
     try {
-        const res = await api.get(`/api/builds/build/${id}/`);
+        const res = await api.get(`/api/builds/${id}/`);
         return res.data;
     } catch (error) {
         throw new Error("Failed to get build");
@@ -38,7 +38,7 @@ export const getBuild = async (id) => {
 
 export const createBuild = async (payload) => {
     try {
-        const res = await api.post("/api/builds/build/", payload);
+        const res = await api.post("/api/builds/", payload);
         return res.data;
     } catch (error) {
         throw new Error("Failed to create build");
@@ -47,7 +47,7 @@ export const createBuild = async (payload) => {
 
 export const updateBuild = async (id, payload) => {
     try {
-        const res = await api.patch(`/api/builds/build/${id}/`, payload);
+        const res = await api.patch(`/api/builds/${id}/`, payload);
         return res.data;
     } catch (error) {
         throw new Error("Failed to update build");

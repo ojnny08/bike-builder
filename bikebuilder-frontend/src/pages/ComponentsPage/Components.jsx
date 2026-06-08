@@ -29,6 +29,7 @@ const Components = () => {
         setLoading(true);
         fetchComponentsByCategory(selectedType)
             .then(data => setComponents(data))
+            .catch(err => console.log(err))
             .finally(() => setLoading(false));
     }, [selectedType]);
 

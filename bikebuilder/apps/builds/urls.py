@@ -1,8 +1,7 @@
-from django.urls import path
-from .views import BuildView, BuildViewAll
+from rest_framework.routers import DefaultRouter
+from .views import BuildViewSet
 
-urlpatterns = [
-    path("build/", BuildView.as_view()),
-    path("build/<int:pk>/", BuildView.as_view()),
-    path("build-all/", BuildViewAll.as_view()),
-]
+router = DefaultRouter()
+router.register('', BuildViewSet, basename='build')
+
+urlpatterns = router.urls

@@ -25,21 +25,13 @@ const Builder = () => {
         build.components.map(c => [c.component_type, c])
     );
 
-    const componentSelection = async ( currentCategory ) => {
+    useEffect(() => {
         if (!activeCategory) return;
         setLoadingComponents(true);
-        try {
-            const data = await fetchComponents( currentCategory );
-            setComponents(data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoadingComponents(false);
-        }
-    }
-    useEffect(() => {
-        componentSelection(activeCategory);
-        
+        fetchComponents(activeCategory)
+            .then(data => setComponents(data))
+            .catch(err => console.log(err))
+            .finally(() => setLoadingComponents(false));
     }, [activeCategory]);
 
     const handleNext = () => {
@@ -98,7 +90,7 @@ const Builder = () => {
                         />
                         <button className="start-over-btn" onClick={emptyBuild}>Start Over</button>
                         <button className="save-build-btn" onClick={handleSaveBuild}>
-                            {"Save Build"}
+                            Save Build
                         </button>
                     </div>
                 </div>
@@ -148,7 +140,6 @@ const Builder = () => {
                     </aside>
                 </div>
 
-                {/* Step navigation */}
                 <div className="step-nav">
                     <button className="step-back-btn" onClick={handleBack} disabled={currentStep === 0}>Back</button>
                     {isLastStep ? (
