@@ -1,6 +1,7 @@
-from django.urls import path
-from .views import ComponentsList
+from rest_framework.routers import DefaultRouter
+from .views import ComponentsViewSet
 
-urlpatterns = [
-    path('componentsList/', ComponentsList.as_view()),
-]
+router = DefaultRouter()
+router.register('', ComponentsViewSet, basename='components')
+
+urlpatterns = router.urls

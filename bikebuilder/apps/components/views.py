@@ -1,20 +1,20 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 from .serializer import ComponentsSerializer
 from .models import Components
 
 
-class ComponentsList(APIView):
+class ComponentsViewSet(ModelViewSet):
+    serializer_class = ComponentsSerializer
 
-    def get(self, request):
-        components = Components.objects.all()
+    def get_queryset(self):
+        queryset = Components.objects.all()
 
-        component_type = request.query_params.get("category", "")
-        if component_type:
-            components = components.filter(component_type=component_type)
+        category = self.request.query_params.get("category")
+        if category:
+            queryset = queryset.filter(component_type=category)
 
-        search = request.query_params.get("search", "")
+        search = self.request.query_params.get("search")
         if search:
-            components = components.filter(name__icontains=search)
+            queryset = queryset.filter(name__icontains=search)
 
-        return Response(ComponentsSerializer(components, many=True).data)
+        return queryset

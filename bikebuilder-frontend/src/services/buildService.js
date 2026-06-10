@@ -2,8 +2,8 @@ import { api } from "../api/axios";
 
 export const fetchComponents = async (currentCategory) => {
     try {
-        const res = await api.get("/api/components/componentsList/", { params: { category: currentCategory } });
-        return res.data;
+        const res = await api.get("/api/components/", { params: { category: currentCategory } });
+        return res.data.results ?? res.data;
     } catch (error) {
         throw new Error("Failed to get components");
     }
@@ -12,7 +12,7 @@ export const fetchComponents = async (currentCategory) => {
 export const fetchBuilds = async () => {
     try {
         const res = await api.get("/api/builds/");
-        return res.data;
+        return res.data.results;
     } catch (error) {
         throw new Error("Failed to get builds");
     }
