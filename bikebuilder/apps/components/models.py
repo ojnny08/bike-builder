@@ -60,7 +60,7 @@ class Frame(Components):
         QR_130 = 'qr_130', 'Quick Release 130mm' # older road/fixed 
         QR_135 = 'qr_135', 'Quick Release 135mm'
         THRU_142 = 'thru_142', 'Thru Axle 142mm'
-        TRU_142 = 'thur_148', 'Thru Axle 148mm'
+        THRU_148 = 'thur_148', 'Thru Axle 148mm'
 
     size = models.CharField(max_length=10)
     material = models.CharField(max_length=20, choices=Material.choices)
@@ -147,12 +147,14 @@ class Wheel(Components):
         REAR = "rear", "Rear"
 
     class AxleStandard(models.TextChoices):
+        TRACK = "track_120", "Track 120mm"
         QR_FRONT = "qr_100", "Quick Release Front (100mm)"
-        QR_REAR = "qr_135", "Quick Release Rear (135mm)"
-        THRU_FRONT = "thru_100", "Thru Axle Front (100mm)"
-        THRU_FRONT_BOOST = "thru_110", "Thru Axle Front Boost (110mm)"
-        THRU_REAR = "thru_142", "Thru Axle Rear (142mm)"
-        THRU_REAR_BOOST = "thru_148", "Thru Axle Rear Boost (148mm)"
+        QR_130 = "qr_130", "Quick Release (130mm)"   
+        QR_135 = "qr_135", "Quick Release (135mm)"    
+        THRU_FRONT_100 = "thru_100", "Thru Axle Front (100mm)"
+        THRU_FRONT_110 = "thru_110", "Thru Axle Front Boost (110mm)"
+        THRU_142 = "thru_142", "Thru Axle (142mm)"    
+        THRU_148 = "thru_148", "Thru Axle Boost (148mm)" 
 
     wheel_size = models.CharField(max_length=10, choices=WheelSize.choices)
     position = models.CharField(max_length=10, choices=Position.choices)
