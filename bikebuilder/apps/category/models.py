@@ -2,29 +2,11 @@ from django.db import models
 
 class BikeType(models.Model):
       class Slug(models.TextChoices):
-          ROAD    = "road",     "Road"
-          MOUNTAIN = "mountain", "Mountain"
-          GRAVEL  = "gravel",   "Gravel"
-          FIXED   = "fixed",    "Fixed Gear"
+          FIXED   = "fixed", "Fixed Gear"
 
       RULES = {
-          "road": {
-              "required": ["frame", "fork", "crankset", "cassette", "rear_derailleur", "wheel", "tire", "handlebar", "stem", "brake", "saddle",
-  "seatpost"],
-              "optional": ["front_derailleur"],
-          },
-          "mountain": {
-              "required": ["frame", "fork", "crankset", "cassette", "rear_derailleur", "wheel", "tire", "handlebar", "stem", "brake", "saddle",
-  "seatpost"],
-              "optional": ["front_derailleur"],
-          },
-          "gravel": {
-              "required": ["frame", "fork", "crankset", "cassette", "rear_derailleur", "wheel", "tire", "handlebar", "stem", "brake", "saddle",
-  "seatpost"],
-              "optional": ["front_derailleur"],
-          },
           "fixed": {
-              "required": ["frame", "fork", "crankset", "wheel", "tire", "handlebar", "stem", "saddle", "seatpost"],
+              "required": ["frame", "bottom_bracket", "crankset", "wheel", "tire", "stem", "handlebar", "seatpost", "saddle"],
               "optional": ["brake"],
           },
       }

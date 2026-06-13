@@ -7,5 +7,5 @@ from .models import BikeType
 class BikeTypeList(APIView):
 
     def get(self, request):
-        bike_types = BikeType.objects.all()
+        bike_types = BikeType.objects.filter(slug__in=BikeType.RULES.keys())
         return Response(BikeTypeSerializer(bike_types, many=True).data)

@@ -4,12 +4,8 @@ from ..category.models import BikeType
 
 class ComponentType(models.TextChoices):
     FRAME = "frame", "Frame"
-    FORK = "fork", "Fork"
     BOTTOM_BRACKET = "bottom_bracket", "Bottom Bracket"
     CRANKSET = "crankset", "Crankset"
-    CASSETTE = "cassette", "Cassette"
-    REAR_DERAILLEUR = "rear_derailleur", "Rear Derailleur"
-    FRONT_DERAILLEUR = "front_derailleur", "Front Derailleur"
     WHEEL = "wheel", "Wheel"
     TIRE = "tire", "Tire"
     HANDLEBAR = "handlebar", "Handlebar"
@@ -40,15 +36,6 @@ class Components(models.Model):
     
 
 class Frame(Components):
-    class Material(models.TextChoices):
-        CARBON = 'carbon', 'Carbon'
-        ALUMINIUM = 'aluminium', 'Aluminium'
-        STEEL = 'steel', 'Steel'
-
-    class HeadTube(models.TextChoices):
-        STRAIGHT = 'stright', 'Stright'
-        TAPERED = 'tapered', 'Tapered'
-    
     class BBShell(models.TextChoices):
         THREADED = "threaded", "Threaded (BSA)"
         PRESS_FIT = "press_fit", "Press Fit"
@@ -63,9 +50,7 @@ class Frame(Components):
         THRU_148 = 'thur_148', 'Thru Axle 148mm'
 
     size = models.CharField(max_length=10)
-    material = models.CharField(max_length=20, choices=Material.choices)
     bb_shell = models.CharField(max_length=20, choices=BBShell.choices)
-    head_tube_type = models.CharField(max_length=20, choices=HeadTube.choices)
     rear_axle_standard = models.CharField(max_length=20, choices=RearAxleFit.choices)
     max_tire_clearance_mm = models.PositiveSmallIntegerField()
 
@@ -102,36 +87,6 @@ class Crankset(Components):
     chainring_count = models.PositiveSmallIntegerField()
     bcd = models.PositiveSmallIntegerField(null=True, blank=True, help_text="Bolt circle diameter in mm, null for direct mount")
     speeds = models.PositiveSmallIntegerField(help_text="1 for single speed / fixed")
-
-
-class Cassette(Components):
-    class FreehubStandard(models.TextChoices):
-        HG = "hg", "Shimano HG"
-        XD = "xd", "SRAM XD"
-        XDR = "xdr", "SRAM XDR"
-        MICRO_SPLINE = "micro_spline", "Shimano Micro Spline"
-
-    speeds = models.PositiveSmallIntegerField()
-    min_cog = models.PositiveSmallIntegerField()
-    max_cog = models.PositiveSmallIntegerField()
-    freehub_standard = models.CharField(max_length=20, choices=FreehubStandard.choices)
-
-
-class RearDerailleur(Components):
-    speeds = models.PositiveSmallIntegerField()
-    max_cog_size = models.PositiveSmallIntegerField()
-    clutch = models.BooleanField(default=False)
-
-
-class FrontDerailleur(Components):
-    class ClampType(models.TextChoices):
-        BRAZE_ON = "braze_on", "Braze-on"
-        MM_28_6 = "28.6mm", "28.6mm Clamp"
-        MM_31_8 = "31.8mm", "31.8mm Clamp"
-        DIRECT_MOUNT = "direct_mount", "Direct Mount"
-
-    speeds = models.PositiveSmallIntegerField()
-    clamp_type = models.CharField(max_length=20, choices=ClampType.choices)
 
 
 class Wheel(Components):
@@ -207,22 +162,15 @@ class Brake(Components):
     class BrakeType(models.TextChoices):
         RIM_CALIPER = "rim_caliper", "Rim Caliper"
         RIM_CANTILEVER = "rim_cantilever", "Rim Cantilever"
-        DISC_MECHANICAL = "disc_mechanical", "Disc Mechanical"
-        DISC_HYDRAULIC = "disc_hydraulic", "Disc Hydraulic"
 
     class MountType(models.TextChoices):
         FLAT_MOUNT = "flat_mount", "Flat Mount"
         POST_MOUNT = "post_mount", "Post Mount"
         IS_MOUNT = "is_mount", "IS Mount"
 
-    class Position(models.TextChoices):
-        FRONT = "front", "Front"
-        REAR = "rear", "Rear"
-
     brake_type = models.CharField(max_length=20, choices=BrakeType.choices)
     mount_type = models.CharField(max_length=20, choices=MountType.choices, blank=True)
     rotor_size_mm = models.PositiveSmallIntegerField(null=True, blank=True)
-    position = models.CharField(max_length=10, choices=Position.choices)
 
 
 class Saddle(Components):

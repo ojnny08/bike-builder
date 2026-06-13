@@ -1,5 +1,5 @@
 .public-builds-page {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
 }
 
@@ -7,31 +7,33 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 32px;
+    margin-bottom: 36px;
 }
 
 .public-builds-title {
-    font-size: 1.8rem;
-    font-weight: 800;
+    font-size: 1.5rem;
+    font-weight: 600;
     color: var(--text);
+    letter-spacing: -0.03em;
     margin-bottom: 4px;
 }
 
 .public-builds-subtitle {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
 }
 
 .new-build-btn {
     display: inline-block;
-    padding: 10px 24px;
+    padding: 8px 16px;
     background: var(--accent);
     color: var(--on-accent);
     text-decoration: none;
-    border-radius: 0;
-    font-size: 0.875rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
     font-weight: 600;
-    transition: background 0.15s;
+    transition: background 0.12s;
 }
 
 .new-build-btn:hover {
@@ -40,6 +42,7 @@
 
 .loading-text {
     color: var(--text-muted);
+    font-size: 0.875rem;
 }
 
 .empty-builds {
@@ -49,24 +52,26 @@
     gap: 16px;
     padding: 80px 0;
     color: var(--text-muted);
+    font-size: 0.875rem;
 }
 
 .builds-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
+    gap: 12px;
 }
 
 .build-card {
     background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 0;
-    padding: 20px;
-    transition: border-color 0.15s;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    transition: border-color 0.12s, background 0.12s;
 }
 
 .build-card:hover {
     background: var(--surface-hover);
+    border-color: var(--border-strong);
 }
 
 .build-card-header {
@@ -77,18 +82,19 @@
 }
 
 .build-bike-type {
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 0.875rem;
+    font-weight: 600;
     color: var(--text);
+    letter-spacing: -0.02em;
 }
 
 .build-status {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     padding: 3px 8px;
-    border-radius: 0;
+    border-radius: 999px;
 }
 
 .build-status.in_progress {
@@ -102,27 +108,29 @@
 }
 
 .build-component-count {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--text-secondary);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .build-date {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     margin-bottom: 16px;
 }
 
 .delete-btn {
-    padding: 7px 16px;
+    padding: 6px 14px;
     background: transparent;
-    border: 1.5px solid var(--border);
-    font-size: 0.8rem;
-    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
     cursor: pointer;
-    transition: border-color 0.15s, color 0.15s;
+    transition: border-color 0.12s, color 0.12s;
 }
 
 .delete-btn:hover {
-    background: var(--surface-hover);
+    border-color: var(--border-strong);
+    color: var(--text-secondary);
 }
