@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage/Home'
 import Components from './pages/ComponentsPage/Components'
 import Builds from './pages/BuildsPage/Builds'
 import PublicBuilds from './pages/BuildsPage/PublicBuilds'
+import ComponentSelectPage from './pages/BuildsPage/components/ComponentSelectPage'
 import './App.css'
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/components" element={<Components />}/>
           <Route path="/builds/new" element={<Builds />}/>
+          <Route path="/builds/new/select/:category" element={<ComponentSelectPage />}/>
           <Route path="/builds" element={<PublicBuilds />}/>
         </Route>
       </Routes>

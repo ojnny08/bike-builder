@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../../context/BuildContext";
 import "../Builds.css";
 import { createBuild, updateBuild } from "../../../services/buildService";
-import { fetchComponentsByCategory, fetchCompatibleComponents } from "../../../services/componentService";
 
 
 const UPSTREAM_DEPS = {
@@ -19,13 +18,10 @@ const UPSTREAM_DEPS = {
 const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
 const Builder = () => {
-    const { build, emptyBuild, addComponent } = useBuild();
+    const { build, emptyBuild } = useBuild();
     const { required = [], optional = [] } = build.bikeType.rules;
     const allCategories = [...required, ...optional];
     const [name, setName] = useState(build.name || "");
-    const [activeCategory, setActiveCategory] = useState(null);
-    const [components, setComponents] = useState([]);
-    const [loadingComponents, setLoadingComponents] = useState(false);
     const [saving, setSaving] = useState(false);
     const navigate = useNavigate();
 
@@ -33,40 +29,10 @@ const Builder = () => {
         build.components.map(c => [c.component_type, c])
     );
 
-    const componentKey = build.components.map(c => c.id).join(',');
-
     const isLocked = (cat) => {
         const dep = UPSTREAM_DEPS[cat];
         return dep && allCategories.includes(dep) && !selectedByCategory[dep];
     };
-
-    useEffect(() => {
-        if (!activeCategory) return;
-        const load = async () => {
-            setLoadingComponents(true);
-            try {
-                const selectedIds = Object.fromEntries(
-                    allCategories
-                        .slice(0, allCategories.indexOf(activeCategory))
-                        .filter(t => selectedByCategory[t])
-                        .map(t => [`${t}_id`, selectedByCategory[t].id])
-                );
-                const [all, compatible] = await Promise.all([
-                    fetchComponentsByCategory(activeCategory),
-                    activeCategory === 'frame'
-                        ? Promise.resolve(null)
-                        : fetchCompatibleComponents(activeCategory, selectedIds),
-                ]);
-                const compatibleIds = new Set((compatible ?? all).map(c => c.id));
-                setComponents(all.map(c => ({ ...c, compatible: compatibleIds.has(c.id) })));
-            } catch (e) {
-                console.error(e);
-            } finally {
-                setLoadingComponents(false);
-            }
-        };
-        load();
-    }, [activeCategory, componentKey]);
 
     const handleSaveBuild = async () => {
         setSaving(true);
@@ -119,64 +85,28 @@ const Builder = () => {
                     {allCategories.map(cat => {
                         const selected = selectedByCategory[cat];
                         const locked = isLocked(cat);
-                        const isActive = activeCategory === cat;
 
                         return (
-                            <div key={cat} className="pcp-item-wrap">
-                                <div
-                                    className={`pcp-item${isActive ? ' pcp-item-active' : ''}${locked ? ' pcp-item-locked' : ''}`}
-                                    onClick={() => !locked && setActiveCategory(isActive ? null : cat)}
-                                >
-                                    <span className="pcp-item-cat">{formatCat(cat)}</span>
-                                    <div className="pcp-item-center">
-                                        {selected ? (
-                                            <span className="pcp-item-selected">{selected.name}
-                                                <span className="pcp-item-brand"> · {selected.brand}</span>
-                                            </span>
-                                        ) : locked ? (
-                                            <span className="pcp-item-locked-msg">Select prerequisite first</span>
-                                        ) : (
-                                            <span className="pcp-item-placeholder">Choose {formatCat(cat)}</span>
-                                        )}
-                                    </div>
-                                    <span className="pcp-item-price">
-                                        {selected?.price ? `$${parseFloat(selected.price).toFixed(2)}` : '—'}
-                                    </span>
+                            <div
+                                key={cat}
+                                className={`pcp-item${locked ? ' pcp-item-locked' : ''}`}
+                                onClick={() => !locked && navigate(`/builds/new/select/${cat}`)}
+                            >
+                                <span className="pcp-item-cat">{formatCat(cat)}</span>
+                                <div className="pcp-item-center">
+                                    {selected ? (
+                                        <span className="pcp-item-selected">{selected.name}
+                                            <span className="pcp-item-brand"> · {selected.brand}</span>
+                                        </span>
+                                    ) : locked ? (
+                                        <span className="pcp-item-locked-msg">Select prerequisite first</span>
+                                    ) : (
+                                        <span className="pcp-item-placeholder">Choose {formatCat(cat)}</span>
+                                    )}
                                 </div>
-
-                                {isActive && (
-                                    <div className="pcp-picker">
-                                        {loadingComponents ? (
-                                            <p className="loading-text">Loading...</p>
-                                        ) : components.length === 0 ? (
-                                            <p className="empty-state">No compatible components found.</p>
-                                        ) : (
-                                            components.map(comp => {
-                                                const isSelected = selected?.id === comp.id;
-                                                const isCompatible = comp.compatible ?? true;
-                                                return (
-                                                    <div
-                                                        key={comp.id}
-                                                        className={`pcp-option${isSelected ? ' pcp-option-selected' : ''}${!isCompatible ? ' pcp-option-incompat' : ''}`}
-                                                        onClick={() => {
-                                                            if (!isCompatible) return;
-                                                            addComponent(comp);
-                                                            setActiveCategory(null);
-                                                        }}
-                                                    >
-                                                        <div className="pcp-option-info">
-                                                            <span className="pcp-option-name">{comp.name}</span>
-                                                            <span className="pcp-option-brand">{comp.brand}</span>
-                                                        </div>
-                                                        <span className="pcp-option-price">
-                                                            {comp.price ? `$${parseFloat(comp.price).toFixed(2)}` : '—'}
-                                                        </span>
-                                                    </div>
-                                                );
-                                            })
-                                        )}
-                                    </div>
-                                )}
+                                <span className="pcp-item-price">
+                                    {selected?.price ? `$${parseFloat(selected.price).toFixed(2)}` : '—'}
+                                </span>
                             </div>
                         );
                     })}

@@ -1,27 +1,41 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from .serializer import ComponentsSerializer
 from .models import Components, Frame, BottomBracket, Crankset, Wheel, Handlebar, Stem
 from .compatibility import get_compatible_queryset
 
 
-class ComponentsViewSet(ModelViewSet):
-    serializer_class = ComponentsSerializer
+def _paginate(queryset, request):
+    paginator = PageNumberPagination()
+    paginator.page_size = 20
+    page = paginator.paginate_queryset(queryset, request)
+    return paginator.get_paginated_response(ComponentsSerializer(page, many=True).data)
 
-    def get_queryset(self):
+
+class ComponentsViewSet(ViewSet):
+
+    def list(self, request):
         queryset = Components.objects.all()
 
-        category = self.request.query_params.get("category")
+        category = request.query_params.get("category")
         if category:
             queryset = queryset.filter(component_type=category)
 
-        search = self.request.query_params.get("search")
+        search = request.query_params.get("search")
         if search:
             queryset = queryset.filter(name__icontains=search)
 
-        return queryset
+        return _paginate(queryset, request)
+
+    def retrieve(self, request, pk=None):
+        try:
+            component = Components.objects.get(pk=pk)
+        except Components.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(ComponentsSerializer(component).data)
 
     @action(detail=False, methods=['get'])
     def compatible(self, request):
@@ -39,14 +53,7 @@ class ComponentsViewSet(ModelViewSet):
         }
 
         queryset = get_compatible_queryset(category, selected)
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(ComponentsSerializer(queryset, many=True).data)
 
 
 def _fetch(model, request, param):
@@ -57,3 +64,4 @@ def _fetch(model, request, param):
         return model.objects.get(pk=pk)
     except model.DoesNotExist:
         return None
+
