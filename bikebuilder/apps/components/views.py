@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from .serializer import ComponentsSerializer
-from .models import Components, Frame, BottomBracket, Crankset, Wheel, Handlebar, Stem
+from .models import Components, Frame, BottomBracket, Crankset, Wheel, Stem, Sprocket
 from .compatibility import get_compatible_queryset
 
 
@@ -20,13 +20,13 @@ class ComponentsViewSet(ViewSet):
     def list(self, request):
         queryset = Components.objects.all()
 
-        category = request.query_params.get("category")
-        if category:
-            queryset = queryset.filter(component_type=category)
+        component_type = request.query_params.get("component_type")
+        if component_type:
+            queryset = queryset.filter(component_type=component_type)
 
-        search = request.query_params.get("search")
-        if search:
-            queryset = queryset.filter(name__icontains=search)
+        select = request.query_params.get("select")
+        if select:
+            queryset = queryset.filter(name__icontains=select)
 
         return _paginate(queryset, request)
 
@@ -36,23 +36,23 @@ class ComponentsViewSet(ViewSet):
         except Components.DoesNotExist:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response(ComponentsSerializer(component).data)
-
+   
     @action(detail=False, methods=['get'])
     def compatible(self, request):
-        category = request.query_params.get('category')
-        if not category:
-            return Response({'error': 'category is required'}, status=status.HTTP_400_BAD_REQUEST)
+        component_type = request.query_params.get('component_type')
+        if not component_type:
+            return Response({'error': 'component_type is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         selected = {
             'frame': _fetch(Frame, request, 'frame_id'),
             'bottom_bracket': _fetch(BottomBracket, request, 'bottom_bracket_id'),
             'crankset': _fetch(Crankset, request, 'crankset_id'),
             'wheel': _fetch(Wheel, request, 'wheel_id'),
-            'handlebar': _fetch(Handlebar, request, 'handlebar_id'),
             'stem': _fetch(Stem, request, 'stem_id'),
+            'sprocket': _fetch(Sprocket, request, 'sprocket_id'),
         }
 
-        queryset = get_compatible_queryset(category, selected)
+        queryset = get_compatible_queryset(component_type, selected)
         return Response(ComponentsSerializer(queryset, many=True).data)
 
 

@@ -13,6 +13,8 @@ class ComponentType(models.TextChoices):
     BRAKE = "brake", "Brake"
     SADDLE = "saddle", "Saddle"
     SEATPOST = "seatpost", "Seatpost"
+    SPROCKET = "sprocket", "Sprocket"
+    CHAIN = "chain", "Chain"
 
 
 class Components(models.Model):
@@ -109,14 +111,42 @@ class Wheel(Components):
         THRU_FRONT_100 = "thru_100", "Thru Axle Front (100mm)"
         THRU_FRONT_110 = "thru_110", "Thru Axle Front Boost (110mm)"
         THRU_142 = "thru_142", "Thru Axle (142mm)"    
-        THRU_148 = "thru_148", "Thru Axle Boost (148mm)" 
+        THRU_148 = "thru_148", "Thru Axle Boost (148mm)"
+    
+    class HubType(models.TextChoices):
+        THREADED = "threaded", "Threaded"
+        SPLINE = "spline", "Spline"
 
     wheel_size = models.CharField(max_length=10, choices=WheelSize.choices)
     position = models.CharField(max_length=10, choices=Position.choices)
     axle_standard = models.CharField(max_length=20, choices=AxleStandard.choices)
+    hub_type = models.CharField(max_length=10, choices=HubType.choices, default="threaded")
     max_tire_width_mm = models.PositiveSmallIntegerField()
     tubeless_ready = models.BooleanField(default=False)
 
+class Sprocket(Components):
+    class MountType(models.TextChoices):
+        THREADED = "threaded", "Threaded",
+        SPLINE = "spline", "Spline"
+
+    class Widths(models.TextChoices):
+        WIDTH_1_8 = "1/8", "1/8",
+        WIDTH_3_32 = "3/32", "3/32",
+
+    mount_type = models.CharField(max_length=10, choices=MountType.choices)
+    sprocket_width = models.CharField(max_length=10, choices=Widths.choices)
+    sprocket_teeth = models.PositiveSmallIntegerField()
+
+class Chain(Components):
+    class Widths(models.TextChoices):
+        WIDTH_1_8 = "1/8", "1/8",
+        WIDTH_3_32 = "3/32", "3/32",
+
+    class Material(models.TextChoices):
+        CHROMOLY = "chromoly", "Chromoly",
+        STEEL = "steel", "Steel",
+    chain_width = models.CharField(max_length=10, choices=Widths.choices)
+    chain_material = models.CharField(max_length=20, choices=Material.choices)
 
 class Tire(Components):
     class WheelSize(models.TextChoices):

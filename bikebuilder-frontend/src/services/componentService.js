@@ -2,7 +2,7 @@ import { api } from "../api/axios";
 
 export const fetchComponentsByCategory = async (category) => {
     try {
-        const res = await api.get("/api/components/", { params: { category } });
+        const res = await api.get("/api/components/", { params: { component_type: category } });
         return res.data.results;
     } catch (error) {
         throw new Error("Failed to get components");
@@ -12,7 +12,7 @@ export const fetchComponentsByCategory = async (category) => {
 export const fetchCompatibleComponents = async (category, selectedIds = {}) => {
     try {
         const res = await api.get("/api/components/compatible/", {
-            params: { category, ...selectedIds },
+            params: { component_type: category, ...selectedIds },
         });
         return res.data.results;
     } catch (error) {

@@ -1,13 +1,14 @@
 from .models import (
-    Components, BottomBracket, Crankset, Wheel, Tire, Handlebar, Stem
+    Components, BottomBracket, Crankset, Wheel, Tire, Handlebar, Stem, Sprocket, Chain
 )
 
 RULES = {
-    'bottom_bracket':  (BottomBracket,  'frame',           lambda f:  {'shell_type': f.bb_shell}),
-    'crankset':        (Crankset,       'bottom_bracket',  lambda bb: {'spindle_interface': bb.spindle_interface}),
-    'wheel':           (Wheel,          'frame',           lambda f:  {'axle_standard': f.rear_axle_standard}),
-    'stem':            (Stem,           'handlebar',       lambda h:  {'bar_clamp_diameter_mm': h.clamp_diameter_mm}),
-    'handlebar':       (Handlebar,      'stem',            lambda s:  {'clamp_diameter_mm': s.bar_clamp_diameter_mm}),
+    'bottom_bracket': (BottomBracket, 'frame',        lambda f:  {'shell_type': f.bb_shell}),
+    'crankset':       (Crankset,      'bottom_bracket', lambda bb: {'spindle_interface': bb.spindle_interface}),
+    'wheel':          (Wheel,         'frame',          lambda f:  {'axle_standard': f.rear_axle_standard}),
+    'handlebar':      (Handlebar,     'stem',           lambda s:  {'clamp_diameter_mm': s.bar_clamp_diameter_mm}),
+    'sprocket':       (Sprocket,      'wheel',          lambda w:  {'mount_type': w.hub_type}),
+    'chain':          (Chain,         'sprocket',       lambda s:  {'chain_width': s.sprocket_width}),
 }
 
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useBuild } from "../../../context/BuildContext";
-import { fetchComponentsByCategory, fetchCompatibleComponents } from "../../../services/componentService";
-import "../Builds.css";
+import { useBuild } from "../../context/BuildContext";
+import { fetchComponentsByCategory, fetchCompatibleComponents } from "../../services/componentService";
+import "./Builds.css";
 
 const ComponentSelectPage = () => {
     const { category } = useParams();
@@ -11,22 +11,27 @@ const ComponentSelectPage = () => {
     const [components, setComponents] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const { required = [], optional = [] } = build.bikeType?.rules ?? {};
-    const allCategories = [...required, ...optional];
+    const { required = [], optional = [], prerequisites = {} } = build.bikeType?.rules;
 
     const selectedByCategory = Object.fromEntries(
         build.components.map(c => [c.component_type, c])
     );
 
+    const getSelectedIds = () => {
+        const ids = {};
+        let current = category;
+        while (prerequisites[current]) {
+            const dep = prerequisites[current];
+            if (selectedByCategory[dep]) ids[`${dep}_id`] = selectedByCategory[dep].id;
+            current = dep;
+        }
+        return ids;
+    };
+
     useEffect(() => {
         const load = async () => {
             try {
-                const selectedIds = Object.fromEntries(
-                    allCategories
-                        .slice(0, allCategories.indexOf(category))
-                        .filter(t => selectedByCategory[t])
-                        .map(t => [`${t}_id`, selectedByCategory[t].id])
-                );
+                const selectedIds = getSelectedIds();
                 const [all, compatible] = await Promise.all([
                     fetchComponentsByCategory(category),
                     category === 'frame'

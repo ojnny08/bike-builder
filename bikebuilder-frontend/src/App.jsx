@@ -5,7 +5,7 @@ import HomePage from './pages/HomePage/Home'
 import Components from './pages/ComponentsPage/Components'
 import Builds from './pages/BuildsPage/Builds'
 import PublicBuilds from './pages/BuildsPage/PublicBuilds'
-import ComponentSelectPage from './pages/BuildsPage/components/ComponentSelectPage'
+import ComponentSelectPage from './pages/BuildsPage/ComponentSelectPage'
 import './App.css'
 
 function App() {

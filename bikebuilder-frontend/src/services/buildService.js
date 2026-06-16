@@ -12,7 +12,7 @@ export const fetchComponents = async (currentCategory) => {
 export const fetchBuilds = async () => {
     try {
         const res = await api.get("/api/builds/");
-        return res.data.results;
+        return res.data;
     } catch (error) {
         throw new Error("Failed to get builds");
     }

@@ -5,21 +5,11 @@ import "../Builds.css";
 import { createBuild, updateBuild } from "../../../services/buildService";
 
 
-const UPSTREAM_DEPS = {
-    bottom_bracket: 'frame',
-    crankset: 'bottom_bracket',
-    cassette: 'crankset',
-    rear_derailleur: 'cassette',
-    front_derailleur: 'crankset',
-    wheel: 'frame',
-    tire: 'wheel',
-};
-
 const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
 const Builder = () => {
     const { build, emptyBuild } = useBuild();
-    const { required = [], optional = [] } = build.bikeType.rules;
+    const { required = [], optional = [], prerequisites = {} } = build.bikeType.rules;
     const allCategories = [...required, ...optional];
     const [name, setName] = useState(build.name || "");
     const [saving, setSaving] = useState(false);
@@ -29,8 +19,8 @@ const Builder = () => {
         build.components.map(c => [c.component_type, c])
     );
 
-    const isLocked = (cat) => {
-        const dep = UPSTREAM_DEPS[cat];
+    const isLocked = (category) => {
+        const dep = prerequisites[category];
         return dep && allCategories.includes(dep) && !selectedByCategory[dep];
     };
 
@@ -82,17 +72,17 @@ const Builder = () => {
 
                 {/* Component rows */}
                 <div className="pcp-list">
-                    {allCategories.map(cat => {
-                        const selected = selectedByCategory[cat];
-                        const locked = isLocked(cat);
+                    {allCategories.map(category => {
+                        const selected = selectedByCategory[category];
+                        const locked = isLocked(category);
 
                         return (
                             <div
-                                key={cat}
+                                key={category}
                                 className={`pcp-item${locked ? ' pcp-item-locked' : ''}`}
-                                onClick={() => !locked && navigate(`/builds/new/select/${cat}`)}
+                                onClick={() => !locked && navigate(`/builds/new/select/${category}`)}
                             >
-                                <span className="pcp-item-cat">{formatCat(cat)}</span>
+                                <span className="pcp-item-cat">{formatCat(category)}</span>
                                 <div className="pcp-item-center">
                                     {selected ? (
                                         <span className="pcp-item-selected">{selected.name}
@@ -101,7 +91,7 @@ const Builder = () => {
                                     ) : locked ? (
                                         <span className="pcp-item-locked-msg">Select prerequisite first</span>
                                     ) : (
-                                        <span className="pcp-item-placeholder">Choose {formatCat(cat)}</span>
+                                        <span className="pcp-item-placeholder">Choose {formatCat(category)}</span>
                                     )}
                                 </div>
                                 <span className="pcp-item-price">
@@ -117,11 +107,11 @@ const Builder = () => {
             <div className="pcp-summary">
                 <h3 className="pcp-summary-title">Summary</h3>
                 <div className="pcp-summary-list">
-                    {allCategories.map(cat => {
-                        const comp = selectedByCategory[cat];
+                    {allCategories.map(category => {
+                        const comp = selectedByCategory[category];
                         return (
-                            <div key={cat} className="pcp-summary-row">
-                                <span className="pcp-summary-cat">{formatCat(cat)}</span>
+                            <div key={category} className="pcp-summary-row">
+                                <span className="pcp-summary-cat">{formatCat(category)}</span>
                                 <span className="pcp-summary-val">
                                     {comp ? comp.name : <span className="pcp-summary-empty">—</span>}
                                 </span>
