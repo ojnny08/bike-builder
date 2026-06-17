@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBuild } from "../../context/BuildContext";
 import { fetchComponentsByCategory, fetchCompatibleComponents } from "../../services/componentService";
-import "./Builds.css";
+import "./style/Builds.css";
 
 const ComponentSelectPage = () => {
     const { category } = useParams();

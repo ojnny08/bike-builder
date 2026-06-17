@@ -6,8 +6,8 @@ from apps.components.serializer import ComponentsSerializer
 class BuildsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Build
-        fields = ['id', 'name', 'bikeType', 'components', 'status', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'name', 'bikeType', 'components', 'status', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'user', 'created_at', 'updated_at']
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)

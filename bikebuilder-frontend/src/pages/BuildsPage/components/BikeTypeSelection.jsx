@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { api } from "../../../api/axios";
-import "../Builds.css";
 import { fetchBikeTypes } from "../../../services/bikeTypeService";
+import "../style/Builds.css";
 
 const DESCRIPTIONS = {
     road: "Built for speed on paved surfaces. Lightweight frames, drop handlebars, and narrow tires optimised for long-distance rides and racing.",

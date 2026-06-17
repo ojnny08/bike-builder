@@ -5,7 +5,7 @@ from .serializer import BuildsSerializer
 from .models import Build
 
 
-class BuildViewSet(ViewSet):
+class MyBuildViewSet(ViewSet):
 
     def list(self, request):
         build = Build.objects.filter(user=request.user)
@@ -27,7 +27,7 @@ class BuildViewSet(ViewSet):
     
     def destroy(self, request, pk=None):
         try:
-            build = Build.objects.get(pk=pk)
+            build = Build.objects.get(pk=pk, user=request.user)
         except Build.DoesNotExist:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
         build.delete()
@@ -35,7 +35,7 @@ class BuildViewSet(ViewSet):
 
     def partial_update(self, request, pk=None):
         try:
-            build = Build.objects.get(pk=pk)
+            build = Build.objects.get(pk=pk, user=request.user)
         except Build.DoesNotExist:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = BuildsSerializer(build, data=request.data, partial=True)

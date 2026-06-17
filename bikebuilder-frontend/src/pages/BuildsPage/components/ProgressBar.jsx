@@ -1,4 +1,4 @@
-import "../Builds.css";
+import "./style/Builds.css";
 
 const fmt = str => str.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 

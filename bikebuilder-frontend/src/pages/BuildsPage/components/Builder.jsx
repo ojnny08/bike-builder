@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../../context/BuildContext";
-import "../Builds.css";
+import "../style/Builds.css";
 import { createBuild, updateBuild } from "../../../services/buildService";
 
 

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useBuild } from "../../context/BuildContext";
 import { fetchBuilds, deleteBuild, getBuild } from "../../services/buildService";
-import "./PublicBuilds.css";
+import PublicBuildsCard from "./components/PublicBuildsCard";
+import "./style/PublicBuilds.css";
 
 const PublicBuilds = () => {
     const [buildsList, setBuildsList] = useState([]);
@@ -55,16 +56,12 @@ const PublicBuilds = () => {
             ) : (
                 <div className="builds-grid">
                     {buildsList.map(build => (
-                        <div key={build.id} className="build-card">
-                            <div className="build-card-header">
-                                <span className="build-bike-type">{build.name}</span>
-                                <span className={`build-status ${build.status}`}>{build.status.replace("_", " ")}</span>
-                            </div>
-                            <p className="build-component-count">{build.components.length} components</p>
-                            <p className="build-date">{new Date(build.created_at).toLocaleDateString()}</p>
-                            <button className="delete-btn" onClick={() => handleDelete(build.id)}>Delete</button>
-                            <button className="delete-btn" onClick={() => handleEdit(build.id)}>Edit</button>
-                        </div>
+                        <PublicBuildsCard 
+                            key={build.id}
+                            build={build}
+                            onDelete={handleDelete}
+                            onEdit={handleEdit}
+                        />
                     ))}
                 </div>
             )}

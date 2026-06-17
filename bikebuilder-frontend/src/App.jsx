@@ -6,6 +6,7 @@ import Components from './pages/ComponentsPage/Components'
 import Builds from './pages/BuildsPage/Builds'
 import PublicBuilds from './pages/BuildsPage/PublicBuilds'
 import ComponentSelectPage from './pages/BuildsPage/ComponentSelectPage'
+import Profile from './pages/ProfilePage/Profile'
 import './App.css'
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/builds/new" element={<Builds />}/>
           <Route path="/builds/new/select/:category" element={<ComponentSelectPage />}/>
           <Route path="/builds" element={<PublicBuilds />}/>
+          <Route path="/profile/:pk" element={<Profile />}/>
         </Route>
       </Routes>
     </BrowserRouter>
