@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Build
 from apps.category.serializer import BikeTypeSerializer
 from apps.components.serializer import ComponentsSerializer
+from apps.users.serializer import UserPublicSerializer
 
 class BuildsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +12,7 @@ class BuildsSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
+        rep['user'] = UserPublicSerializer(instance.user).data
         rep['bikeType'] = BikeTypeSerializer(instance.bikeType).data
         rep['components'] = ComponentsSerializer(instance.components.all(), many=True).data
         return rep
