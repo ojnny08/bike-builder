@@ -1,7 +1,12 @@
 from rest_framework.routers import DefaultRouter
-from .views import MyBuildViewSet
+from django.urls import path
+from .views import MyBuildViewSet, PublicBuildsViewSet
 
 router = DefaultRouter()
 router.register('', MyBuildViewSet, basename='build')
 
-urlpatterns = router.urls
+public_builds = PublicBuildsViewSet.as_view({'get': 'list'})
+
+urlpatterns = [
+    path('public/', public_builds, name='public-builds'),
+] + router.urls

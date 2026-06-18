@@ -5,6 +5,19 @@ from .serializer import BuildsSerializer
 from .models import Build
 
 
+class PublicBuildsViewSet(ViewSet):
+
+    def list(self, request):
+        user_pk = request.query_params.get('user')
+        progress = request.query_params.get('status')
+        builds = Build.objects.all()
+        if user_pk:
+            builds = builds.filter(user__pk=user_pk)
+        if progress:
+            builds = builds.filter(status=progress)
+        return Response(BuildsSerializer(builds, many=True).data)
+
+
 class MyBuildViewSet(ViewSet):
 
     def list(self, request):

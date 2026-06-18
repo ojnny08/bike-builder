@@ -9,12 +9,21 @@ export const fetchComponents = async (currentCategory) => {
     }
 };
 
-export const fetchBuilds = async () => {
+export const fetchBuilds = async (params = {}) => {
     try {
-        const res = await api.get("/api/builds/");
+        const res = await api.get("/api/builds/", { params });
         return res.data;
     } catch (error) {
         throw new Error("Failed to get builds");
+    }
+};
+
+export const fetchPublicBuilds = async (params = {}) => {
+    try {
+        const res = await api.get("/api/builds/public/", { params });
+        return res.data;
+    } catch (error) {
+        throw new Error("Failed to get public builds");
     }
 };
 

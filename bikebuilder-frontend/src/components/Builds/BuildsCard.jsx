@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const PublicBuildsCard = ({ build, onDelete, onEdit }) => {
+const BuildsCard = ({ build, onDelete, onEdit }) => {
     const navigate = useNavigate();
 
     return (
@@ -18,4 +18,4 @@ const PublicBuildsCard = ({ build, onDelete, onEdit }) => {
     );
 };
 
-export default PublicBuildsCard;
+export default BuildsCard;

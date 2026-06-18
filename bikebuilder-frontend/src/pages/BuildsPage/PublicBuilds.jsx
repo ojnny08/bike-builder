@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useBuild } from "../../context/BuildContext";
 import { fetchBuilds, deleteBuild, getBuild } from "../../services/buildService";
-import PublicBuildsCard from "./components/PublicBuildsCard";
+import PublicBuildsCard from "../../components/Builds/BuildsCard";
 import "./style/PublicBuilds.css";
 
 const PublicBuilds = () => {
