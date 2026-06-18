@@ -1,20 +1,58 @@
-import { NavLink, Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { fetchCurrentUserProfile } from "../../services/userService";
 import "./NavBar.css";
 
 const NavBar = () => {
     const { currentUser, logout } = useAuth();
+    const [profilePk, setProfilePk] = useState(null);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!currentUser) return;
+        fetchCurrentUserProfile().then(data => setProfilePk(data.id));
+    }, [currentUser]);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target))
+                setDropdownOpen(false);
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     return (
         <nav className="navbar">
             <div className="navbar-top">
                 <NavLink to="/" className="navbar-brand">
                     <span className="navbar-brand-icon">&#x1F6B4;</span>
-                    BUILD A BIKE
+                    Bikco
                 </NavLink>
                 <div className="navbar-auth">
                     {currentUser ? (
-                        <button className="navbar-auth-btn" onClick={logout}>Log Out</button>
+                        <div className="navbar-user" ref={dropdownRef}>
+                            <div className="navbar-user-info" onClick={() => profilePk && navigate(`/profile/${profilePk}`)}>
+                                {currentUser.photoURL
+                                    ? <img src={currentUser.photoURL} alt={currentUser.displayName} className="navbar-avatar" />
+                                    : <div className="navbar-avatar-placeholder">{currentUser.displayName?.[0] ?? "?"}</div>
+                                }
+                                <span className="navbar-username">{currentUser.displayName}</span>
+                            </div>
+                            <button className="navbar-chevron" onClick={() => setDropdownOpen(prev => !prev)}>
+                                <span className={`navbar-chevron-icon ${dropdownOpen ? "open" : ""}`} />
+                            </button>
+                            {dropdownOpen && (
+                                <div className="navbar-dropdown">
+                                    <button className="navbar-dropdown-item" onClick={() => { logout(); setDropdownOpen(false); }}>
+                                        Log Out
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     ) : (
                         <>
                             <Link to="/login" className="navbar-auth-link">Log In</Link>

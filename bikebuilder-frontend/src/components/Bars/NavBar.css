@@ -54,6 +54,105 @@
     font-size: 0.875rem;
 }
 
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.navbar-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.navbar-avatar-placeholder {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.navbar-username {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.navbar-user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.navbar-chevron {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-chevron-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--text-muted);
+    border-bottom: 2px solid var(--text-muted);
+    transform: rotate(45deg) translateY(-3px);
+    transition: transform 0.2s, border-color 0.12s;
+}
+
+.navbar-chevron:hover .navbar-chevron-icon {
+    border-color: var(--text);
+}
+
+.navbar-chevron-icon.open {
+    transform: rotate(225deg) translateY(-3px);
+}
+
+.navbar-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    min-width: 120px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.navbar-dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+}
+
+.navbar-dropdown-item:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
 .navbar-auth-btn {
     background: none;
     border: none;
