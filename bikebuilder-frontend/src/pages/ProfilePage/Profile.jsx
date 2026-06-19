@@ -1,44 +1,32 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchCurrentPublicProfile } from "../../services/userService";
-import { fetchPublicBuilds } from "../../services/buildService";
-import BuildsCard from "../../components/Builds/BuildsCard";
-import { getBuild } from "../../services/buildService";
+import { fetchPublicBuilds, getBuild } from "../../services/buildService";
 import { useBuild } from "../../context/BuildContext";
-import { useNavigate } from "react-router-dom";
+import BuildsCard from "../../components/Builds/BuildsCard";
 import "./Profile.css";
 
 const Profile = () => {
-    const { pk } = useParams();
+    const { username } = useParams();
     const [profile, setProfile] = useState(null);
     const [buildsList, setBuildsList] = useState([]);
     const { editBuild } = useBuild();
-    const navigate = useNavigate('');
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-
 
     useEffect(() => {
         Promise.all([
-            fetchCurrentPublicProfile(pk),
-            fetchPublicBuilds({ user: pk }),
+            fetchCurrentPublicProfile(username),
+            fetchPublicBuilds({ username }),
         ]).then(([profileData, buildsData]) => {
             setProfile(profileData);
             setBuildsList(buildsData);
         }).finally(() => setLoading(false));
-    }, [pk]);
+    }, [username]);
 
-    const handleDelete = async (pk) => {
+    const handleEdit = async (id) => {
         try {
-            await deleteBuild(pk);
-            setBuildsList(prev => prev.filter(b => b.id !== pk));
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const handleEdit = async (pk) => {
-        try {
-            const data = await getBuild(pk);
+            const data = await getBuild(id);
             editBuild({ build: data });
             navigate("/builds/new");
         } catch (error) {
@@ -61,14 +49,13 @@ const Profile = () => {
                 )}
                 <h2 className="profile-name">{profile.display_name}</h2>
             </div>
-            
+
             <div className="profile-build-card">
                 {buildsList.map((build) => (
                     <BuildsCard
                         key={build.id}
                         build={build}
-                        onDelete={handleDelete}
-                        onEdit={handleEdit}/>
+                        onEdit={handleEdit} />
                 ))}
             </div>
         </div>

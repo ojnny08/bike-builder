@@ -6,14 +6,14 @@ import "./NavBar.css";
 
 const NavBar = () => {
     const { currentUser, logout } = useAuth();
-    const [profilePk, setProfilePk] = useState(null);
+    const [profileUsername, setProfileUsername] = useState(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!currentUser) return;
-        fetchCurrentUserProfile().then(data => setProfilePk(data.id));
+        fetchCurrentUserProfile().then(data => setProfileUsername(data.username));
     }, [currentUser]);
 
     useEffect(() => {
@@ -35,7 +35,7 @@ const NavBar = () => {
                 <div className="navbar-auth">
                     {currentUser ? (
                         <div className="navbar-user" ref={dropdownRef}>
-                            <div className="navbar-user-info" onClick={() => profilePk && navigate(`/profile/${profilePk}`)}>
+                            <div className="navbar-user-info" onClick={() => profileUsername && navigate(`/profile/${profileUsername}`)}>
                                 {currentUser.photoURL
                                     ? <img src={currentUser.photoURL} alt={currentUser.displayName} className="navbar-avatar" />
                                     : <div className="navbar-avatar-placeholder">{currentUser.displayName?.[0] ?? "?"}</div>

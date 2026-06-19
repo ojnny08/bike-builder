@@ -5,7 +5,7 @@ const BuildsCard = ({ build, onDelete, onEdit }) => {
 
     return (
         <div className="build-card">
-            <div className="build-card-user" onClick={() => navigate(`/profile/${build.user.id}`)}>
+            <div className="build-card-user" onClick={() => navigate(`/profile/${build.user.username}`)}>
                 {build.user.photo_url
                     ? <img src={build.user.photo_url} alt={build.user.display_name} className="build-card-avatar" />
                     : <div className="build-card-avatar-placeholder">{build.user.display_name?.[0] ?? "?"}</div>

@@ -21,7 +21,7 @@ function App() {
           <Route path="/builds/new" element={<Builds />}/>
           <Route path="/builds/new/select/:category" element={<ComponentSelectPage />}/>
           <Route path="/builds" element={<PublicBuilds />}/>
-          <Route path="/profile/:pk" element={<Profile />}/>
+          <Route path="/profile/:username" element={<Profile />}/>
         </Route>
       </Routes>
     </BrowserRouter>

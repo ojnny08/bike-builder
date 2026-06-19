@@ -18,9 +18,9 @@ class UserProfileViewSet(ViewSet):
     
 class PublicProfileViewSet(ViewSet):
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, username=None):
         try:
-            profile = User.objects.get(pk=pk)
+            profile = User.objects.get(username=username)
         except User.DoesNotExist:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response(UserPublicSerializer(profile).data)

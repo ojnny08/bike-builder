@@ -6,5 +6,5 @@ public_profile = PublicProfileViewSet.as_view({'get': 'retrieve'})
 
 urlpatterns = [
     path('', profile, name='profile'),
-    path('<int:pk>/', public_profile, name='public-profile'),
+    path('<slug:username>/', public_profile, name='public-profile'),
 ]

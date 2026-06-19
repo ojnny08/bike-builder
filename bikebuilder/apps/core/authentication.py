@@ -1,6 +1,7 @@
 import firebase_admin
 from firebase_admin import auth, credentials
 from django.conf import settings
+from django.utils.text import slugify
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 from apps.users.models import User
@@ -34,7 +35,7 @@ class FirebaseAuthentication(BaseAuthentication):
         display_name = decoded_token.get("name", "")
         photo_url = decoded_token.get("picture", "")
 
-        user, _ = User.objects.get_or_create(
+        user, created = User.objects.get_or_create(
             firebase_uid=firebase_uid,
             defaults={
                 "email": email,
@@ -42,5 +43,15 @@ class FirebaseAuthentication(BaseAuthentication):
                 "photo_url": photo_url,
             },
         )
+
+        if created and display_name:
+            base = slugify(display_name)[:45]
+            slug = base
+            n = 1
+            while User.objects.filter(username=slug).exists():
+                slug = f"{base}-{n}"
+                n += 1
+            user.username = slug
+            user.save(update_fields=["username"])
 
         return (user, None)
