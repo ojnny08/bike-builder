@@ -1,10 +1,37 @@
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const BuildsCard = ({ build, onDelete, onEdit }) => {
+const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
     const navigate = useNavigate();
+    const fileInputRef = useRef(null);
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        onUploadImage(build.id, file);
+        e.target.value = "";
+    };
 
     return (
         <div className="build-card">
+            <div
+                className={`build-card-image${onUploadImage ? ' build-card-image-clickable' : ''}`}
+                onClick={() => onUploadImage && fileInputRef.current.click()}
+            >
+                {build.image_url
+                    ? <img src={build.image_url} alt={build.name} className="build-card-img" />
+                    : <div className="build-card-img-placeholder">
+                        {onUploadImage && <span className="build-card-img-prompt">+ Add Photo</span>}
+                      </div>
+                }
+                {onUploadImage && build.image_url && (
+                    <div className="build-card-img-overlay">Change Photo</div>
+                )}
+            </div>
+            {onUploadImage && (
+                <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+            )}
+
             <div className="build-card-user" onClick={() => navigate(`/profile/${build.user.username}`)}>
                 {build.user.photo_url
                     ? <img src={build.user.photo_url} alt={build.user.display_name} className="build-card-avatar" />

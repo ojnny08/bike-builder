@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Canvas & surfaces — Notion warm whites */
+  /* Canvas & surfaces */
   --bg:             #f7f6f3;
   --surface:        #edecea;
   --surface-2:      #f2f1ef;
@@ -9,23 +9,29 @@
   --border:         #d9d7d2;
   --border-strong:  #b8b4ad;
 
-  /* Text — Notion ink scale */
+  /* Text */
   --text:           #1a1a1a;
   --text-secondary: #5d5b54;
   --text-muted:     #a4a097;
 
-  /* Accent — Notion purple, used sparingly */
+  /* Accent */
   --accent:         #37352f;
   --accent-hover:   #1a1a1a;
   --accent-focus:   #5645d4;
   --accent-bg:      rgba(86, 69, 212, 0.06);
   --on-accent:      #ffffff;
 
+  /* Layout */
+  --page-x: 64px;
+
   /* Semantic */
   --green:          #1aae39;
   --green-bg:       rgba(26, 174, 57, 0.08);
   --yellow:         #dd5b00;
   --yellow-bg:      rgba(221, 91, 0, 0.08);
+  --error:          #f87171;
+  --error-bg:       rgba(248, 113, 113, 0.08);
+  --error-border:   rgba(248, 113, 113, 0.2);
 }
 
 *, *::before, *::after {
@@ -35,8 +41,13 @@
   outline: none;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 html, body, #root {
   height: 100%;
+  width: 100%;
 }
 
 body {
@@ -47,4 +58,14 @@ body {
   letter-spacing: -0.005em;
   font-size: 15px;
   line-height: 1.5;
+}
+
+.loading-text {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.empty-state {
+  color: var(--text-muted);
+  font-size: 0.8rem;
 }

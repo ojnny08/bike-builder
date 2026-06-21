@@ -53,5 +53,5 @@ class FirebaseAuthentication(BaseAuthentication):
                 n += 1
             user.username = slug
             user.save(update_fields=["username"])
-
+    
         return (user, None)

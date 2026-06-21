@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../../context/BuildContext";
 import "../style/Builds.css";
-import { createBuild, updateBuild } from "../../../services/buildService";
+import { createBuild, updateBuild, uploadBuildImage } from "../../../services/buildService";
 
 
 const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -13,6 +13,9 @@ const Builder = () => {
     const allCategories = [...required, ...optional];
     const [name, setName] = useState(build.name || "");
     const [saving, setSaving] = useState(false);
+    const [savedBuildId, setSavedBuildId] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef(null);
     const navigate = useNavigate();
 
     const selectedByCategory = Object.fromEntries(
@@ -35,17 +38,55 @@ const Builder = () => {
             status: allRequiredFilled ? "complete" : "in_progress",
         };
         try {
-            if (build.id) await updateBuild(build.id, payload);
-            else await createBuild(payload);
-            navigate("/builds");
+            if (build.id) {
+                await updateBuild(build.id, payload);
+                emptyBuild();
+                navigate("/builds");
+            } else {
+                const saved = await createBuild(payload);
+                setSavedBuildId(saved.id);
+            }
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handleUploadImage = async (file) => {
+        setUploading(true);
+        try {
+            await uploadBuildImage(savedBuildId, file);
+        } finally {
+            setUploading(false);
             emptyBuild();
+            navigate("/builds");
         }
     };
 
     const totalPrice = build.components.reduce((sum, c) => sum + (parseFloat(c.price) || 0), 0);
     const totalWeight = build.components.reduce((sum, c) => sum + (parseFloat(c.weight) || 0), 0);
+
+    if (savedBuildId) return (
+        <div className="pcp-upload-step">
+            <p className="pcp-upload-title">Build saved!</p>
+            <p className="pcp-upload-sub">Add a photo of your bike</p>
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={e => {
+                    const file = e.target.files[0];
+                    if (file) handleUploadImage(file);
+                }}
+            />
+            <button className="pcp-save-btn" onClick={() => fileInputRef.current.click()} disabled={uploading}>
+                {uploading ? "Uploading..." : "Choose Photo"}
+            </button>
+            <button className="pcp-start-over" onClick={() => { emptyBuild(); navigate("/builds"); }}>
+                Skip
+            </button>
+        </div>
+    );
 
     return (
         <div className="pcp-wrapper">

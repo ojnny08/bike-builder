@@ -15,5 +15,6 @@ class Build(models.Model):
     bikeType = models.ForeignKey(BikeType, on_delete=models.CASCADE)
     components = models.ManyToManyField(Components, blank=True)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.IN_PROGRESS)
+    image_url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

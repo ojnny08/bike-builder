@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchCurrentPublicProfile } from "../../services/userService";
-import { fetchPublicBuilds, getBuild } from "../../services/buildService";
+import { fetchPublicBuilds, getBuild, uploadBuildImage } from "../../services/buildService";
 import { useBuild } from "../../context/BuildContext";
 import BuildsCard from "../../components/Builds/BuildsCard";
 import "./Profile.css";
@@ -34,6 +34,11 @@ const Profile = () => {
         }
     };
 
+    const handleUploadImage = async (id, file) => {
+        const url = await uploadBuildImage(id, file);
+        setBuildsList(prev => prev.map(b => b.id === id ? { ...b, image_url: url } : b));
+    };
+
     if (loading) return <p className="loading-text">Loading...</p>;
     if (!profile) return <p className="loading-text">Profile not found.</p>;
 
@@ -55,7 +60,8 @@ const Profile = () => {
                     <BuildsCard
                         key={build.id}
                         build={build}
-                        onEdit={handleEdit} />
+                        onEdit={handleEdit}
+                        onUploadImage={handleUploadImage} />
                 ))}
             </div>
         </div>

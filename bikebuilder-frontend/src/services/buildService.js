@@ -62,3 +62,14 @@ export const updateBuild = async (id, payload) => {
         throw new Error("Failed to update build");
     }
 };
+
+export const uploadBuildImage = async (id, file) => {
+    try {
+        const form = new FormData();
+        form.append("image", file);
+        const res = await api.post(`/api/builds/${id}/upload-image/`, form);
+        return res.data.image_url;
+    } catch (error) {
+        throw new Error("Failed to upload image");
+    }
+};

@@ -1,7 +1,7 @@
 .home {
     display: flex;
     height: calc(100vh - 110px);
-    margin: -32px -64px;
+    margin: -32px calc(-1 * var(--page-x));
 }
 
 .home-left {

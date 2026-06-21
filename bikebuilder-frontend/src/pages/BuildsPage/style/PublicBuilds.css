@@ -1,7 +1,4 @@
-.public-builds-page {
-    max-width: 1100px;
-    margin: 0 auto;
-}
+.public-builds-page {}
 
 .public-builds-header {
     display: flex;
@@ -40,21 +37,6 @@
     background: var(--accent-hover);
 }
 
-.loading-text {
-    color: var(--text-muted);
-    font-size: 0.875rem;
-}
-
-.empty-builds {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    padding: 80px 0;
-    color: var(--text-muted);
-    font-size: 0.875rem;
-}
-
 .builds-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -65,9 +47,69 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 20px 24px;
+    overflow: hidden;
+    padding-bottom: 20px;
     transition: border-color 0.12s, background 0.12s;
 }
+
+.build-card > *:not(.build-card-image) {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.build-card-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--surface-hover);
+    position: relative;
+}
+
+.build-card-image-clickable { cursor: pointer; }
+
+.build-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.15s;
+}
+
+.build-card-image-clickable:hover .build-card-img { opacity: 0.85; }
+
+.build-card-img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.build-card-img-prompt {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+}
+
+.build-card-image-clickable:hover .build-card-img-prompt { color: var(--text-secondary); }
+
+.build-card-img-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.build-card-image-clickable:hover .build-card-img-overlay { opacity: 1; }
 
 .build-card:hover {
     background: var(--surface-hover);
@@ -80,6 +122,7 @@
     gap: 8px;
     margin-bottom: 14px;
     cursor: pointer;
+    padding-top: 16px;
 }
 
 .build-card-avatar {

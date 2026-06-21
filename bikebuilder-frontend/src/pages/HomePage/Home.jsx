@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import hero from "../../assets/hero.png";
 import "./Home.css";
 
 const HomePage = () => {
@@ -11,7 +10,7 @@ const HomePage = () => {
                 <Link to="/builds/new" className="start-build-btn">Build</Link>
             </div>
             <div className="home-right">
-                <img src={hero} alt="bike" />
+                <img src="/engine11.png" alt="bike" />
             </div>
         </div>
     );

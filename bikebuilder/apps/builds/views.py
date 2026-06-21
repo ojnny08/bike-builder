@@ -1,8 +1,10 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import action
 from .serializer import BuildsSerializer
 from .models import Build
+from .image_upload import upload_to_s3
 
 
 class PublicBuildsViewSet(ViewSet):
@@ -56,6 +58,20 @@ class MyBuildViewSet(ViewSet):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'], url_path='upload-image')
+    def upload_image(self, request, pk=None):
+        try:
+            build = Build.objects.get(pk=pk, user=request.user)
+        except Build.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+        file = request.FILES.get('image')
+        if not file:
+            return Response({'error': 'No image provided'}, status=status.HTTP_400_BAD_REQUEST)
+        url = upload_to_s3(file, pk)
+        build.image_url = url
+        build.save(update_fields=['image_url'])
+        return Response({'image_url': url})
     
         
 
