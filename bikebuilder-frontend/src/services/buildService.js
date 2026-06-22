@@ -1,4 +1,5 @@
 import { api } from "../api/axios";
+import { toRenderableImage } from "../utils/image";
 
 export const fetchComponents = async (currentCategory) => {
     try {
@@ -66,10 +67,12 @@ export const updateBuild = async (id, payload) => {
 export const uploadBuildImage = async (id, file) => {
     try {
         const form = new FormData();
-        form.append("image", file);
+        form.append("image", await toRenderableImage(file));
         const res = await api.post(`/api/builds/${id}/upload-image/`, form);
         return res.data.image_url;
     } catch (error) {
+        console.error("uploadBuildImage failed:", error);
         throw new Error("Failed to upload image");
     }
 };
+

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchCurrentPublicProfile } from "../../services/userService";
-import { fetchPublicBuilds, getBuild, uploadBuildImage } from "../../services/buildService";
+import { fetchPublicBuilds, getBuild, deleteBuild, uploadBuildImage } from "../../services/buildService";
 import { useBuild } from "../../context/BuildContext";
 import BuildsCard from "../../components/Builds/BuildsCard";
 import "./Profile.css";
@@ -34,6 +34,15 @@ const Profile = () => {
         }
     };
 
+    const handleDelete = async (id) => {
+        try {
+            await deleteBuild(id);
+            setBuildsList(prev => prev.filter(b => b.id !== id));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleUploadImage = async (id, file) => {
         const url = await uploadBuildImage(id, file);
         setBuildsList(prev => prev.map(b => b.id === id ? { ...b, image_url: url } : b));
@@ -60,6 +69,7 @@ const Profile = () => {
                     <BuildsCard
                         key={build.id}
                         build={build}
+                        onDelete={handleDelete}
                         onEdit={handleEdit}
                         onUploadImage={handleUploadImage} />
                 ))}
