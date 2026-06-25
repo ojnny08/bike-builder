@@ -29,7 +29,12 @@ const NavBar = () => {
         <nav className="navbar">
             <div className="navbar-top">
                 <NavLink to="/" className="navbar-brand">
-                    <span className="navbar-brand-icon">&#x1F6B4;</span>
+                    <svg className="navbar-brand-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <circle cx="18.5" cy="17.5" r="3.5" />
+                        <circle cx="5.5" cy="17.5" r="3.5" />
+                        <circle cx="15" cy="5" r="1" />
+                        <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
+                    </svg>
                     Bikco
                 </NavLink>
                 <div className="navbar-auth">

@@ -1,66 +1,364 @@
+/* ── Home / landing ─────────────────────────────────────────────────────────
+   Lives inside Layout's .page-wrapper (padding: 32px var(--page-x)). The hero
+   breaks out full-bleed; the sections below sit in a centered content column. */
+
 .home {
-    display: flex;
-    height: calc(100vh - 110px);
-    margin: -32px calc(-1 * var(--page-x));
+    margin: -32px calc(-1 * var(--page-x)) -32px;
 }
 
-.home-left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 80px 72px;
-    background: var(--bg);
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+
+.home-hero {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+    gap: 48px;
+    padding: 72px var(--page-x);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
 }
 
-.home-left h1 {
-    font-size: 3.2rem;
-    font-weight: 700;
-    line-height: 1.1;
-    margin-bottom: 20px;
-    color: var(--text);
-    letter-spacing: -0.05em;
+.home-hero-text {
+    max-width: 540px;
 }
 
-.home-left p {
-    font-size: 0.95rem;
+.home-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--accent-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--text-secondary);
-    margin-bottom: 40px;
-    max-width: 380px;
-    line-height: 1.7;
+    animation: fadeInUp var(--dur) var(--ease-out) both;
 }
 
-.start-build-btn {
-    display: inline-block;
-    padding: 12px 28px;
+.home-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.home-title {
+    margin-top: 22px;
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    color: var(--text);
+    animation: fadeInUp var(--dur) var(--ease-out) 60ms both;
+}
+
+.home-title-accent {
+    color: var(--text-muted);
+}
+
+.home-lead {
+    margin-top: 22px;
+    max-width: 440px;
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    animation: fadeInUp var(--dur) var(--ease-out) 120ms both;
+}
+
+.home-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+    animation: fadeInUp var(--dur) var(--ease-out) 180ms both;
+}
+
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 24px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background var(--dur-fast), color var(--dur-fast),
+                border-color var(--dur-fast),
+                transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
+}
+
+.home-btn svg { transition: transform var(--dur) var(--ease-out); }
+.home-btn:hover svg { transform: translateX(3px); }
+
+.home-btn-primary {
     background: var(--accent);
     color: var(--on-accent);
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border-radius: 8px;
-    width: fit-content;
-    transition: background 0.12s;
+    box-shadow: var(--shadow-sm);
 }
-
-.start-build-btn:hover {
+.home-btn-primary:hover {
     background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-accent);
+}
+.home-btn-primary:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
+
+.home-btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border-strong);
+}
+.home-btn-ghost:hover {
+    background: var(--surface-hover);
+    transform: translateY(-2px);
 }
 
-.home-right {
-    flex: 1;
+.home-btn-invert {
     background: var(--surface);
-    border-left: 1px solid var(--border);
+    color: var(--accent);
+    box-shadow: var(--shadow-md);
+}
+.home-btn-invert:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+/* Stats */
+.home-stats {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 44px;
+    animation: fadeInUp var(--dur) var(--ease-out) 240ms both;
+}
+
+.home-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.home-stat-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+}
+
+.home-stat-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.home-stat-sep {
+    width: 1px;
+    height: 34px;
+    background: var(--border);
+}
+
+/* Hero visual */
+.home-hero-visual {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    animation: fadeIn 0.5s var(--ease-out) both, floatY 6s ease-in-out 0.5s infinite;
 }
 
-.home-right img {
-    width: 80%;
+.home-hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.5;
+    mask-image: radial-gradient(circle at center, #000 35%, transparent 78%);
+    -webkit-mask-image: radial-gradient(circle at center, #000 35%, transparent 78%);
+}
+
+.home-hero-img {
+    position: relative;
+    width: 82%;
     height: auto;
     object-fit: contain;
-    opacity: 0.6;
-    filter: brightness(1.2);
+    filter: drop-shadow(0 18px 30px rgba(10, 10, 15, 0.18));
+}
+
+.home-hero-tag {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--accent);
+    color: var(--on-accent);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    box-shadow: var(--shadow-md);
+}
+
+@keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
+/* ── Content sections ───────────────────────────────────────────────────── */
+
+.home-section {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 72px var(--page-x) 0;
+}
+
+.home-section-title {
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Features */
+.home-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.home-feature {
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    animation: fadeInUp var(--dur) var(--ease-out) both;
+    transition: transform var(--dur) var(--ease-out), box-shadow var(--dur), border-color var(--dur-fast);
+}
+
+.home-feature:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+}
+
+.home-feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    background: var(--accent);
+    color: var(--on-accent);
+    margin-bottom: 18px;
+}
+.home-feature-icon svg { width: 22px; height: 22px; }
+
+.home-feature-title {
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.home-feature-desc {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+}
+
+/* Steps */
+.home-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.home-step {
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-2);
+    animation: fadeInUp var(--dur) var(--ease-out) both;
+}
+
+.home-step-num {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.home-step-title {
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.home-step-desc {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+}
+
+/* ── CTA band ───────────────────────────────────────────────────────────── */
+
+.home-band {
+    margin: 72px 0 0;
+    padding: 72px var(--page-x);
+    background: var(--accent);
+    color: var(--on-accent);
+    text-align: center;
+}
+
+.home-band-title {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 12px;
+}
+
+.home-band-sub {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 28px;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+    .home-hero {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding: 48px var(--page-x);
+    }
+    .home-hero-visual { order: -1; aspect-ratio: 16 / 10; }
+    .home-features,
+    .home-steps { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+    .home-stats { gap: 16px; }
+    .home-cta-row .home-btn { flex: 1; justify-content: center; }
 }

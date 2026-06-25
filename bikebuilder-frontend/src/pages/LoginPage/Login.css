@@ -37,6 +37,7 @@
   justify-content: center;
   padding: 64px 52px;
   background: var(--bg);
+  animation: fadeInUp var(--dur) var(--ease-out) both;
 }
 
 .login-form-panel h2 {
@@ -78,6 +79,7 @@
 
 .login-form input:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
 }
 
 .login-form .btn-primary {
@@ -92,11 +94,19 @@
   cursor: pointer;
   margin-top: 4px;
   font-family: inherit;
-  transition: background 0.12s;
+  box-shadow: var(--shadow-sm);
+  transition: background var(--dur-fast), transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
 }
 
 .login-form .btn-primary:hover {
   background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-accent);
+}
+
+.login-form .btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
 .login-divider {

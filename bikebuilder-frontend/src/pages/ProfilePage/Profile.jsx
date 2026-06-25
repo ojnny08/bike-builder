@@ -58,7 +58,7 @@ const Profile = () => {
                     <img className="profile-avatar" src={profile.photo_url} alt={profile.display_name} />
                 ) : (
                     <div className="profile-avatar-placeholder">
-                        {profile.display_name ?? "?"}
+                        {profile.display_name?.[0] ?? "?"}
                     </div>
                 )}
                 <h2 className="profile-name">{profile.display_name}</h2>

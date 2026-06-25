@@ -28,7 +28,13 @@
 }
 
 .navbar-brand-icon {
-    font-size: 1.2rem;
+    color: var(--accent);
+    display: block;
+    transition: transform var(--dur) var(--ease-out);
+}
+
+.navbar-brand:hover .navbar-brand-icon {
+    transform: rotate(-8deg) scale(1.05);
 }
 
 .navbar-auth {
@@ -133,6 +139,9 @@
     min-width: 120px;
     z-index: 100;
     overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    transform-origin: top right;
+    animation: fadeInUp var(--dur-fast) var(--ease-out) both;
 }
 
 .navbar-dropdown-item {
@@ -177,22 +186,42 @@
 }
 
 .navbar-links a {
+    position: relative;
     color: var(--text-muted);
     text-decoration: none;
     padding: 12px 28px;
     font-size: 0.8rem;
     font-weight: 500;
     letter-spacing: 0.03em;
-    border-bottom: 1.5px solid transparent;
-    transition: border-color 0.15s, color 0.15s;
+    transition: color var(--dur-fast);
+}
+
+.navbar-links a::after {
+    content: '';
+    position: absolute;
+    left: 28px;
+    right: 28px;
+    bottom: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform var(--dur) var(--ease-out);
 }
 
 .navbar-links a:hover {
     color: var(--text-secondary);
 }
 
+.navbar-links a:hover::after {
+    transform: scaleX(0.5);
+}
+
 .navbar-links a.active {
-    color: var(--text);
+    color: var(--accent);
     font-weight: 600;
-    border-bottom: 1.5px solid var(--accent);
+}
+
+.navbar-links a.active::after {
+    transform: scaleX(1);
 }
