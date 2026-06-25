@@ -14,6 +14,8 @@ const Builder = () => {
     const [name, setName] = useState(build.name || "");
     const [saving, setSaving] = useState(false);
     const [savedBuildId, setSavedBuildId] = useState(null);
+    const [shareToken, setShareToken] = useState(null);
+    const [copied, setCopied] = useState(false);
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef(null);
     const navigate = useNavigate();
@@ -45,10 +47,17 @@ const Builder = () => {
             } else {
                 const saved = await createBuild(payload);
                 setSavedBuildId(saved.id);
+                setShareToken(saved.share_token);
             }
         } finally {
             setSaving(false);
         }
+    };
+
+    const handleCopyShareLink = async () => {
+        const url = `${window.location.origin}/builds/shared/${shareToken}`;
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
     };
 
     const handleUploadImage = async (file) => {
@@ -68,6 +77,11 @@ const Builder = () => {
     if (savedBuildId) return (
         <div className="pcp-upload-step">
             <p className="pcp-upload-title">Build saved!</p>
+            {shareToken && (
+                <button className="pcp-start-over" onClick={handleCopyShareLink}>
+                    {copied ? "Link copied!" : "Copy share link"}
+                </button>
+            )}
             <p className="pcp-upload-sub">Add a photo of your bike</p>
             <input
                 ref={fileInputRef}

@@ -2,12 +2,14 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 from .serializer import BuildsSerializer
 from .models import Build
-from .image_upload import upload_to_s3
+from .image_upload import upload_to_s3, delete_from_s3
 
 
 class PublicBuildsViewSet(ViewSet):
+    permission_classes = [AllowAny]
 
     def list(self, request):
         username = request.query_params.get('username')
@@ -18,6 +20,13 @@ class PublicBuildsViewSet(ViewSet):
         if progress:
             builds = builds.filter(status=progress)
         return Response(BuildsSerializer(builds, many=True).data)
+    
+    def retrieve(self, request, token=None):
+        try:
+            build = Build.objects.get(share_token=token)
+        except Build.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(BuildsSerializer(build).data)
 
 
 class MyBuildViewSet(ViewSet):
@@ -68,9 +77,11 @@ class MyBuildViewSet(ViewSet):
         file = request.FILES.get('image')
         if not file:
             return Response({'error': 'No image provided'}, status=status.HTTP_400_BAD_REQUEST)
+        old_url = build.image_url
         url = upload_to_s3(file, pk)
         build.image_url = url
         build.save(update_fields=['image_url'])
+        delete_from_s3(old_url)
         return Response({'image_url': url})
     
         

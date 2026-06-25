@@ -28,6 +28,15 @@ export const fetchPublicBuilds = async (params = {}) => {
     }
 };
 
+export const getSharedBuild = async (token) => {
+    try {
+        const res = await api.get(`/api/builds/public/${token}/`);
+        return res.data;
+    } catch (error) {
+        throw new Error("Failed to get shared build");
+    }
+};
+
 export const deleteBuild = async (id) => {
     try {
         const res = await api.delete(`/api/builds/${id}/`);

@@ -214,3 +214,18 @@
     border-color: var(--border-strong);
     color: var(--text-secondary);
 }
+
+.share-btn {
+    padding: 6px 14px;
+    background: var(--accent, #2563eb);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.12s;
+}
+
+.share-btn:hover {
+    opacity: 0.85;
+}

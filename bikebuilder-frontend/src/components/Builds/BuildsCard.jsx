@@ -1,15 +1,23 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
+    const [copied, setCopied] = useState(false);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
         onUploadImage(build.id, file);
         e.target.value = "";
+    };
+
+    const handleShare = async () => {
+        const url = `${window.location.origin}/builds/shared/${build.share_token}`;
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
     };
 
     return (
@@ -45,6 +53,7 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
             </div>
             <p className="build-component-count">{build.components.length} components</p>
             <p className="build-date">{new Date(build.created_at).toLocaleDateString()}</p>
+            <button className="share-btn" onClick={handleShare}>{copied ? "Link copied!" : "Share"}</button>
             {onDelete && <button className="delete-btn" onClick={() => onDelete(build.id)}>Delete</button>}
             {onEdit && <button className="delete-btn" onClick={() => onEdit(build.id)}>Edit</button>}
         </div>
