@@ -1,0 +1,5 @@
+# Dependencies for the Track Supermarket scraper (scrape_tracksupermarket.py).
+# Kept separate from the app's requirements.txt so production deploys don't pull these in.
+# Install with:  .venv/bin/pip install -r bikebuilder/scripts/requirements-scrape.txt
+requests>=2.31      # already provided transitively by boto3/firebase-admin
+beautifulsoup4>=4.12

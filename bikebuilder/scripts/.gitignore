@@ -1,0 +1,4 @@
+# Scraper outputs and HTTP cache — regenerated, not source.
+.cache/
+scraped_components.json
+scraped_components.csv

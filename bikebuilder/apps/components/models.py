@@ -6,15 +6,19 @@ class ComponentType(models.TextChoices):
     FRAME = "frame", "Frame"
     BOTTOM_BRACKET = "bottom_bracket", "Bottom Bracket"
     CRANKSET = "crankset", "Crankset"
+    CHAINRING = "chainring", "Chainring"
+    SPROCKET = "sprocket", "Sprocket"
+    CHAIN = "chain", "Chain"
     WHEEL = "wheel", "Wheel"
+    TRACKHUB = "track_hub", "Track Hub"
     TIRE = "tire", "Tire"
     HANDLEBAR = "handlebar", "Handlebar"
     STEM = "stem", "Stem"
     BRAKE = "brake", "Brake"
     SADDLE = "saddle", "Saddle"
     SEATPOST = "seatpost", "Seatpost"
-    SPROCKET = "sprocket", "Sprocket"
-    CHAIN = "chain", "Chain"
+    PEDALS = "pedals", "Pedals"
+   
 
 
 class Components(models.Model):
@@ -25,10 +29,6 @@ class Components(models.Model):
     weight_grams = models.PositiveIntegerField(help_text="Weight in grams")
     description = models.TextField(blank=True)
     image_url = models.URLField(blank=True)
-    affiliate_url = models.URLField(blank=True)
-    in_stock = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['brand', 'name']
@@ -38,6 +38,10 @@ class Components(models.Model):
     
 
 class Frame(Components):
+    class Generation(models.TextChoices):
+        MODERN = "modern", "Modern"
+        VINTAGE = "vintage", "Vintage"
+
     class BBShell(models.TextChoices):
         THREADED = "threaded", "Threaded (BSA)"
         PRESS_FIT = "press_fit", "Press Fit"
@@ -59,17 +63,26 @@ class Frame(Components):
 
 class BottomBracket(Components):
     class ShellType(models.TextChoices):
-        THREADED = "threaded", "Threaded (BSA)"
-        PRESS_FIT = "press_fit", "Press Fit"
-        T47 = "t47", "T47"
+        THREADED_BSA = "threaded_bsa", "Threaded (BSA/English)"
+        THREADED_ITA = "threaded_ita", "Threaded (Italian)"
+        T47 = "t47", "T47 Threaded"
+        
+        PRESS_FIT_86_92 = "pf86_92", "Press Fit (BB86/BB92)"
+        PRESS_FIT_30 = "pf30", "PressFit 30"
         BB30 = "bb30", "BB30"
 
     class SpindleInterface(models.TextChoices):
-        SQUARE_TAPER = "square_taper", "Square Taper"
-        ISIS = "isis", "ISIS/Octalink"
-        MM_24 = "24mm", "24mm (Shimano/SRAM)"
-        MM_30 = "30mm", "30mm (BB30)"
-        DUB = "dub", "SRAM DUB"
+        # Square Taper
+        SQUARE_TAPER_ISO = "square_taper_iso", "Square Taper ISO"
+        SQUARE_TAPER_JIS = "square_taper_jis", "Square Taper JIS"
+        
+        OCTALINK = "octalink", "Shimano Octalink"
+        ISIS = "isis", "ISIS Drive"
+        
+        MM_24 = "24mm", "24mm (Shimano Hollowtech II)"
+        GXP = "gxp", "SRAM GXP (24mm/22mm stepped)"
+        MM_30 = "30mm", "30mm (BB30/386EVO)"
+        DUB = "dub", "SRAM DUB (28.99mm)"
 
     shell_type = models.CharField(max_length=20, choices=ShellType.choices)
     spindle_interface = models.CharField(max_length=20, choices=SpindleInterface.choices)
@@ -78,18 +91,25 @@ class BottomBracket(Components):
 
 class Crankset(Components):
     class SpindleInterface(models.TextChoices):
-        SQUARE_TAPER = "square_taper", "Square Taper"
-        ISIS = "isis", "ISIS/Octalink"
-        MM_24 = "24mm", "24mm (Shimano)"
-        MM_30 = "30mm", "30mm (SRAM)"
-        DUB = "dub", "SRAM DUB"
+        # Square Taper
+        SQUARE_TAPER_ISO = "square_taper_iso", "Square Taper ISO"
+        SQUARE_TAPER_JIS = "square_taper_jis", "Square Taper JIS"
+        
+        OCTALINK = "octalink", "Shimano Octalink"
+        ISIS = "isis", "ISIS Drive"
+        
+        MM_24 = "24mm", "24mm (Shimano Hollowtech II)"
+        GXP = "gxp", "SRAM GXP (24mm/22mm stepped)"
+        MM_30 = "30mm", "30mm (BB30/386EVO)"
+        DUB = "dub", "SRAM DUB (28.99mm)"
+    
+    class ArmLength(models.TextChoices):
+        ARM_160mm = "160mm", "160mm"
+        ARM_165mm = "165mm", "165mm"
+        ARM_170mm = "170mm", "170mm"
 
     spindle_interface = models.CharField(max_length=20, choices=SpindleInterface.choices)
-    arm_length_mm = models.PositiveSmallIntegerField()
-    chainring_count = models.PositiveSmallIntegerField()
-    bcd = models.PositiveSmallIntegerField(null=True, blank=True, help_text="Bolt circle diameter in mm, null for direct mount")
-    speeds = models.PositiveSmallIntegerField(help_text="1 for single speed / fixed")
-
+    arm_length_mm = models.CharField(max_length=5, choices=ArmLength.choices)
 
 class Wheel(Components):
     class WheelSize(models.TextChoices):
@@ -116,6 +136,7 @@ class Wheel(Components):
     class HubType(models.TextChoices):
         THREADED = "threaded", "Threaded"
         SPLINE = "spline", "Spline"
+    
 
     wheel_size = models.CharField(max_length=10, choices=WheelSize.choices)
     position = models.CharField(max_length=10, choices=Position.choices)
@@ -227,3 +248,32 @@ class Seatpost(Components):
     length_mm = models.PositiveSmallIntegerField()
     offset_mm = models.PositiveSmallIntegerField(default=0)
     post_type = models.CharField(max_length=20, choices=PostType.choices, default=PostType.STANDARD)
+
+
+class TrackHub(Components):
+    class HubPosition(models.TextChoices):
+        FRONT = "front", "Front Hub"
+        REAR = "rear", "Rear Hub"
+
+    class AxleType(models.TextChoices):
+        BOLT_ON_M9 = "bolt_on_m9", "Bolt-On M9 (Standard Front Axle)"
+        BOLT_ON_M10 = "bolt_on_m10", "Bolt-On M10 (Standard Rear Axle)"
+        FEMALE_BOLT = "female_bolt", "Female Allen Bolt System"
+
+    class HubSpacing(models.TextChoices):
+        FRONT_100MM = "100mm", "100mm (Standard Front)"
+        REAR_120MM = "120mm", "120mm (Standard Track Rear)"
+        REAR_110MM = "110mm", "110mm (Vintage NJS / Keirin Rear)"
+        REAR_130MM = "130mm", "130mm (Single-Speed Conversion Rear)"
+
+    class CogInterface(models.TextChoices):
+        FIXED_SINGLE = "fixed_single", "Single-Sided Fixed"
+        FLIP_FLOP_FIX_FREE = "flip_flop_fix_free", "Flip-Flop (Fixed / Freewheel)"
+        FLIP_FLOP_FIX_FIX = "flip_flop_fix_fix", "Flip-Flop (Fixed / Fixed)"
+        SPLINED_TRACK = "splined", "Splined Track (e.g., Miche / Shimano)"
+
+    class ThreadStandard(models.TextChoices):
+        ISO_ENGLISH = "iso_english", "Standard English/ISO (1.37 x 24 TPI)"
+        NJS_JIS = "njs_jis", "NJS/JIS (Keirin standard)"
+        CAMPAGNOLO = "campagnolo", "Campagnolo Threading"
+        FRENCH = "french", "Vintage French Threading"
