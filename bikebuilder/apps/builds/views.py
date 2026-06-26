@@ -14,11 +14,14 @@ class PublicBuildsViewSet(ViewSet):
     def list(self, request):
         username = request.query_params.get('username')
         progress = request.query_params.get('status')
+        limit = request.query_params.get('limit')
         builds = Build.objects.all()
         if username:
             builds = builds.filter(user__username=username)
         if progress:
             builds = builds.filter(status=progress)
+        if limit:
+            builds = builds[:int(limit)]
         return Response(BuildsSerializer(builds, many=True).data)
     
     def retrieve(self, request, token=None):

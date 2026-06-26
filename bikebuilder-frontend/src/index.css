@@ -53,6 +53,12 @@
   outline: none;
 }
 
+/* Disable all motion (transitions + keyframe animations) app-wide */
+*, *::before, *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
 html {
   scrollbar-gutter: stable;
 }

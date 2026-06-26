@@ -103,30 +103,30 @@ const Builder = () => {
     );
 
     return (
-        <div className="pcp-wrapper">
-            <div className="pcp-main">
+        <div className="bb-wrapper">
+            <div className="bb-main">
                 {/* Top bar */}
-                <div className="pcp-topbar">
-                    <div className="pcp-topbar-left">
-                        <span className="pcp-build-type">{build.bikeType.name}</span>
+                <header className="bb-topbar">
+                    <div className="bb-topbar-left">
+                        <span className="bb-build-type">{build.bikeType.name}</span>
                         <input
-                            className="pcp-name-input"
+                            className="bb-name-input"
                             type="text"
-                            placeholder="Name your build..."
+                            placeholder="Name your build…"
                             value={name}
                             onChange={e => setName(e.target.value)}
                         />
                     </div>
-                    <div className="pcp-topbar-right">
-                        <button className="pcp-start-over" onClick={emptyBuild}>Start Over</button>
-                        <button className="pcp-save-btn" onClick={handleSaveBuild} disabled={saving}>
-                            {saving ? "Saving..." : "Save Build"}
+                    <div className="bb-topbar-right">
+                        <button className="bb-btn-ghost" onClick={emptyBuild}>Start Over</button>
+                        <button className="bb-btn-primary" onClick={handleSaveBuild} disabled={saving}>
+                            {saving ? "Saving…" : "Save Build"}
                         </button>
                     </div>
-                </div>
+                </header>
 
                 {/* Component rows */}
-                <div className="pcp-list">
+                <div className="bb-list">
                     {allCategories.map(category => {
                         const selected = selectedByCategory[category];
                         const locked = isLocked(category);
@@ -134,56 +134,32 @@ const Builder = () => {
                         return (
                             <div
                                 key={category}
-                                className={`pcp-item${locked ? ' pcp-item-locked' : ''}`}
+                                className={`bb-row${locked ? ' is-locked' : ''}`}
                                 onClick={() => !locked && navigate(`/builds/new/select/${category}`)}
                             >
-                                <span className="pcp-item-cat">{formatCat(category)}</span>
-                                <div className="pcp-item-center">
+                                <span className="bb-row-cat">{formatCat(category)}</span>
+                                <div className="bb-row-detail">
                                     {selected ? (
-                                        <span className="pcp-item-selected">{selected.name}
-                                            <span className="pcp-item-brand"> · {selected.brand}</span>
+                                        <span className="bb-row-name">{selected.name}
+                                            <span className="bb-row-brand"> · {selected.brand}</span>
                                         </span>
                                     ) : locked ? (
-                                        <span className="pcp-item-locked-msg">Select prerequisite first</span>
+                                        <span className="bb-row-msg">Select prerequisite first</span>
                                     ) : (
-                                        <span className="pcp-item-placeholder">Choose {formatCat(category)}</span>
+                                        <span className="bb-row-placeholder">Choose {formatCat(category)}</span>
                                     )}
                                 </div>
-                                <span className="pcp-item-price">
+                                <span className="bb-row-price">
                                     {selected?.price ? `$${parseFloat(selected.price).toFixed(2)}` : '—'}
                                 </span>
                             </div>
                         );
                     })}
-                </div>
-            </div>
 
-            {/* Summary panel */}
-            <div className="pcp-summary">
-                <h3 className="pcp-summary-title">Summary</h3>
-                <div className="pcp-summary-list">
-                    {allCategories.map(category => {
-                        const comp = selectedByCategory[category];
-                        return (
-                            <div key={category} className="pcp-summary-row">
-                                <span className="pcp-summary-cat">{formatCat(category)}</span>
-                                <span className="pcp-summary-val">
-                                    {comp ? comp.name : <span className="pcp-summary-empty">—</span>}
-                                </span>
-                            </div>
-                        );
-                    })}
-                </div>
-                <div className="pcp-summary-totals">
-                    {totalWeight > 0 && (
-                        <div className="pcp-summary-total-row">
-                            <span>Total Weight</span>
-                            <span>{totalWeight.toFixed(0)}g</span>
-                        </div>
-                    )}
-                    <div className="pcp-summary-total-row pcp-summary-price">
-                        <span>Total Price</span>
-                        <span>${totalPrice.toFixed(2)}</span>
+                    {/* Total — below the last row, right side */}
+                    <div className="bb-total">
+                        <span className="bb-total-weight">{totalWeight > 0 ? `${totalWeight.toFixed(0)} g` : '—'}</span>
+                        <span className="bb-total-price">${totalPrice.toFixed(2)}</span>
                     </div>
                 </div>
             </div>

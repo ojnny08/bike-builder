@@ -1,25 +1,25 @@
-/* ── Home / landing ─────────────────────────────────────────────────────────
-   Lives inside Layout's .page-wrapper (padding: 32px var(--page-x)). The hero
-   breaks out full-bleed; the sections below sit in a centered content column. */
 
 .home {
     margin: -32px calc(-1 * var(--page-x)) -32px;
 }
 
-/* ── Hero ───────────────────────────────────────────────────────────────── */
-
 .home-hero {
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
+    display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 48px;
-    padding: 72px var(--page-x);
+    justify-content: center;
+    text-align: center;
+    gap: 210px;
+    padding: 88px var(--page-x);
     background: var(--surface);
     border-bottom: 1px solid var(--border);
 }
 
 .home-hero-text {
-    max-width: 540px;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .home-eyebrow {
@@ -71,6 +71,7 @@
 .home-cta-row {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 12px;
     margin-top: 32px;
     animation: fadeInUp var(--dur) var(--ease-out) 180ms both;
@@ -128,6 +129,7 @@
 .home-stats {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 24px;
     margin-top: 44px;
     animation: fadeInUp var(--dur) var(--ease-out) 240ms both;
@@ -163,6 +165,7 @@
 /* Hero visual */
 .home-hero-visual {
     position: relative;
+    width: min(620px, 100%);
     aspect-ratio: 4 / 3;
     border-radius: 16px;
     background: var(--bg);
@@ -349,11 +352,12 @@
 
 @media (max-width: 900px) {
     .home-hero {
-        grid-template-columns: 1fr;
+        flex-direction: column;
         gap: 36px;
-        padding: 48px var(--page-x);
+        min-height: 0;
+        padding: 56px var(--page-x);
     }
-    .home-hero-visual { order: -1; aspect-ratio: 16 / 10; }
+    .home-hero-visual { aspect-ratio: 16 / 10; }
     .home-features,
     .home-steps { grid-template-columns: 1fr; }
 }

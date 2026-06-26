@@ -2,17 +2,23 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
+    background: transparent;
     position: relative;
 }
 
 .navbar-top {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
-    padding: 0 40px;
+    padding: 0 0 0 40px;
     height: 56px;
+    background: var(--surface-hover);
+}
+
+.navbar-left {
+    display: flex;
+    align-items: stretch;
+    gap: 32px;
 }
 
 .navbar-brand {
@@ -41,6 +47,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    padding-right: 40px;
 }
 
 .navbar-auth-link {
@@ -179,17 +186,25 @@
 
 .navbar-links {
     display: flex;
-    justify-content: center;
+    align-self: flex-start;
+    align-items: stretch;
     gap: 0;
-    border-top: 1px solid var(--border);
+    height: 44px;
+    margin-left: 16px;
     position: relative;
+    background: var(--surface);
+    /* diagonal cut on the trailing edge — makes the navbar look sliced off */
+    padding-right: 28px;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
 }
 
 .navbar-links a {
     position: relative;
+    display: flex;
+    align-items: center;
     color: var(--text-muted);
     text-decoration: none;
-    padding: 12px 28px;
+    padding: 0 24px;
     font-size: 0.8rem;
     font-weight: 500;
     letter-spacing: 0.03em;
@@ -199,9 +214,9 @@
 .navbar-links a::after {
     content: '';
     position: absolute;
-    left: 28px;
-    right: 28px;
-    bottom: 0;
+    left: 24px;
+    right: 24px;
+    bottom: 10px;
     height: 2px;
     background: var(--accent);
     transform: scaleX(0);
