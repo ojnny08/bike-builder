@@ -1,0 +1,119 @@
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { fetchCurrentUserProfile } from "../../services/userService";
+import {
+    fetchComments,
+    createComment,
+    updateComment,
+    deleteComment,
+    upvoteComment,
+} from "../../services/commentService";
+import CommentItem from "./CommentItem";
+import "./Comments.css";
+
+const Comments = ({ buildId }) => {
+    const { currentUser } = useAuth();
+    const [comments, setComments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [myUsername, setMyUsername] = useState(null);
+    const [draft, setDraft] = useState("");
+    const [posting, setPosting] = useState(false);
+
+    useEffect(() => {
+        if (!buildId) return;
+        fetchComments(buildId)
+            .then(setComments)
+            .finally(() => setLoading(false));
+    }, [buildId]);
+
+    useEffect(() => {
+        if (!currentUser) return;
+        fetchCurrentUserProfile()
+            .then((profile) => setMyUsername(profile.username))
+            .catch(() => {});
+    }, [currentUser]);
+
+    const handlePost = async (e) => {
+        e.preventDefault();
+        const text = draft.trim();
+        if (!text || posting) return;
+        setPosting(true);
+        try {
+            const created = await createComment(buildId, text);
+            setComments((prev) => [created, ...prev]);
+            setDraft("");
+        } finally {
+            setPosting(false);
+        }
+    };
+
+    const handleUpdate = async (id, text) => {
+        const updated = await updateComment(id, text);
+        setComments((prev) => prev.map((c) => (c.id === id ? updated : c)));
+    };
+
+    const handleDelete = async (id) => {
+        await deleteComment(id);
+        setComments((prev) => prev.filter((c) => c.id !== id));
+    };
+
+    const handleUpvote = async (id) => {
+        const { my_vote, vote_count } = await upvoteComment(id);
+        setComments((prev) =>
+            prev.map((c) => (c.id === id ? { ...c, my_vote, vote_count } : c))
+        );
+    };
+
+    return (
+        <section className="comments">
+            <h3 className="comments-title">
+                Comments <span className="comments-count">{comments.length}</span>
+            </h3>
+
+            {currentUser ? (
+                <form className="comment-form" onSubmit={handlePost}>
+                    <label htmlFor="comment-input" className="sr-only">Add a comment</label>
+                    <textarea
+                        id="comment-input"
+                        className="comment-input"
+                        placeholder="Share your thoughts on this build…"
+                        value={draft}
+                        maxLength={1000}
+                        rows={3}
+                        onChange={(e) => setDraft(e.target.value)}
+                    />
+                    <div className="comment-form-footer">
+                        <span className="comment-charcount">{draft.length}/1000</span>
+                        <button type="submit" className="comment-submit" disabled={!draft.trim() || posting}>
+                            {posting ? "Posting…" : "Post comment"}
+                        </button>
+                    </div>
+                </form>
+            ) : (
+                <p className="comments-signed-out">Sign in to join the conversation.</p>
+            )}
+
+            {loading ? (
+                <p className="comments-loading">Loading comments…</p>
+            ) : comments.length === 0 ? (
+                <p className="comments-empty">No comments yet. Be the first to share your thoughts.</p>
+            ) : (
+                <ul className="comment-list">
+                    {comments.map((c) => (
+                        <CommentItem
+                            key={c.id}
+                            comment={c}
+                            isOwner={!!myUsername && c.user.username === myUsername}
+                            canVote={!!currentUser}
+                            onUpdate={handleUpdate}
+                            onDelete={handleDelete}
+                            onUpvote={handleUpvote}
+                        />
+                    ))}
+                </ul>
+            )}
+        </section>
+    );
+};
+
+export default Comments;

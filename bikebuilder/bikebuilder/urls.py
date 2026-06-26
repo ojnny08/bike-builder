@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/category/', include('apps.category.urls')),
     path('api/components/', include('apps.components.urls')),
     path('api/builds/', include('apps.builds.urls')),
+    path('api/comments/', include('apps.comments.urls')),
 ]

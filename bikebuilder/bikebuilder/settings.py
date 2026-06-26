@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'apps.category',
     'apps.components',
     'apps.users',
+    'apps.comments',
+    'apps.vote',
     'storages',
 ]
 

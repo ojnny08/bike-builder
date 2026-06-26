@@ -192,6 +192,10 @@
     letter-spacing: -0.02em;
 }
 
+.build-card-clickable {
+    cursor: pointer;
+}
+
 .build-status {
     font-size: 0.7rem;
     font-weight: 600;

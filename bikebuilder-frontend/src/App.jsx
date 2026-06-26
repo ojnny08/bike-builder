@@ -7,6 +7,7 @@ import Components from './pages/ComponentsPage/Components'
 import Builds from './pages/BuildsPage/Builds'
 import PublicBuilds from './pages/BuildsPage/PublicBuilds'
 import SharedBuild from './pages/BuildsPage/SharedBuild'
+import BuildDetail from './pages/BuildsPage/BuildDetail'
 import ComponentSelectPage from './pages/BuildsPage/ComponentSelectPage'
 import Profile from './pages/ProfilePage/Profile'
 import './App.css'
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/components" element={<Components />}/>
           <Route path="/builds" element={<PublicBuilds />}/>
+          <Route path="/builds/view/:token" element={<BuildDetail />}/>
           <Route path="/builds/shared/:token" element={<SharedBuild />}/>
           <Route element={<ProtectedRoute />}>
             <Route path="/builds/new" element={<Builds />}/>

@@ -40,7 +40,8 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
         e.target.value = "";
     };
 
-    const handleShare = async () => {
+    const handleShare = async (e) => {
+        e.stopPropagation();
         const url = `${window.location.origin}/builds/shared/${build.share_token}`;
         await navigator.clipboard.writeText(url);
         setCopied(true);
@@ -48,10 +49,13 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
     };
 
     return (
-        <div className="build-card">
+        <div
+            className="build-card build-card-clickable"
+            onClick={() => navigate(`/builds/view/${build.share_token}`)}
+        >
             <div
                 className={`build-card-image${onUploadImage ? ' build-card-image-clickable' : ''}`}
-                onClick={() => onUploadImage && fileInputRef.current.click()}
+                onClick={(e) => { if (onUploadImage) { e.stopPropagation(); fileInputRef.current.click(); } }}
             >
                 {build.image_url
                     ? <img src={build.image_url} alt={build.name} className="build-card-img" />
@@ -67,7 +71,7 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
                 <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
             )}
 
-            <div className="build-card-user" onClick={() => navigate(`/profile/${build.user.username}`)}>
+            <div className="build-card-user" onClick={(e) => { e.stopPropagation(); navigate(`/profile/${build.user.username}`); }}>
                 {build.user.photo_url
                     ? <img src={build.user.photo_url} alt={build.user.display_name} className="build-card-avatar" />
                     : <div className="build-card-avatar-placeholder">{build.user.display_name?.[0] ?? "?"}</div>
@@ -88,8 +92,8 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
                     {copied ? <CheckIcon /> : <ShareIcon />}
                     {copied ? "Copied!" : "Share"}
                 </button>
-                {onDelete && <button className="icon-btn icon-btn-danger" onClick={() => onDelete(build.id)} aria-label="Delete build"><TrashIcon /></button>}
-                {onEdit && <button className="icon-btn" onClick={() => onEdit(build.id)} aria-label="Edit build"><EditIcon /></button>}
+                {onDelete && <button className="icon-btn icon-btn-danger" onClick={(e) => { e.stopPropagation(); onDelete(build.id); }} aria-label="Delete build"><TrashIcon /></button>}
+                {onEdit && <button className="icon-btn" onClick={(e) => { e.stopPropagation(); onEdit(build.id); }} aria-label="Edit build"><EditIcon /></button>}
             </div>
         </div>
     );

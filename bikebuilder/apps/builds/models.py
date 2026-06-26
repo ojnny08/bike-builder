@@ -1,9 +1,11 @@
 import secrets
 
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 from apps.category.models import BikeType
 from apps.components.models import Components
 from apps.users.models import User
+from apps.vote.models import Vote
 
 # Create your models here.
 
@@ -22,5 +24,6 @@ class Build(models.Model):
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.IN_PROGRESS)
     image_url = models.URLField(blank=True)
     share_token = models.CharField(max_length=12, unique=True, db_index=True, default=generate_share_token, editable=False)
+    votes = GenericRelation(Vote)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
