@@ -290,3 +290,128 @@
     color: var(--error);
     background: var(--error-bg);
 }
+
+/* ── Single build view ────────────────────────────────────────────────────── */
+
+.build-view {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.55fr);
+    gap: 28px;
+    align-items: start;
+    margin-bottom: 32px;
+}
+
+.build-view-section-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+.build-view-components {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.build-view-component {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 4px 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.build-view-comp-cat {
+    grid-column: 1 / -1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.build-view-comp-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.build-view-comp-brand {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.build-view-comp-price {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.build-view-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+}
+
+.build-view-total-price {
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    color: var(--text);
+}
+
+.build-view-photo {
+    position: static;
+    display: flex;
+    justify-content: center;
+}
+
+.build-view-img {
+    width: 100%;
+    max-width: 640px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    display: block;
+}
+
+.build-view-img-placeholder {
+    width: 100%;
+    max-width: 640px;
+    aspect-ratio: 4 / 3;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--surface-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.build-view-description {
+    margin-top: 24px;
+}
+
+.build-view-description-text {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+}
+
+@media (max-width: 720px) {
+    .build-view {
+        grid-template-columns: 1fr;
+    }
+}

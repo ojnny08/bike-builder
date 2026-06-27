@@ -12,6 +12,7 @@ const Builder = () => {
     const { required = [], optional = [], prerequisites = {} } = build.bikeType.rules;
     const allCategories = [...required, ...optional];
     const [name, setName] = useState(build.name || "");
+    const [description, setDescription] = useState(build.description || "");
     const [saving, setSaving] = useState(false);
     const [savedBuildId, setSavedBuildId] = useState(null);
     const [shareToken, setShareToken] = useState(null);
@@ -35,6 +36,7 @@ const Builder = () => {
         const allRequiredFilled = required.every(t => selectedTypes.has(t));
         const payload = {
             name: name || `${build.bikeType.name} Build`,
+            description,
             bikeType: build.bikeType.id,
             components: build.components.map(c => c.id),
             status: allRequiredFilled ? "complete" : "in_progress",
@@ -64,6 +66,8 @@ const Builder = () => {
         setUploading(true);
         try {
             await uploadBuildImage(savedBuildId, file);
+        } catch {
+            // image upload failed — fall through and navigate anyway
         } finally {
             setUploading(false);
             emptyBuild();
@@ -73,6 +77,14 @@ const Builder = () => {
 
     const totalPrice = build.components.reduce((sum, c) => sum + (parseFloat(c.price) || 0), 0);
     const totalWeight = build.components.reduce((sum, c) => sum + (parseFloat(c.weight) || 0), 0);
+
+    if (uploading) return (
+        <div className="pcp-upload-step">
+            <div className="pcp-spinner" />
+            <p className="pcp-upload-title">Saving your build…</p>
+            <p className="pcp-upload-sub">Uploading photo, this will only take a moment</p>
+        </div>
+    );
 
     if (savedBuildId) return (
         <div className="pcp-upload-step">
@@ -115,6 +127,13 @@ const Builder = () => {
                             placeholder="Name your build…"
                             value={name}
                             onChange={e => setName(e.target.value)}
+                        />
+                        <textarea
+                            className="bb-desc-input"
+                            placeholder="Describe your build…"
+                            value={description}
+                            rows={2}
+                            onChange={e => setDescription(e.target.value)}
                         />
                     </div>
                     <div className="bb-topbar-right">

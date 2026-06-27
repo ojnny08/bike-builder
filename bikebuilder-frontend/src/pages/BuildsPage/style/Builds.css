@@ -326,6 +326,24 @@
     margin-bottom: 8px;
 }
 
+.pcp-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: pcp-spin 0.7s linear infinite;
+    margin-bottom: 6px;
+}
+
+@keyframes pcp-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pcp-spinner { animation-duration: 1.4s; }
+}
+
 /* ── Progress bar ─────────────────────────────────────────────────────────── */
 
 .progress-bar-container {
@@ -416,6 +434,23 @@
 
 .bb-name-input::placeholder { color: var(--text-muted); }
 .bb-name-input:focus { border-color: var(--accent); }
+
+.bb-desc-input {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    outline: none;
+    width: 260px;
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    resize: vertical;
+    line-height: 1.4;
+}
+
+.bb-desc-input::placeholder { color: var(--text-muted); }
+.bb-desc-input:focus { border-color: var(--accent); }
 
 .bb-topbar-right {
     display: flex;

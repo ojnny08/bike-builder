@@ -21,9 +21,13 @@ class Build(models.Model):
     name = models.CharField(max_length=40, default="New Build")
     bikeType = models.ForeignKey(BikeType, on_delete=models.CASCADE)
     components = models.ManyToManyField(Components, blank=True)
+    description = models.TextField(blank=True, default="")
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.IN_PROGRESS)
     image_url = models.URLField(blank=True)
     share_token = models.CharField(max_length=12, unique=True, db_index=True, default=generate_share_token, editable=False)
     votes = GenericRelation(Vote)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
