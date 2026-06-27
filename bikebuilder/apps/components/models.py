@@ -32,7 +32,10 @@ class Components(models.Model):
 
     class Meta:
         ordering = ['brand', 'name']
-    
+        indexes = [
+            models.Index(fields=['component_type', 'brand', 'name']),
+        ]
+
     def __str__(self):
         return f"{self.brand} {self.name}"
     
