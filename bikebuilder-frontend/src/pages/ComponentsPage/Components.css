@@ -42,12 +42,6 @@
     transition: transform var(--dur) var(--ease-out), border-color var(--dur-fast), box-shadow var(--dur);
 }
 
-.component-type-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-}
-
 .back-btn {
     padding: 7px 16px;
     background: transparent;
@@ -81,12 +75,6 @@
     gap: 16px;
     box-shadow: var(--shadow-sm);
     transition: transform var(--dur) var(--ease-out), border-color var(--dur-fast), box-shadow var(--dur);
-}
-
-.product-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
 }
 
 /* Staggered entrance for the first row of cards */

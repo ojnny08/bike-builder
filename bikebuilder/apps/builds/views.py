@@ -58,6 +58,7 @@ class MyBuildViewSet(ViewSet):
         except Build.DoesNotExist:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
         build.delete()
+        delete_from_s3(build.image_url)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def partial_update(self, request, pk=None):

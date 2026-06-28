@@ -94,7 +94,7 @@
     transition: background var(--dur-fast), transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
 }
 
-.pcp-save-btn:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-2px); box-shadow: var(--shadow-accent); }
+.pcp-save-btn:hover:not(:disabled) { background: var(--accent-hover); box-shadow: var(--shadow-accent); }
 .pcp-save-btn:active:not(:disabled) { transform: translateY(0); box-shadow: var(--shadow-sm); }
 .pcp-save-btn:disabled { opacity: 0.5; cursor: default; box-shadow: none; }
 
@@ -192,7 +192,7 @@
     transition: background var(--dur-fast), transform var(--dur-fast) var(--ease-out);
 }
 
-.pcp-option:hover { background: var(--accent-bg); transform: translateX(4px); }
+.pcp-option:hover { background: var(--accent-bg); }
 
 .pcp-option-incompat {
     opacity: 0.3;
