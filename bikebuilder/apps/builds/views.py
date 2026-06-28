@@ -57,6 +57,7 @@ class MyBuildViewSet(ViewSet):
             build = Build.objects.get(pk=pk, user=request.user)
         except Build.DoesNotExist:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+        delete_from_s3(build.image_url)
         build.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
