@@ -23,6 +23,7 @@ AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
+REDIS_URL = os.getenv("REDIS_URL")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -145,6 +146,16 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+    } if REDIS_URL else {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
 }
 
 FIREBASE_CREDENTIALS_PATH = BASE_DIR / 'firebase' / 'firebase-credentials.json'

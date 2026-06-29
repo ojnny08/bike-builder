@@ -3,6 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import AllowAny
+from django.core.cache import cache
 from .serializer import ComponentsSerializer
 from .models import Components, Frame, BottomBracket, Crankset, Wheel, Stem, Sprocket
 from .compatibility import get_compatible_queryset
@@ -16,26 +18,49 @@ def _paginate(queryset, request):
 
 
 class ComponentsViewSet(ViewSet):
+    permission_classes = [AllowAny]
 
     def list(self, request):
-        queryset = Components.objects.all()
+        component_type = request.query_params.get("component_type") or ""
+        select = request.query_params.get("select") or ""
+        page = request.query_params.get("page") or "1"
+        key = f"components:list:{component_type}:{select}:{page}"
 
-        component_type = request.query_params.get("component_type")
+        cached = cache.get(key)
+        if cached is not None:
+            response = Response(cached)
+            response["X-Cache"] = "HIT"
+            return response
+
+        queryset = Components.objects.all()
         if component_type:
             queryset = queryset.filter(component_type=component_type)
-
-        select = request.query_params.get("select")
         if select:
             queryset = queryset.filter(name__icontains=select)
 
-        return _paginate(queryset, request)
+        response = _paginate(queryset, request)
+        cache.set(key, response.data, 60 * 15)
+        response["X-Cache"] = "MISS"
+        return response
 
     def retrieve(self, request, pk=None):
+        key = f"components:detail:{pk}"
+        cached = cache.get(key)
+        if cached is not None:
+            response = Response(cached)
+            response["X-Cache"] = "HIT"
+            return response
+
         try:
             component = Components.objects.get(pk=pk)
         except Components.DoesNotExist:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
-        return Response(ComponentsSerializer(component).data)
+
+        data = ComponentsSerializer(component).data
+        cache.set(key, data, 60 * 60)
+        response = Response(data)
+        response["X-Cache"] = "MISS"
+        return response
    
     @action(detail=False, methods=['get'])
     def compatible(self, request):

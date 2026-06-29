@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./Home.css";
 import { useEffect, useState } from "react";
-import { fetchPublicBuilds } from "../../services/buildService";
+import { fetchFeaturedBuilds } from "../../services/buildService";
 import BuildsCard from "../../components/Builds/BuildsCard";
 
 const stroke = {
@@ -21,9 +21,9 @@ const steps = [
 
 const HomePage = () => {
     const [threeBuilds, setThreeBuilds] = useState([]);
-    
+
     const handleThreeBuilds = async () => {
-        const data = await fetchPublicBuilds({ status: 'complete', limit: 3 });
+        const data = await fetchFeaturedBuilds();
         setThreeBuilds(data);
     }
 
@@ -70,7 +70,7 @@ const HomePage = () => {
             </section>
 
             <section className="home-section">
-                <h2 className="home-section-title">Completed Bikes</h2>
+                <h2 className="home-section-title">Top Builds This Week</h2>
                 <div className="home-features">
                     {threeBuilds.map((f, i) => (
                         <div key={f.id} style={{ animationDelay: `${i * 70}ms` }}>
