@@ -6,6 +6,7 @@
   --surface:        #ffffff;
   --surface-2:      #fafafa;
   --surface-hover:  #f1f1f2;
+  --navbar-bg:      var(--surface-hover);  /* cohesive navbar block — the usual light grey */
   --border:         #e6e6e9;
   --border-strong:  #cdcdd2;
 

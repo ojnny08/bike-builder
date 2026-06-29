@@ -38,7 +38,6 @@
 
 .new-build-btn:hover {
     background: var(--accent-hover);
-    transform: translateY(-2px);
     box-shadow: var(--shadow-accent);
 }
 
@@ -78,7 +77,7 @@
 
 .build-card-image {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     background: var(--surface-hover);
     position: relative;
@@ -94,7 +93,7 @@
     transition: opacity var(--dur-fast), transform 0.4s var(--ease-out);
 }
 
-.build-card-image-clickable:hover .build-card-img { opacity: 0.85; transform: scale(1.05); }
+.build-card-image-clickable:hover .build-card-img { opacity: 0.85; }
 
 .build-card-img-placeholder {
     width: 100%;
@@ -134,11 +133,28 @@
 
 .build-card-image-clickable:hover .build-card-img-overlay { opacity: 1; }
 
-.build-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
+.build-card-share {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(10, 10, 15, 0.35);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
 }
+
+.build-card-share:hover { background: rgba(10, 10, 15, 0.6); }
+
+.build-card-share.is-copied { background: var(--accent); }
 
 .build-card-user {
     display: flex;
@@ -196,70 +212,25 @@
     cursor: pointer;
 }
 
-.build-status {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 3px 8px;
-    border-radius: 999px;
-}
-
-.build-status.in_progress {
-    background: var(--yellow-bg);
-    color: var(--yellow);
-}
-
-.build-status.complete {
-    background: var(--green-bg);
-    color: var(--green);
-}
-
 .build-card-meta {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    gap: 2px;
     font-size: 0.78rem;
     color: var(--text-secondary);
     margin-bottom: 18px;
 }
 
-.build-card-meta-dot { color: var(--text-muted); }
+.build-card-meta-date { color: var(--text-muted); }
 
 /* ── Card actions ─────────────────────────────────────────────────────────── */
 
 .build-card-actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 8px;
 }
-
-.share-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    flex: 1;
-    padding: 9px 14px;
-    background: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--on-accent);
-    cursor: pointer;
-    box-shadow: var(--shadow-sm);
-    transition: background var(--dur-fast), transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
-}
-
-.share-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-accent);
-}
-
-.share-btn:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
-.share-btn.is-copied { background: var(--green); border-color: var(--green); }
 
 /* Square icon-only buttons (edit / delete) */
 .icon-btn {

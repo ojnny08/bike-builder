@@ -2,17 +2,16 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    background: transparent;
+    background: var(--surface); /* white shows through the diagonal slash */
     position: relative;
 }
-
 .navbar-top {
     display: flex;
     align-items: stretch;
     justify-content: space-between;
     padding: 0 0 0 40px;
     height: 56px;
-    background: var(--surface-hover);
+    background: var(--navbar-bg);
 }
 
 .navbar-left {
@@ -25,8 +24,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 1.05rem;
+    font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text);
@@ -53,7 +52,7 @@
 .navbar-auth-link {
     color: var(--text-secondary);
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 500;
     transition: color 0.12s;
 }
@@ -64,7 +63,7 @@
 
 .navbar-auth-sep {
     color: var(--border-strong);
-    font-size: 0.875rem;
+    font-size: 1rem;
 }
 
 .navbar-user {
@@ -190,12 +189,12 @@
     align-items: stretch;
     gap: 0;
     height: 44px;
-    margin-left: 16px;
+    margin-left: 0;
     position: relative;
-    background: var(--surface);
-    /* diagonal cut on the trailing edge — makes the navbar look sliced off */
-    padding-right: 28px;
-    clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
+    background: var(--navbar-bg);
+    padding-left: 40px;
+    padding-right: 52px;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 36px) 100%, 0 100%);
 }
 
 .navbar-links a {
@@ -205,7 +204,7 @@
     color: var(--text-muted);
     text-decoration: none;
     padding: 0 24px;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     font-weight: 500;
     letter-spacing: 0.03em;
     transition: color var(--dur-fast);

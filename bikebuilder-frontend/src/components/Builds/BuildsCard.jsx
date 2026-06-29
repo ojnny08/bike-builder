@@ -33,6 +33,9 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
     const fileInputRef = useRef(null);
     const [copied, setCopied] = useState(false);
 
+    const frame = build.components.find((c) => c.component_type === "frame");
+    const crank = build.components.find((c) => c.component_type === "crankset")
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -66,6 +69,13 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
                 {onUploadImage && build.image_url && (
                     <div className="build-card-img-overlay"><CameraIcon /> Change Photo</div>
                 )}
+                <button
+                    className={`build-card-share${copied ? ' is-copied' : ''}`}
+                    onClick={handleShare}
+                    aria-label="Share build"
+                >
+                    {copied ? <CheckIcon /> : <ShareIcon />}
+                </button>
             </div>
             {onUploadImage && (
                 <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
@@ -80,21 +90,18 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
             </div>
             <div className="build-card-header">
                 <span className="build-bike-type">{build.name}</span>
-                <span className={`build-status ${build.status}`}>{build.status.replace("_", " ")}</span>
             </div>
-            <p className="build-card-meta">
-                <span>{build.components.length} components</span>
-                <span className="build-card-meta-dot">·</span>
-                <span>{new Date(build.created_at).toLocaleDateString()}</span>
-            </p>
-            <div className="build-card-actions">
-                <button className={`share-btn${copied ? ' is-copied' : ''}`} onClick={handleShare}>
-                    {copied ? <CheckIcon /> : <ShareIcon />}
-                    {copied ? "Copied!" : "Share"}
-                </button>
-                {onDelete && <button className="icon-btn icon-btn-danger" onClick={(e) => { e.stopPropagation(); onDelete(build.id); }} aria-label="Delete build"><TrashIcon /></button>}
-                {onEdit && <button className="icon-btn" onClick={(e) => { e.stopPropagation(); onEdit(build.id); }} aria-label="Edit build"><EditIcon /></button>}
+            <div className="build-card-meta">
+                <span>{frame ? `${frame.brand} ${frame.name}` : "No frame"}</span>
+                <span>{crank ? `${crank.brand} ${crank.name}` : "No crank"}</span>
+                <span className="build-card-meta-date">{new Date(build.created_at).toLocaleDateString()}</span>
             </div>
+            {(onDelete || onEdit) && (
+                <div className="build-card-actions">
+                    {onDelete && <button className="icon-btn icon-btn-danger" onClick={(e) => { e.stopPropagation(); onDelete(build.id); }} aria-label="Delete build"><TrashIcon /></button>}
+                    {onEdit && <button className="icon-btn" onClick={(e) => { e.stopPropagation(); onEdit(build.id); }} aria-label="Edit build"><EditIcon /></button>}
+                </div>
+            )}
         </div>
     );
 };

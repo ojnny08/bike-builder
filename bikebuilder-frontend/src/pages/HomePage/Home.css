@@ -94,7 +94,6 @@
 }
 
 .home-btn svg { transition: transform var(--dur) var(--ease-out); }
-.home-btn:hover svg { transform: translateX(3px); }
 
 .home-btn-primary {
     background: var(--accent);
@@ -123,7 +122,7 @@
     color: var(--accent);
     box-shadow: var(--shadow-md);
 }
-.home-btn-invert:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.home-btn-invert:hover { box-shadow: var(--shadow-lg); }
 
 /* Stats */
 .home-stats {
@@ -223,9 +222,14 @@
 /* ── Content sections ───────────────────────────────────────────────────── */
 
 .home-section {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 72px var(--page-x) 0;
+    max-width: none;
+    margin: 0;
+    padding: 72px max(var(--page-x), calc(50vw - 620px)) 0;
+    background: var(--bg);
+}
+
+.home-section:last-of-type {
+    padding-bottom: 72px;
 }
 
 .home-section-title {
@@ -241,7 +245,7 @@
 .home-features {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 24px;
 }
 
 .home-feature {
@@ -252,12 +256,6 @@
     box-shadow: var(--shadow-sm);
     animation: fadeInUp var(--dur) var(--ease-out) both;
     transition: transform var(--dur) var(--ease-out), box-shadow var(--dur), border-color var(--dur-fast);
-}
-
-.home-feature:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--border-strong);
 }
 
 .home-feature-icon {
@@ -328,7 +326,7 @@
 /* ── CTA band ───────────────────────────────────────────────────────────── */
 
 .home-band {
-    margin: 72px 0 0;
+    margin: 0;
     padding: 72px var(--page-x);
     background: var(--accent);
     color: var(--on-accent);
