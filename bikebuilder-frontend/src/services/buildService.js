@@ -28,6 +28,15 @@ export const fetchPublicBuilds = async (params = {}) => {
     }
 };
 
+export const fetchFeaturedBuilds = async () => {
+    try {
+        const res = await api.get("/api/builds/featured/");
+        return res.data;
+    } catch (error) {
+        throw new Error("Failed to get featured builds");
+    }
+};
+
 export const getSharedBuild = async (token) => {
     try {
         const res = await api.get(`/api/builds/public/${token}/`);

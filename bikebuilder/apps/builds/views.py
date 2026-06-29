@@ -1,8 +1,14 @@
+from datetime import timedelta
+
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
+from django.core.cache import cache
+from django.db.models import Sum, Q
+from django.db.models.functions import Coalesce
+from django.utils import timezone
 from .serializer import BuildsSerializer
 from .models import Build
 from .image_upload import upload_to_s3, delete_from_s3
@@ -10,6 +16,28 @@ from .image_upload import upload_to_s3, delete_from_s3
 
 class PublicBuildsViewSet(ViewSet):
     permission_classes = [AllowAny]
+
+    @action(detail=False, methods=['get'])
+    def featured(self, request):
+        year, week, _ = timezone.now().isocalendar()
+        key = f"builds:featured:{year}-{week:02d}"
+
+        data = cache.get(key)
+        if data is None:
+            cutoff = timezone.now() - timedelta(days=7)
+            builds = (
+                Build.objects
+                .filter(status=Build.Status.COMPLETE)
+                .annotate(score=Coalesce(Sum('votes__value', filter=Q(votes__created_at__gte=cutoff)), 0))
+                .order_by('-score', '-created_at')
+                .prefetch_related('components')[:3]
+            )
+            data = BuildsSerializer(builds, many=True).data
+            cache.set(key, data, 60 * 60 * 24 * 8)  # 8d safety net; key rotates weekly
+
+        response = Response(data)
+        response["Cache-Control"] = "public, max-age=3600, s-maxage=86400"
+        return response
 
     def list(self, request):
         username = request.query_params.get('username')
