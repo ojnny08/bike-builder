@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Home.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchFeaturedBuilds } from "../../services/buildService";
 import BuildsCard from "../../components/Builds/BuildsCard";
 
@@ -21,6 +21,7 @@ const steps = [
 
 const HomePage = () => {
     const [threeBuilds, setThreeBuilds] = useState([]);
+    const featuresRef = useRef(null);
 
     const handleThreeBuilds = async () => {
         const data = await fetchFeaturedBuilds();
@@ -30,6 +31,25 @@ const HomePage = () => {
     useEffect(() => {
         handleThreeBuilds();
     }, [])
+
+    // Reveal the featured builds on scroll. JS-only: arm the hidden state
+    // (`reveal-ready`) so non-JS / headless renders keep the cards visible,
+    // then play the slide-in once the row enters the viewport.
+    useEffect(() => {
+        const el = featuresRef.current;
+        if (!el) return;
+        el.classList.add("reveal-ready");
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry.isIntersecting) return;
+                el.classList.add("is-visible");
+                observer.disconnect();
+            },
+            { threshold: 0.2 }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [threeBuilds])
     
     return (
         <div className="home">
@@ -71,9 +91,9 @@ const HomePage = () => {
 
             <section className="home-section">
                 <h2 className="home-section-title">Top Builds This Week</h2>
-                <div className="home-features">
+                <div className="home-features" ref={featuresRef}>
                     {threeBuilds.map((f, i) => (
-                        <div key={f.id} style={{ animationDelay: `${i * 70}ms` }}>
+                        <div key={f.id} style={{ animationDelay: `${i * 600}ms` }}>
                             <BuildsCard build={f} />
                         </div>
                     ))}

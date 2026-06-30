@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-30T00:00:00Z",
+  "title": "Design System: BikeBuilder",
+  "extensions": {
+    "colorMeta": {
+      "accent": { "role": "primary", "displayName": "Machined Ink", "canonical": "#111113", "tonalRamp": ["#0a0a0b", "#1a1a1d", "#2c2c30", "#454549", "#6a6a70", "#97979e", "#cdcdd2", "#f1f1f2"] },
+      "bg": { "role": "neutral", "displayName": "Canvas Gray", "canonical": "#f5f5f6", "tonalRamp": ["#0a0a0b", "#1f1f22", "#3a3a3e", "#56565c", "#97979e", "#cdcdd2", "#e6e6e9", "#f5f5f6"] },
+      "surface": { "role": "neutral", "displayName": "Panel White", "canonical": "#ffffff", "tonalRamp": ["#56565c", "#97979e", "#cdcdd2", "#e6e6e9", "#f1f1f2", "#fafafa", "#fdfdfd", "#ffffff"] },
+      "green": { "role": "tertiary", "displayName": "Compatible Green", "canonical": "#1aae39", "tonalRamp": ["#0c3d16", "#125a20", "#178a2e", "#1aae39", "#46c462", "#7ad691", "#b3e8c0", "#e0f6e6"] },
+      "warning": { "role": "tertiary", "displayName": "Caution Amber", "canonical": "#dd5b00", "tonalRamp": ["#4a1f00", "#793400", "#b04a00", "#dd5b00", "#f07a2a", "#f7a168", "#fcc7a3", "#fde7d6"] },
+      "error": { "role": "tertiary", "displayName": "Error Red", "canonical": "#f87171", "tonalRamp": ["#6e1717", "#9c2424", "#c83a3a", "#f87171", "#fa9494", "#fcb4b4", "#fdd2d2", "#feeaea"] }
+    },
+    "typographyMeta": {
+      "heading-page": { "displayName": "Page Heading", "purpose": "Page titles and profile names (1.5rem / 600)." },
+      "heading-section": { "displayName": "Section / Brand", "purpose": "Brand mark and eyebrows — the one place tracking goes wide (UPPERCASE, +0.06em)." },
+      "body": { "displayName": "Body", "purpose": "Default reading text, 15px, slight negative tracking. Cap measure 65–75ch." },
+      "body-strong": { "displayName": "Body Strong", "purpose": "Component names, card titles, the price figure." },
+      "label": { "displayName": "Label", "purpose": "Chips, metadata, small badges (0.7rem / 600, +0.04em)." }
+    },
+    "shadows": [
+      { "name": "resting", "value": "0 1px 2px rgba(10,10,15,0.06), 0 1px 3px rgba(10,10,15,0.05)", "purpose": "Cards and rows at rest." },
+      { "name": "raised", "value": "0 4px 10px rgba(10,10,15,0.08), 0 2px 4px rgba(10,10,15,0.05)", "purpose": "Hovered cards, lifted surfaces." },
+      { "name": "floating", "value": "0 16px 34px rgba(10,10,15,0.14), 0 4px 10px rgba(10,10,15,0.07)", "purpose": "Dropdowns, popovers, modals." },
+      { "name": "accent-lift", "value": "0 8px 20px rgba(10,10,15,0.22)", "purpose": "Primary (ink) button hover/active — a tighter darker press." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The system's single easing — settles into place, never elastic." },
+      { "name": "dur-fast", "value": "140ms", "purpose": "Hovers, small state changes." },
+      { "name": "dur", "value": "220ms", "purpose": "Entrances, card lifts, the live build settle." }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The ink-filled primary action. One per context.",
+      "html": "<button class=\"ds-btn-primary\">Save build</button>",
+      "css": ".ds-btn-primary { font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600; color: #fff; background: #111113; border: 1px solid #111113; border-radius: 6px; padding: 7px 16px; cursor: pointer; box-shadow: 0 1px 2px rgba(10,10,15,0.06), 0 1px 3px rgba(10,10,15,0.05); transition: background 140ms, transform 140ms cubic-bezier(0.16,1,0.3,1), box-shadow 140ms; } .ds-btn-primary:hover { background: #2c2c30; box-shadow: 0 8px 20px rgba(10,10,15,0.22); } .ds-btn-primary:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(10,10,15,0.06); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(17,17,19,0.16); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Quiet secondary action — hairline border on white.",
+      "html": "<button class=\"ds-btn-ghost\">Cancel</button>",
+      "css": ".ds-btn-ghost { font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600; color: #56565c; background: transparent; border: 1px solid #e6e6e9; border-radius: 6px; padding: 7px 16px; cursor: pointer; transition: color 140ms, border-color 140ms; } .ds-btn-ghost:hover { color: #0a0a0b; border-color: #cdcdd2; } .ds-btn-ghost:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(17,17,19,0.16); }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "button-ghost",
+      "description": "Filter/metadata chip. Selection shown by ink, never a colored fill.",
+      "html": "<button class=\"ds-chip ds-chip--selected\">Drivetrain</button>",
+      "css": ".ds-chip { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; color: #56565c; background: #fafafa; border: 1px solid #e6e6e9; border-radius: 6px; padding: 5px 12px; cursor: pointer; transition: color 140ms, border-color 140ms, background 140ms; } .ds-chip:hover { border-color: #cdcdd2; color: #0a0a0b; } .ds-chip--selected { color: #fff; background: #111113; border-color: #111113; }"
+    },
+    {
+      "name": "Component Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Content card — image, name, price. Border-first, lifts on hover.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card__title\">Shimano 105 R7100</div><div class=\"ds-card__price\">$289</div></div>",
+      "css": ".ds-card { background: #fff; border: 1px solid #e6e6e9; border-radius: 12px; padding: 20px; box-shadow: 0 1px 2px rgba(10,10,15,0.06), 0 1px 3px rgba(10,10,15,0.05); transition: transform 220ms cubic-bezier(0.16,1,0.3,1), border-color 140ms, box-shadow 220ms; } .ds-card:hover { transform: translateY(-2px); border-color: #cdcdd2; box-shadow: 0 4px 10px rgba(10,10,15,0.08), 0 2px 4px rgba(10,10,15,0.05); } .ds-card__title { font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 600; color: #0a0a0b; letter-spacing: -0.005em; } .ds-card__price { font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 600; color: #56565c; margin-top: 4px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Text field — hairline border, ink focus ring.",
+      "html": "<input class=\"ds-input\" placeholder=\"Name your build\" />",
+      "css": ".ds-input { font-family: 'Inter', sans-serif; font-size: 15px; color: #0a0a0b; background: #fff; border: 1px solid #e6e6e9; border-radius: 6px; padding: 8px 12px; transition: border-color 140ms, box-shadow 140ms; } .ds-input::placeholder { color: #97979e; } .ds-input:focus { outline: none; border-color: #111113; box-shadow: 0 0 0 3px rgba(17,17,19,0.16); }"
+    },
+    {
+      "name": "Compatibility Badge",
+      "kind": "custom",
+      "refersTo": "label",
+      "description": "Build-state badge. Color always paired with text (never color alone).",
+      "html": "<span class=\"ds-badge ds-badge--ok\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg>Compatible</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; border-radius: 6px; padding: 4px 9px; } .ds-badge--ok { color: #178a2e; background: rgba(26,174,57,0.08); }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "button-ghost",
+      "description": "Top-nav link with the ink underline that grows on hover and fills when active.",
+      "html": "<a class=\"ds-nav-link ds-nav-link--active\" href=\"#\">Builds</a>",
+      "css": ".ds-nav-link { position: relative; display: inline-flex; align-items: center; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.03em; color: #97979e; text-decoration: none; padding: 10px 0; transition: color 140ms; } .ds-nav-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: 6px; height: 2px; background: #111113; transform: scaleX(0); transform-origin: center; transition: transform 220ms cubic-bezier(0.16,1,0.3,1); } .ds-nav-link:hover { color: #56565c; } .ds-nav-link:hover::after { transform: scaleX(0.5); } .ds-nav-link--active { color: #111113; font-weight: 600; } .ds-nav-link--active::after { transform: scaleX(1); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Machined Component",
+    "overview": "BikeBuilder looks the way a well-made bike part feels in the hand: precise, monochrome, and quietly confident. The system is built almost entirely from neutral grays and a single near-black ink on crisp white panels floating on a light neutral-gray canvas. There is no decorative color, no brand purple, no gradient flourish — restraint is the statement. Color enters only where it carries meaning: green for compatible, amber for caution, red for error.",
+    "keyCharacteristics": [
+      "Monochrome by doctrine: one near-black ink, a neutral gray ramp, color reserved for meaning.",
+      "Crisp white surfaces over a light-gray canvas, separated by hairline borders and soft neutral shadows.",
+      "Inter everywhere, tuned with negative tracking on body and wide tracking on labels.",
+      "Tight radii (6–12px) and restrained padding — engineered, not soft.",
+      "Restrained entrance motion that settles into place; subtle, one-shot, never elastic or perpetual."
+    ],
+    "rules": [
+      { "name": "The One Ink Rule", "body": "There is exactly one accent — Machined Ink. No second brand color is ever introduced for decoration. Visual interest comes from hierarchy, spacing, and the component image.", "section": "colors" },
+      { "name": "The Color-Means-Something Rule", "body": "Green, amber, and red are reserved for build state. Never used decoratively, and never signal state with color alone — pair with text or an icon.", "section": "colors" },
+      { "name": "The One Family Rule", "body": "Inter carries everything. Never pair it with a second sans. Contrast is made with weight and size, not a new font.", "section": "typography" },
+      { "name": "The Tracking-Tells-Role Rule", "body": "Negative tracking = reading text. Positive tracking = labels, brand, eyebrows.", "section": "typography" },
+      { "name": "The Border-First Rule", "body": "Structure comes from the 1px hairline and the tonal step first; shadow is the second layer, used to lift on interaction.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep the palette monochrome. Build interest from hierarchy, spacing, weight, and component imagery — not from a new hue.",
+      "Do reserve green/amber/red strictly for build state, and always pair them with text or an icon.",
+      "Do structure surfaces with the 1px hairline and the white-on-gray tonal step first; add shadow only to lift on interaction.",
+      "Do make the running price and compatibility the most legible elements on any build screen.",
+      "Do drive hierarchy with Inter's weights and tracking; negative tracking for reading, positive for labels and brand.",
+      "Do use the mechanical motion vocabulary — fadeInUp / fadeIn on cubic-bezier(0.16,1,0.3,1), 140–220ms — so feedback settles into place."
+    ],
+    "donts": [
+      "Don't ship the generic SaaS dashboard: no cream-and-purple template palette, no hero-metric cards, no endless identical icon-card grids.",
+      "Don't ship the cluttered parts catalog: no Amazon/eBay listing-spam density.",
+      "Don't ship the childish gamified toy: no cartoon energy, no confetti, no badges, no bouncy/elastic motion.",
+      "Don't introduce a second brand color or a gradient for decoration. One ink, period.",
+      "Don't use gradient text, glassmorphism, or a >1px colored side-stripe border on cards or rows.",
+      "Don't use perpetual or looping motion — no infinite float/pulse/bob. Motion is one-shot: it plays on load or interaction, then stops.",
+      "Don't re-introduce a global motion kill-switch in index.css. The prefers-reduced-motion block is the correct, accessible way to suppress motion."
+    ]
+  }
+}

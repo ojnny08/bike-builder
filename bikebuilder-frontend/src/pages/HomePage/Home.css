@@ -174,7 +174,7 @@
     align-items: center;
     justify-content: center;
     box-shadow: var(--shadow-md);
-    animation: fadeIn 0.5s var(--ease-out) both, floatY 6s ease-in-out 0.5s infinite;
+    animation: fadeInUp var(--dur) var(--ease-out) both;
 }
 
 .home-hero-grid {
@@ -246,6 +246,23 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
+}
+
+/* Scroll reveal: cards are visible by default (no-JS / headless safe). When
+   JS arms `.reveal-ready` they hide, then slide down-and-in from the left once
+   the row scrolls into view. The inline animationDelay staggers them left-to-
+   right (~70ms apart). */
+.home-features.reveal-ready > * {
+    opacity: 0;
+}
+
+.home-features.is-visible > * {
+    animation: slideInLeft 700ms var(--ease-out) both;
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translate(-28px, -10px); }
+    to   { opacity: 1; transform: translate(0, 0); }
 }
 
 .home-feature {

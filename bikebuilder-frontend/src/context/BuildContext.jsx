@@ -5,6 +5,7 @@ const BuildContext = createContext();
 const EMPTY_BUILD = {
     id: null,
     name: "",
+    description: "",
     bikeType: null,
     steps: null,
     components: [],

@@ -2,7 +2,7 @@
 - A dynamic bike builder where selecting a component updates the UI in real time. 
 - Each component displays an image, name, and price.
 ## Stack
-- Frontend: React + Tailwind, deployed on Vercel
+- Frontend: React (plain CSS), deployed on Vercel
 - Backend: Django REST Framework, deployed on Railway
 - Database: PostgreSQL
 - Auth: Firebase OAuth (JWT verified in Django middleware)

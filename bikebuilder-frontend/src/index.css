@@ -37,14 +37,16 @@
   /* Layout */
   --page-x: 64px;
 
-  /* Semantic */
+  /* Semantic — surface tints (-bg) and AA-legible text shades (-ink) */
   --green:          #1aae39;
   --green-bg:       rgba(26, 174, 57, 0.08);
+  --green-ink:      #178a2e;
   --yellow:         #dd5b00;
   --yellow-bg:      rgba(221, 91, 0, 0.08);
   --error:          #f87171;
   --error-bg:       rgba(248, 113, 113, 0.08);
   --error-border:   rgba(248, 113, 113, 0.2);
+  --error-ink:      #b42318;
 }
 
 *, *::before, *::after {
@@ -52,12 +54,6 @@
   margin: 0;
   padding: 0;
   outline: none;
-}
-
-/* Disable all motion (transitions + keyframe animations) app-wide */
-*, *::before, *::after {
-  animation: none !important;
-  transition: none !important;
 }
 
 html {
