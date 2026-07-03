@@ -1,95 +1,204 @@
 import { useState, useEffect } from "react";
-import { fetchComponentsByCategory } from "../../services/componentService";
+import { fetchComponentsByCategory, fetchBrands, fetchComponentTypes } from "../../services/componentService";
+import BrandCombobox from "./BrandCombobox";
 import "./Components.css";
 
-const COMPONENT_TYPES = [
-    { value: "frame",            label: "Frame" },
-    { value: "fork",             label: "Fork" },
-    { value: "bottom_bracket",   label: "Bottom Bracket" },
-    { value: "crankset",         label: "Crankset" },
-    { value: "cassette",         label: "Cassette" },
-    { value: "rear_derailleur",  label: "Rear Derailleur" },
-    { value: "front_derailleur", label: "Front Derailleur" },
-    { value: "wheel",            label: "Wheel" },
-    { value: "tire",             label: "Tire" },
-    { value: "handlebar",        label: "Handlebar" },
-    { value: "stem",             label: "Stem" },
-    { value: "brake",            label: "Brake" },
-    { value: "saddle",           label: "Saddle" },
-    { value: "seatpost",         label: "Seatpost" },
-];
-
 const Components = () => {
-    const [selectedType, setSelectedType] = useState(null);
+    const [type, setType] = useState("");
+    const [componentTypes, setComponentTypes] = useState([]);
     const [components, setComponents] = useState([]);
+    const [priceMin, setPriceMin] = useState("");
+    const [priceMax, setPriceMax] = useState("");
     const [loading, setLoading] = useState(false);
+    const [brands, setBrands] = useState([]);
+    const [brand, setBrand] = useState("");
+    const [search, setSearch] = useState("");
+
+    const selectType = (nextType) => {
+        setType(nextType);
+        setBrand("");
+    };
 
     useEffect(() => {
-        if (!selectedType) return;
-        setLoading(true);
-        fetchComponentsByCategory(selectedType)
-            .then(data => setComponents(data))
-            .catch(err => console.log(err))
-            .finally(() => setLoading(false));
-    }, [selectedType]);
+        fetchComponentTypes()
+            .then(data => setComponentTypes(data))
+            .catch(err => console.log(err));
+    }, []);
 
-    if (!selectedType) {
-        return (
-            <div className="components-page">
-                <h2 className="components-title">Products</h2>
-                <p className="components-subtitle">Select a component type to browse.</p>
-                <div className="component-type-grid">
-                    {COMPONENT_TYPES.map(type => (
-                        <button
-                            key={type.value}
-                            className="component-type-card"
-                            onClick={() => setSelectedType(type.value)}
-                        >
-                            {type.label}
-                        </button>
-                    ))}
-                </div>
-            </div>
-        );
-    }
+    useEffect(() => {
+        fetchBrands(type)
+            .then(data => setBrands(data))
+            .catch(err => console.log(err));
+    }, [type]);
 
-    const activeLabel = COMPONENT_TYPES.find(t => t.value === selectedType)?.label;
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(true);
+            fetchComponentsByCategory(type, search, brand, priceMin, priceMax)
+                .then(data => setComponents(data))
+                .catch(err => console.log(err))
+                .finally(() => setLoading(false));
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [type, search, brand, priceMin, priceMax]);
+
+    const typeLabels = Object.fromEntries(componentTypes.map(t => [t.value, t.label]));
+
+    const clearFilters = () => {
+        setType("");
+        setBrand("");
+        setSearch("");
+        setPriceMin("");
+        setPriceMax("");
+    };
+
+    const hasFilters = type || brand || search || priceMin || priceMax;
 
     return (
         <div className="components-page">
             <div className="components-header">
                 <div>
-                    <h2 className="components-title">{activeLabel}</h2>
+                    <h2 className="components-title">Products</h2>
                     <p className="components-subtitle">{components.length} products</p>
                 </div>
-                <button className="back-btn" onClick={() => setSelectedType(null)}>
-                    ← All Categories
-                </button>
             </div>
 
-            {loading ? (
-                <p className="loading-text">Loading...</p>
-            ) : components.length === 0 ? (
-                <p className="loading-text">No components found.</p>
-            ) : (
-                <div className="product-grid">
-                    {components.map(comp => (
-                        <div key={comp.id} className="product-card">
-                            <div className="product-card-body">
-                                <p className="product-brand">{comp.brand}</p>
-                                <h3 className="product-name">{comp.name}</h3>
-                                {comp.description && (
-                                    <p className="product-desc">{comp.description}</p>
-                                )}
-                            </div>
-                            <div className="product-card-footer">
-                                <span className="product-price">${comp.price}</span>
-                                <span className="product-weight">{comp.weight_grams}g</span>
-                            </div>
+            <div className="components-layout">
+                <aside className="filter-panel" aria-label="Filters">
+                    <div className="filter-group">
+                        <label className="filter-label" htmlFor="filter-search">Search</label>
+                        <input
+                            id="filter-search"
+                            type="search"
+                            className="filter-input"
+                            placeholder="Search products..."
+                            value={search}
+                            onChange={e => setSearch(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="filter-group">
+                        <label className="filter-label" htmlFor="filter-type">Type</label>
+                        <select
+                            id="filter-type"
+                            className="filter-select"
+                            value={type}
+                            onChange={e => selectType(e.target.value)}
+                        >
+                            <option value="">All types</option>
+                            {componentTypes.map(t => (
+                                <option key={t.value} value={t.value}>{t.label}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="filter-group">
+                        <label className="filter-label" htmlFor="filter-brand">Brand</label>
+                        <BrandCombobox brands={brands} value={brand} onChange={setBrand} />
+                    </div>
+
+                    <div className="filter-group">
+                        <label className="filter-label" htmlFor="filter-price-min">Price</label>
+                        <div className="filter-price-row">
+                            <input
+                                id="filter-price-min"
+                                type="number"
+                                min="0"
+                                className="filter-input"
+                                placeholder="Min"
+                                value={priceMin}
+                                onChange={e => setPriceMin(e.target.value)}
+                            />
+                            <span className="filter-price-sep">–</span>
+                            <input
+                                id="filter-price-max"
+                                type="number"
+                                min="0"
+                                className="filter-input"
+                                placeholder="Max"
+                                value={priceMax}
+                                onChange={e => setPriceMax(e.target.value)}
+                            />
                         </div>
-                    ))}
+                    </div>
+
+                    {hasFilters && (
+                        <button
+                            type="button"
+                            className="filter-clear"
+                            onClick={clearFilters}
+                        >
+                            Clear filters
+                        </button>
+                    )}
+                </aside>
+
+                <div className="components-results">
+                    {loading ? (
+                        <div className="product-grid" aria-hidden="true">
+                            {Array.from({ length: 6 }, (_, i) => (
+                                <div key={i} className="product-card is-skeleton">
+                                    <div className="product-media" />
+                                    <div className="product-card-body">
+                                        <span className="skeleton-line skeleton-line--brand" />
+                                        <span className="skeleton-line skeleton-line--name" />
+                                    </div>
+                                    <div className="product-card-footer">
+                                        <span className="skeleton-line skeleton-line--price" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : components.length === 0 ? (
+                        <div className="products-empty">
+                            <p className="products-empty-title">No components match</p>
+                            <p className="products-empty-hint">
+                                Try widening the price range or clearing a filter.
+                            </p>
+                            {hasFilters && (
+                                <button type="button" className="filter-clear" onClick={clearFilters}>
+                                    Clear filters
+                                </button>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="product-grid">
+                            {components.map(comp => (
+                                <article key={comp.id} className="product-card">
+                                    <div className="product-media">
+                                        {comp.image_url ? (
+                                            <img src={comp.image_url} alt={comp.name} loading="lazy" />
+                                        ) : (
+                                            <svg className="product-media-placeholder" viewBox="0 0 48 48" aria-hidden="true">
+                                                <circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" strokeWidth="2" />
+                                                <circle cx="24" cy="24" r="5.5" fill="none" stroke="currentColor" strokeWidth="2" />
+                                                <path
+                                                    d="M24 9v6.5M24 32.5V39M9 24h6.5M32.5 24H39M13.4 13.4l4.6 4.6M30 30l4.6 4.6M34.6 13.4L30 18M18 30l-4.6 4.6"
+                                                    stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                                />
+                                            </svg>
+                                        )}
+                                        <span className="product-type">
+                                            {typeLabels[comp.component_type] || comp.component_type}
+                                        </span>
+                                    </div>
+                                    <div className="product-card-body">
+                                        <p className="product-brand">{comp.brand}</p>
+                                        <h3 className="product-name">{comp.name}</h3>
+                                        {comp.description && (
+                                            <p className="product-desc">{comp.description}</p>
+                                        )}
+                                    </div>
+                                    <div className="product-card-footer">
+                                        <span className="product-price">${comp.price}</span>
+                                        <span className="product-weight">{comp.weight_grams}g</span>
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
         </div>
     );
 };

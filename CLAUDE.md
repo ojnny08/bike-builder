@@ -8,8 +8,8 @@
 - Auth: Firebase OAuth (JWT verified in Django middleware)
 
 ## Project Structure
-- /frontend — React app
-- /backend — Django project
+- /bikebuilder-frontend — React app
+- /bikebuilder — Django project (apps live in /bikebuilder/apps)
 
 ## Conventions
 - API routes prefixed with /api/
