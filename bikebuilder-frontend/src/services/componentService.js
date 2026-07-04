@@ -25,3 +25,8 @@ export const fetchCompatibleComponents = async (category, selectedIds = {}) => {
     });
     return res.data;
 };
+
+export const submitProductURL = async (link) => {
+    const res = await api.post("/api/components/import_url/", { url: link });
+    return res.data;
+};

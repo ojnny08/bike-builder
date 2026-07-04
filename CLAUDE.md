@@ -18,3 +18,4 @@
 ### Code style
 - Avoid writting unessesaary code that tries to cover every type of issue
 - Prefer functional programming patterns over object-oriented design. Use early returns to minimize nesting.
+- for designs do not wrap everything in a rectangle with curved edges

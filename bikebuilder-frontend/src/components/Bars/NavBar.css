@@ -6,6 +6,7 @@
     position: relative;
 }
 .navbar-top {
+    position: relative;
     display: flex;
     align-items: stretch;
     justify-content: space-between;
@@ -184,17 +185,14 @@
 }
 
 .navbar-links {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
     display: flex;
-    align-self: flex-start;
     align-items: stretch;
+    height: 100%;
     gap: 0;
-    height: 44px;
-    margin-left: 0;
-    position: relative;
-    background: var(--navbar-bg);
-    padding-left: 40px;
-    padding-right: 52px;
-    clip-path: polygon(0 0, 100% 0, calc(100% - 36px) 100%, 0 100%);
 }
 
 .navbar-links a {

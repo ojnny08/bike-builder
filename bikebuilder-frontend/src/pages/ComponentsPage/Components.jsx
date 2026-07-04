@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchComponentsByCategory, fetchBrands, fetchComponentTypes } from "../../services/componentService";
 import BrandCombobox from "./BrandCombobox";
+import ImportModal from "./ImportModal";
 import "./Components.css";
 
 const Components = () => {
@@ -13,6 +14,9 @@ const Components = () => {
     const [brands, setBrands] = useState([]);
     const [brand, setBrand] = useState("");
     const [search, setSearch] = useState("");
+    const [filtersOpen, setFiltersOpen] = useState(false);
+    const [importOpen, setImportOpen] = useState(false);
+    const [reloadToken, setReloadToken] = useState(0);
 
     const selectType = (nextType) => {
         setType(nextType);
@@ -40,7 +44,7 @@ const Components = () => {
                 .finally(() => setLoading(false));
         }, 300);
         return () => clearTimeout(timer);
-    }, [type, search, brand, priceMin, priceMax]);
+    }, [type, search, brand, priceMin, priceMax, reloadToken]);
 
     const typeLabels = Object.fromEntries(componentTypes.map(t => [t.value, t.label]));
 
@@ -53,6 +57,7 @@ const Components = () => {
     };
 
     const hasFilters = type || brand || search || priceMin || priceMax;
+    const activeCount = [type, brand, priceMin || priceMax].filter(Boolean).length;
 
     return (
         <div className="components-page">
@@ -63,20 +68,55 @@ const Components = () => {
                 </div>
             </div>
 
-            <div className="components-layout">
-                <aside className="filter-panel" aria-label="Filters">
-                    <div className="filter-group">
-                        <label className="filter-label" htmlFor="filter-search">Search</label>
-                        <input
-                            id="filter-search"
-                            type="search"
-                            className="filter-input"
-                            placeholder="Search products..."
-                            value={search}
-                            onChange={e => setSearch(e.target.value)}
-                        />
-                    </div>
+            <div className="components-toolbar">
+                <div className="toolbar-search">
+                    <svg className="toolbar-search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
+                        <path d="M16.5 16.5L21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                    <input
+                        id="filter-search"
+                        type="search"
+                        className="toolbar-search-input"
+                        placeholder="Search products..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                    />
+                </div>
 
+                <button
+                    type="button"
+                    className="filter-toggle"
+                    onClick={() => setImportOpen(true)}
+                >
+                    Import
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M12 5v14M5 12h14"
+                            stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                        />
+                    </svg>
+                </button>
+
+                <button
+                    type="button"
+                    className={`filter-toggle${filtersOpen ? " is-open" : ""}`}
+                    aria-expanded={filtersOpen}
+                    onClick={() => setFiltersOpen(o => !o)}
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M4 6h16M7 12h10M10 18h4"
+                            stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                        />
+                    </svg>
+                    Filter
+                    {activeCount > 0 && <span className="filter-badge">{activeCount}</span>}
+                </button>
+            </div>
+
+            {filtersOpen && (
+                <div className="filter-panel" role="region" aria-label="Filters">
                     <div className="filter-group">
                         <label className="filter-label" htmlFor="filter-type">Type</label>
                         <select
@@ -131,10 +171,11 @@ const Components = () => {
                             Clear filters
                         </button>
                     )}
-                </aside>
+                </div>
+            )}
 
-                <div className="components-results">
-                    {loading ? (
+            <div className="components-results">
+                {loading ? (
                         <div className="product-grid" aria-hidden="true">
                             {Array.from({ length: 6 }, (_, i) => (
                                 <div key={i} className="product-card is-skeleton">
@@ -198,8 +239,14 @@ const Components = () => {
                         </div>
                     )}
                 </div>
+
+                {importOpen && (
+                    <ImportModal
+                        onClose={() => setImportOpen(false)}
+                        onImported={() => setReloadToken(t => t + 1)}
+                    />
+                )}
             </div>
-        </div>
     );
 };
 

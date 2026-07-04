@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from django.core.validators import URLValidator
 from ..category.models import BikeType
 
 
@@ -29,6 +31,17 @@ class Components(models.Model):
     weight_grams = models.PositiveIntegerField(help_text="Weight in grams")
     description = models.TextField(blank=True)
     image_url = models.URLField(blank=True)
+    import_url = models.URLField(
+        blank=True,
+        validators=[URLValidator(schemes=["http", "https"])]
+        )
+    submitted_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="submitted_components",
+    )
 
     class Meta:
         ordering = ['brand', 'name']
@@ -38,6 +51,26 @@ class Components(models.Model):
 
     def __str__(self):
         return f"{self.brand} {self.name}"
+
+
+class ComponentSubmission(models.Model):
+    """A user-submitted product URL awaiting manual entry in the admin."""
+    url = models.URLField(validators=[URLValidator(schemes=["http", "https"])])
+    submitted_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="component_submissions",
+    )
+    processed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.url
     
 
 class Frame(Components):

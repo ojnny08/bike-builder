@@ -41,6 +41,11 @@ const NavBar = () => {
                         Bikco
                     </NavLink>
                 </div>
+                <div className="navbar-links">
+                    <NavLink to="/builds/new">Bike Builder</NavLink>
+                    <NavLink to="/components">Products</NavLink>
+                    <NavLink to="/builds" end>Completed Builds</NavLink>
+                </div>
                 <div className="navbar-auth">
                     {currentUser ? (
                         <div className="navbar-user" ref={dropdownRef}>
@@ -70,11 +75,6 @@ const NavBar = () => {
                         </>
                     )}
                 </div>
-            </div>
-            <div className="navbar-links">
-                <NavLink to="/builds/new">Bike Builder</NavLink>
-                <NavLink to="/components">Products</NavLink>
-                <NavLink to="/builds" end>Completed Builds</NavLink>
             </div>
         </nav>
     );

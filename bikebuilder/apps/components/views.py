@@ -3,9 +3,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.core.cache import cache
-from .serializer import ComponentsSerializer
+from .serializer import ComponentsSerializer, ComponentSubmissionSerializer
 from .models import Components, ComponentType, Frame, BottomBracket, Crankset, Wheel, Stem, Sprocket
 from .compatibility import get_compatible_queryset
 
@@ -33,6 +33,11 @@ def _cached(key, ttl, compute):
 
 class ComponentsViewSet(ViewSet):
     permission_classes = [AllowAny]
+
+    def get_permissions(self):
+        if self.action == "import_url":
+            return [IsAuthenticated()]
+        return super().get_permissions()
 
     def list(self, request):
         component_type = request.query_params.get("component_type") or ""
@@ -102,6 +107,13 @@ class ComponentsViewSet(ViewSet):
         queryset = get_compatible_queryset(component_type, selected)
         return Response(ComponentsSerializer(queryset, many=True).data)
 
+    @action(detail=False, methods=['post'])
+    def import_url(self, request):
+        serializer = ComponentSubmissionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(submitted_by=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 def _fetch(model, request, param):
     pk = request.query_params.get(param)
@@ -111,4 +123,3 @@ def _fetch(model, request, param):
         return model.objects.get(pk=pk)
     except model.DoesNotExist:
         return None
-
