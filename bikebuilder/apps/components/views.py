@@ -45,6 +45,8 @@ class ComponentsViewSet(ViewSet):
         search = request.query_params.get("search") or ""
         price_max = request.query_params.get("price_max") or ""
         price_min = request.query_params.get("price_min") or ""
+        weight_max = request.query_params.get("weight_max") or ""
+        weight_min = request.query_params.get("weight_min") or ""
         page = request.query_params.get("page") or "1"
         key = f"components:list:{component_type}:{brand}:{search}:{price_min}:{price_max}:{page}"
 
@@ -58,11 +60,22 @@ class ComponentsViewSet(ViewSet):
                 queryset = queryset.filter(price__gte=price_min)
             if price_max:
                 queryset = queryset.filter(price__lte=price_max)
+            if weight_max:
+                queryset = queryset.filter(weight_grams__gte=weight_max)
+            if weight_min:
+                queryset = queryset.filter(weight_grams__gte=weight_min)
             if search:
                 queryset = queryset.filter(name__icontains=search)
             return _paginate(queryset, request).data
 
         return _cached(key, 60 * 15, compute)
+
+    def retrieve(self, request, pk=None):
+        key = f"components:detail:{pk}"
+        try:
+            return _cached(key, 60 * 60, lambda: ComponentsSerializer(Components.objects.get(pk=pk)).data)
+        except Components.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=False, methods=['get'])
     def types(self, request):
@@ -81,14 +94,7 @@ class ComponentsViewSet(ViewSet):
             return list(queryset.values_list("brand", flat=True).distinct().order_by("brand"))
 
         return _cached(key, 60 * 15, compute)
-
-    def retrieve(self, request, pk=None):
-        key = f"components:detail:{pk}"
-        try:
-            return _cached(key, 60 * 60, lambda: ComponentsSerializer(Components.objects.get(pk=pk)).data)
-        except Components.DoesNotExist:
-            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
-
+    
     @action(detail=False, methods=['get'])
     def compatible(self, request):
         component_type = request.query_params.get('component_type')

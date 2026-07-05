@@ -1,74 +1,42 @@
 import { useState, useEffect } from "react";
-import { fetchComponentsByCategory, fetchBrands, fetchComponentTypes } from "../../services/componentService";
-import BrandCombobox from "./BrandCombobox";
+import { fetchComponentsByCategory } from "../../services/componentService";
+import { useComponentFilters } from "../../hooks/useComponentFilters";
+import FilterSidebar from "../../components/Filters/FilterSidebar";
 import ImportModal from "./ImportModal";
 import "./Components.css";
 
 const Components = () => {
-    const [type, setType] = useState("");
-    const [componentTypes, setComponentTypes] = useState([]);
+    const filters = useComponentFilters();
+    const { query } = filters;
+
     const [components, setComponents] = useState([]);
-    const [priceMin, setPriceMin] = useState("");
-    const [priceMax, setPriceMax] = useState("");
+    const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [brands, setBrands] = useState([]);
-    const [brand, setBrand] = useState("");
-    const [search, setSearch] = useState("");
-    const [filtersOpen, setFiltersOpen] = useState(false);
     const [importOpen, setImportOpen] = useState(false);
     const [reloadToken, setReloadToken] = useState(0);
 
-    const selectType = (nextType) => {
-        setType(nextType);
-        setBrand("");
-    };
-
     useEffect(() => {
-        fetchComponentTypes()
-            .then(data => setComponentTypes(data))
-            .catch(err => console.log(err));
-    }, []);
+        setLoading(true);
+        fetchComponentsByCategory(query.type, query.search, query.brand, query.priceMin, query.priceMax)
+            .then(data => {
+                setComponents(data.results);
+                setTotal(data.count);
+            })
+            .catch(err => console.log(err))
+            .finally(() => setLoading(false));
+    }, [query.type, query.search, query.brand, query.priceMin, query.priceMax, reloadToken]);
 
-    useEffect(() => {
-        fetchBrands(type)
-            .then(data => setBrands(data))
-            .catch(err => console.log(err));
-    }, [type]);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(true);
-            fetchComponentsByCategory(type, search, brand, priceMin, priceMax)
-                .then(data => setComponents(data))
-                .catch(err => console.log(err))
-                .finally(() => setLoading(false));
-        }, 300);
-        return () => clearTimeout(timer);
-    }, [type, search, brand, priceMin, priceMax, reloadToken]);
-
-    const typeLabels = Object.fromEntries(componentTypes.map(t => [t.value, t.label]));
-
-    const clearFilters = () => {
-        setType("");
-        setBrand("");
-        setSearch("");
-        setPriceMin("");
-        setPriceMax("");
-    };
-
-    const hasFilters = type || brand || search || priceMin || priceMax;
-    const activeCount = [type, brand, priceMin || priceMax].filter(Boolean).length;
+    const typeLabels = Object.fromEntries(filters.componentTypes.map(t => [t.value, t.label]));
 
     return (
         <div className="components-page">
             <div className="components-header">
                 <div>
-                    <h2 className="components-title">Products</h2>
-                    <p className="components-subtitle">{components.length} products</p>
+                    <h1 className="components-title">{total} Products </h1>
                 </div>
             </div>
 
-            <div className="components-toolbar">
+            <div className="cmp-toolbar-row">
                 <div className="toolbar-search">
                     <svg className="toolbar-search-icon" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
@@ -79,8 +47,8 @@ const Components = () => {
                         type="search"
                         className="toolbar-search-input"
                         placeholder="Search products..."
-                        value={search}
-                        onChange={e => setSearch(e.target.value)}
+                        value={filters.search}
+                        onChange={e => filters.setSearch(e.target.value)}
                     />
                 </div>
 
@@ -97,84 +65,12 @@ const Components = () => {
                         />
                     </svg>
                 </button>
-
-                <button
-                    type="button"
-                    className={`filter-toggle${filtersOpen ? " is-open" : ""}`}
-                    aria-expanded={filtersOpen}
-                    onClick={() => setFiltersOpen(o => !o)}
-                >
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path
-                            d="M4 6h16M7 12h10M10 18h4"
-                            stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                        />
-                    </svg>
-                    Filter
-                    {activeCount > 0 && <span className="filter-badge">{activeCount}</span>}
-                </button>
             </div>
 
-            {filtersOpen && (
-                <div className="filter-panel" role="region" aria-label="Filters">
-                    <div className="filter-group">
-                        <label className="filter-label" htmlFor="filter-type">Type</label>
-                        <select
-                            id="filter-type"
-                            className="filter-select"
-                            value={type}
-                            onChange={e => selectType(e.target.value)}
-                        >
-                            <option value="">All types</option>
-                            {componentTypes.map(t => (
-                                <option key={t.value} value={t.value}>{t.label}</option>
-                            ))}
-                        </select>
-                    </div>
+            <div className="cmp-body">
+                <FilterSidebar filters={filters} />
 
-                    <div className="filter-group">
-                        <label className="filter-label" htmlFor="filter-brand">Brand</label>
-                        <BrandCombobox brands={brands} value={brand} onChange={setBrand} />
-                    </div>
-
-                    <div className="filter-group">
-                        <label className="filter-label" htmlFor="filter-price-min">Price</label>
-                        <div className="filter-price-row">
-                            <input
-                                id="filter-price-min"
-                                type="number"
-                                min="0"
-                                className="filter-input"
-                                placeholder="Min"
-                                value={priceMin}
-                                onChange={e => setPriceMin(e.target.value)}
-                            />
-                            <span className="filter-price-sep">–</span>
-                            <input
-                                id="filter-price-max"
-                                type="number"
-                                min="0"
-                                className="filter-input"
-                                placeholder="Max"
-                                value={priceMax}
-                                onChange={e => setPriceMax(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    {hasFilters && (
-                        <button
-                            type="button"
-                            className="filter-clear"
-                            onClick={clearFilters}
-                        >
-                            Clear filters
-                        </button>
-                    )}
-                </div>
-            )}
-
-            <div className="components-results">
+                <div className="components-results">
                 {loading ? (
                         <div className="product-grid" aria-hidden="true">
                             {Array.from({ length: 6 }, (_, i) => (
@@ -196,8 +92,8 @@ const Components = () => {
                             <p className="products-empty-hint">
                                 Try widening the price range or clearing a filter.
                             </p>
-                            {hasFilters && (
-                                <button type="button" className="filter-clear" onClick={clearFilters}>
+                            {filters.hasFilters && (
+                                <button type="button" className="filter-clear" onClick={filters.clearFilters}>
                                     Clear filters
                                 </button>
                             )}
@@ -239,14 +135,15 @@ const Components = () => {
                         </div>
                     )}
                 </div>
-
-                {importOpen && (
-                    <ImportModal
-                        onClose={() => setImportOpen(false)}
-                        onImported={() => setReloadToken(t => t + 1)}
-                    />
-                )}
             </div>
+
+            {importOpen && (
+                <ImportModal
+                    onClose={() => setImportOpen(false)}
+                    onImported={() => setReloadToken(t => t + 1)}
+                />
+            )}
+        </div>
     );
 };
 

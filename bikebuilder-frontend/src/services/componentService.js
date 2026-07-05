@@ -1,10 +1,18 @@
 import { api } from "../api/axios";
 
-export const fetchComponentsByCategory = async (category, search = "", brand = "", priceMin = "", priceMax = "") => {
+export const fetchComponentsByCategory = async (category, search = "", brand = "", priceMin = "", priceMax = "", weightMax = "", weightMin = "") => {
     const res = await api.get("/api/components/", {
-        params: { component_type: category, search, brand, price_min: priceMin, price_max: priceMax },
-    });
-    return res.data.results;
+        params: { 
+                    component_type: category, 
+                    search: search, 
+                    brand: brand,
+                    price_min: priceMin, 
+                    price_max: priceMax, 
+                    weight_max: weightMax,
+                    weight_Min: weightMin
+                },
+            });
+    return res.data;
 };
 
 export const fetchComponentTypes = async () => {

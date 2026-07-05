@@ -1,0 +1,243 @@
+.components-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.toolbar-search {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.toolbar-search-icon {
+    position: absolute;
+    left: 14px;
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.toolbar-search-input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px 0 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: var(--text);
+    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.toolbar-search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.toolbar-search-input:hover {
+    border-color: var(--border-strong);
+}
+
+.toolbar-search-input:focus {
+    outline: none;
+    border-color: var(--accent-focus);
+    box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.filter-toggle {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.filter-toggle svg {
+    width: 18px;
+    height: 18px;
+}
+
+.filter-toggle:hover,
+.filter-toggle.is-open {
+    border-color: var(--border-strong);
+}
+
+.filter-toggle.is-open {
+    box-shadow: 0 0 0 3px var(--accent-ring);
+    border-color: var(--accent-focus);
+}
+
+.filter-badge {
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--accent-bg);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.filter-panel {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 18px;
+    margin-bottom: 24px;
+    padding: 4px 2px 22px;
+    animation: fadeInUp var(--dur-fast) var(--ease-out) both;
+}
+
+.filter-panel::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--border);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1 1 180px;
+    min-width: 160px;
+}
+
+.filter-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.filter-input,
+.filter-select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: var(--text);
+    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.filter-input::placeholder {
+    color: var(--text-muted);
+}
+
+.filter-input:hover,
+.filter-select:hover {
+    border-color: var(--border-strong);
+}
+
+.filter-input:focus,
+.filter-select:focus {
+    outline: none;
+    border-color: var(--accent-focus);
+    box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.filter-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2397979e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 34px;
+}
+
+.filter-price-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-price-sep {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.filter-clear {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    height: 44px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: border-color var(--dur-fast), color var(--dur-fast);
+}
+
+.filter-clear:hover {
+    border-color: var(--border-strong);
+    color: var(--text);
+}
+
+.combobox {
+    position: relative;
+}
+
+.combobox-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    max-height: 220px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+}
+
+.combobox-option {
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: background-color var(--dur-fast);
+}
+
+.combobox-option:hover {
+    background: var(--surface-hover);
+}
+
+.combobox-option.is-selected {
+    background: var(--accent-bg);
+    font-weight: 600;
+}
+
+.combobox-empty {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}

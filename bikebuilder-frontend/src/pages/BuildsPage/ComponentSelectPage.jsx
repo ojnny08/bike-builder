@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBuild } from "../../context/BuildContext";
 import { fetchComponentsByCategory, fetchCompatibleComponents } from "../../services/componentService";
+import { useComponentFilters } from "../../hooks/useComponentFilters";
+import FilterBar from "../../components/Filters/FilterBar";
 import "./style/Builds.css";
 
 const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -57,6 +59,8 @@ const ComponentSelectPage = () => {
     const { category } = useParams();
     const { build, addComponent } = useBuild();
     const navigate = useNavigate();
+    const filters = useComponentFilters({ fixedType: category });
+    const { query } = filters;
     const [components, setComponents] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -80,16 +84,18 @@ const ComponentSelectPage = () => {
 
     useEffect(() => {
         const load = async () => {
+            setLoading(true);
             try {
                 const selectedIds = getSelectedIds();
                 const [all, compatible] = await Promise.all([
-                    fetchComponentsByCategory(category),
+                    fetchComponentsByCategory(category, query.search, query.brand, query.priceMin, query.priceMax),
                     category === 'frame'
                         ? Promise.resolve(null)
                         : fetchCompatibleComponents(category, selectedIds),
                 ]);
-                const compatibleIds = new Set((compatible ?? all).map(c => c.id));
-                setComponents(all.map(c => ({ ...c, compatible: compatibleIds.has(c.id) })));
+                const allResults = all.results;
+                const compatibleIds = new Set((compatible ?? allResults).map(c => c.id));
+                setComponents(allResults.map(c => ({ ...c, compatible: compatibleIds.has(c.id) })));
             } catch (e) {
                 console.error(e);
             } finally {
@@ -97,7 +103,7 @@ const ComponentSelectPage = () => {
             }
         };
         load();
-    }, [category]);
+    }, [category, query.search, query.brand, query.priceMin, query.priceMax]);
 
     const handleSelect = (comp) => {
         addComponent(comp);
@@ -109,17 +115,19 @@ const ComponentSelectPage = () => {
     return (
         <div className="cs-page">
             <header className="cs-head">
-                <button className="bb-btn-ghost" onClick={() => navigate("/builds/new")}>← Back to build</button>
                 <div className="cs-head-text">
-                    <h1 className="cs-head-title">Choose a {formatCat(category)}</h1>
+                    <h1 className="cs-head-title"> Select A {formatCat(category)}</h1>
                     {!loading && (
                         <p className="cs-head-sub">
                             {compatCount} compatible
                             {components.length > compatCount && ` · ${components.length - compatCount} incompatible`}
                         </p>
                     )}
+                    <button className="bb-btn-ghost" onClick={() => navigate("/builds/new")}>← Back to build</button>
                 </div>
             </header>
+
+            <FilterBar filters={filters} />
 
             {loading ? (
                 <div className="cs-grid">

@@ -1,13 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 
-// Searchable brand dropdown: type to filter the list, click to select.
-// `value` is the applied brand (""=all); `onChange` reports the picked brand.
-const BrandCombobox = ({ brands, value, onChange }) => {
+const BrandSelectBox = ({ brands, value, onChange }) => {
     const [query, setQuery] = useState("");
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
 
-    // Close the dropdown when clicking anywhere outside it.
     useEffect(() => {
         const onClickOutside = (e) => {
             if (ref.current && !ref.current.contains(e.target)) setOpen(false);
@@ -71,4 +68,4 @@ const BrandCombobox = ({ brands, value, onChange }) => {
     );
 };
 
-export default BrandCombobox;
+export default BrandSelectBox;
