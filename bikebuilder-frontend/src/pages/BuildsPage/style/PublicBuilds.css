@@ -52,6 +52,11 @@
     gap: 16px;
 }
 
+/* Space between the builds grid and the filter toolbar below it. */
+.public-builds-page .components-toolbar {
+    margin-top: 40px;
+}
+
 .build-card {
     background: var(--surface);
     border: 1px solid var(--border);

@@ -43,11 +43,19 @@ class PublicBuildsViewSet(ViewSet):
         username = request.query_params.get('username')
         progress = request.query_params.get('status')
         limit = request.query_params.get('limit')
+        search = request.query_params.get('search')
+        component_ids = request.query_params.getlist('component')
         builds = Build.objects.all()
         if username:
             builds = builds.filter(user__username=username)
         if progress:
             builds = builds.filter(status=progress)
+        if search:
+            builds = builds.filter(name__icontains=search)
+        # A build must contain every selected component, so filter once per id.
+        for cid in component_ids:
+            builds = builds.filter(components__id=cid)
+        builds = builds.distinct()
         if limit:
             builds = builds[:int(limit)]
         return Response(BuildsSerializer(builds, many=True).data)

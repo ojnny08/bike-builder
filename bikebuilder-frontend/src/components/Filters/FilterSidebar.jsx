@@ -1,5 +1,5 @@
 import FilterFields from "./FilterFields";
-import "./FilterSidebar.css";
+import "./style/FilterSidebar.css";
 
 // Always-open vertical filter rail for the components listing page.
 // Shares the actual inputs with FilterBar via FilterFields; only the

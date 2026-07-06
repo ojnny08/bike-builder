@@ -1,0 +1,21 @@
+/* Layout only — visual styling (labels, selects, buttons) is reused from
+   FilterBar.css via .filter-label / .filter-select / .filter-clear. */
+.build-filters {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+}
+
+.build-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 520px;
+}
+
+.build-filter-row .filter-select {
+    flex: 1;
+}

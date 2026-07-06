@@ -127,7 +127,7 @@ const ComponentSelectPage = () => {
                 </div>
             </header>
 
-            <FilterBar filters={filters} />
+            <FilterBar filters={filters} iconOnly centered />
 
             {loading ? (
                 <div className="cs-grid">

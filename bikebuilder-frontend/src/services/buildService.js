@@ -19,9 +19,25 @@ export const fetchBuilds = async (params = {}) => {
     }
 };
 
+// Build the query string by hand so array values (e.g. component ids) repeat
+// the key — component=12&component=45 — which Django reads with getlist().
+// Axios' default array serialization would emit component[]= and miss it.
+const toSearchParams = (params) => {
+    const search = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+        if (value === null || value === undefined || value === "") return;
+        if (Array.isArray(value)) {
+            value.forEach(v => search.append(key, v));
+            return;
+        }
+        search.set(key, value);
+    });
+    return search;
+};
+
 export const fetchPublicBuilds = async (params = {}) => {
     try {
-        const res = await api.get("/api/builds/public/", { params });
+        const res = await api.get(`/api/builds/public/?${toSearchParams(params)}`);
         return res.data;
     } catch (error) {
         throw new Error("Failed to get public builds");
@@ -93,4 +109,5 @@ export const uploadBuildImage = async (id, file) => {
         throw new Error("Failed to upload image");
     }
 };
+
 

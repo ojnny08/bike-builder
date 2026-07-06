@@ -1,14 +1,20 @@
 import { useState } from "react";
-import "./FilterBar.css";
+import "./style/FilterBar.css";
 import FilterFields from "./FilterFields";
 
-const FilterBar = ({ filters, children }) => {
+const FilterBar = ({ filters, children, panel, searchPlaceholder = "Search products...", iconOnly = false, centered = false, className = "" }) => {
     const { search, setSearch, activeCount } = filters;
     const [open, setOpen] = useState(false);
 
+    const toolbarClass = [
+        "components-toolbar",
+        centered && "components-toolbar--centered",
+        className,
+    ].filter(Boolean).join(" ");
+
     return (
         <>
-            <div className="components-toolbar">
+            <div className={toolbarClass}>
                 <div className="toolbar-search">
                     <svg className="toolbar-search-icon" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
@@ -18,7 +24,7 @@ const FilterBar = ({ filters, children }) => {
                         id="filter-search"
                         type="search"
                         className="toolbar-search-input"
-                        placeholder="Search products..."
+                        placeholder={searchPlaceholder}
                         value={search}
                         onChange={e => setSearch(e.target.value)}
                     />
@@ -28,8 +34,9 @@ const FilterBar = ({ filters, children }) => {
 
                 <button
                     type="button"
-                    className={`filter-toggle${open ? " is-open" : ""}`}
+                    className={`filter-toggle${open ? " is-open" : ""}${iconOnly ? " filter-toggle--icon" : ""}`}
                     aria-expanded={open}
+                    aria-label={iconOnly ? "Filter" : undefined}
                     onClick={() => setOpen(o => !o)}
                 >
                     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -38,14 +45,14 @@ const FilterBar = ({ filters, children }) => {
                             stroke="currentColor" strokeWidth="2" strokeLinecap="round"
                         />
                     </svg>
-                    Filter
+                    {!iconOnly && "Filter"}
                     {activeCount > 0 && <span className="filter-badge">{activeCount}</span>}
                 </button>
             </div>
 
             {open && (
                 <div className="filter-panel" role="region" aria-label="Filters">
-                    <FilterFields filters={filters} />
+                    {panel ?? <FilterFields filters={filters} />}
                 </div>
             )}
         </>

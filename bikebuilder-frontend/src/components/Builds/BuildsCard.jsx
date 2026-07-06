@@ -51,32 +51,36 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
         setTimeout(() => setCopied(false), 2000);
     };
 
+    const imageBlock = (
+        <div
+            className={`build-card-image${onUploadImage ? ' build-card-image-clickable' : ''}`}
+            onClick={(e) => { if (onUploadImage) { e.stopPropagation(); fileInputRef.current.click(); } }}
+        >
+            {build.image_url
+                ? <img src={build.image_url} alt={build.name} className="build-card-img" />
+                : <div className="build-card-img-placeholder">
+                    {onUploadImage && <span className="build-card-img-prompt"><CameraIcon /> Add Photo</span>}
+                  </div>
+            }
+            {onUploadImage && build.image_url && (
+                <div className="build-card-img-overlay"><CameraIcon /> Change Photo</div>
+            )}
+            <button
+                className={`build-card-share${copied ? ' is-copied' : ''}`}
+                onClick={handleShare}
+                aria-label="Share build"
+            >
+                {copied ? <CheckIcon /> : <ShareIcon />}
+            </button>
+        </div>
+    );
+
     return (
         <div
             className="build-card build-card-clickable"
             onClick={() => navigate(`/builds/view/${build.share_token}`)}
         >
-            <div
-                className={`build-card-image${onUploadImage ? ' build-card-image-clickable' : ''}`}
-                onClick={(e) => { if (onUploadImage) { e.stopPropagation(); fileInputRef.current.click(); } }}
-            >
-                {build.image_url
-                    ? <img src={build.image_url} alt={build.name} className="build-card-img" />
-                    : <div className="build-card-img-placeholder">
-                        {onUploadImage && <span className="build-card-img-prompt"><CameraIcon /> Add Photo</span>}
-                      </div>
-                }
-                {onUploadImage && build.image_url && (
-                    <div className="build-card-img-overlay"><CameraIcon /> Change Photo</div>
-                )}
-                <button
-                    className={`build-card-share${copied ? ' is-copied' : ''}`}
-                    onClick={handleShare}
-                    aria-label="Share build"
-                >
-                    {copied ? <CheckIcon /> : <ShareIcon />}
-                </button>
-            </div>
+            {imageBlock}
             {onUploadImage && (
                 <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
             )}

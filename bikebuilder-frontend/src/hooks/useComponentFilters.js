@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchBrands, fetchComponentTypes } from "../services/componentService";
 
-// Shared filter state for component listings: search, type, brand, price range.
-// Pass `fixedType` when the category is locked (e.g. picking a part for a build)
-// so the type filter is hidden and brands load for that one category.
-// `query` is a debounced snapshot the caller feeds into its own fetch effect.
+
 export const useComponentFilters = ({ fixedType = "" } = {}) => {
     const typeLocked = fixedType !== "";
 
@@ -60,6 +57,8 @@ export const useComponentFilters = ({ fixedType = "" } = {}) => {
         setSearch("");
         setPriceMin("");
         setPriceMax("");
+        setWeightMin("");
+        setWeightMax("");
     };
 
     const hasFilters = Boolean(brand || search || priceMin || priceMax || weightMax || weightMin || (!typeLocked && type));
