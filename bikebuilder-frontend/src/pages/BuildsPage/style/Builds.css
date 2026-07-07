@@ -6,13 +6,13 @@
 .bb-wrapper {
     margin: -32px calc(-1 * var(--page-x));
     background: var(--surface);
-    min-height: calc(100vh - 90px);
+    min-height: calc(100vh - 32px);
 }
 
 .bb-main {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 90px);
+    min-height: calc(100vh - 94px); /* viewport − page bottom padding − builder nav */
     background: var(--surface);
 }
 
@@ -49,40 +49,53 @@
 
 .bb-btn-lg { padding: 10px 24px; font-size: 0.9rem; }
 
-/* ── Top bar ────────────────────────────────────────────────────────────── */
-.bb-topbar {
+/* ── Builder nav — replaces the site navbar while building ───────────────── */
+.bn-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    gap: 24px;
+    height: 62px;
     padding: 0 64px;
-    height: 72px;
+    background: var(--navbar-bg);
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
 }
 
-.bb-topbar-left { display: flex; align-items: center; gap: 24px; min-width: 0; }
-
-.bb-build-type {
-    font-size: 1rem;
+.bn-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.05rem;
     font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--text);
-    letter-spacing: -0.01em;
-    white-space: nowrap;
 }
+.bn-brand-icon { color: var(--accent); display: block; transition: transform var(--dur) var(--ease-out); }
+.bn-brand:hover .bn-brand-icon { transform: rotate(-8deg) scale(1.05); }
 
-.bb-progress { display: flex; align-items: center; gap: 12px; min-width: 0; }
-
-.bb-progress-track {
-    width: 120px;
-    height: 5px;
+.bn-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    margin: 0 24px;
+}
+.bn-bar-track {
+    flex: 1;
+    height: 12px;
     border-radius: 999px;
-    background: var(--surface-hover);
+    background: var(--surface);
+    border: 1px solid var(--border);
     overflow: hidden;
-    flex-shrink: 0;
 }
-
-.bb-progress-fill {
+.bn-bar-fill {
     display: block;
     height: 100%;
     width: 100%;
@@ -91,12 +104,33 @@
     transform-origin: left center;
     transition: transform var(--dur) var(--ease-out);
 }
-
-.bb-progress-text {
+.bn-bar-text {
     font-size: 0.78rem;
     font-weight: 600;
     color: var(--text-secondary);
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.bn-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+/* ── Top bar (bike type label above the parts list) ─────────────────────── */
+.bb-topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 64px;
+    height: 56px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.bb-build-type {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
     white-space: nowrap;
 }
 
@@ -225,9 +259,8 @@
 
 /* ═══ Component picker — card grid ══════════════════════════════════════════ */
 .cs-page {
-    margin: -32px calc(-1 * var(--page-x));
     padding: 28px 64px 64px;
-    min-height: calc(100vh - 90px);
+    min-height: calc(100vh - 94px); /* viewport − page bottom padding − builder nav */
     background: var(--bg);
 }
 
@@ -492,6 +525,7 @@
 }
 
 @media (max-width: 680px) {
+    .bn-bar { padding: 0 24px; gap: 14px; }
     .bb-topbar { padding: 0 24px; height: auto; flex-wrap: wrap; gap: 12px; padding-top: 14px; padding-bottom: 14px; }
     .bb-list { padding: 20px 24px 28px; }
     .bb-footer { padding: 12px 24px; }

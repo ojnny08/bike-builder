@@ -9,6 +9,7 @@ import PublicBuilds from './pages/BuildsPage/PublicBuilds'
 import SharedBuild from './pages/BuildsPage/SharedBuild'
 import BuildDetail from './pages/BuildsPage/BuildDetail'
 import ComponentSelectPage from './pages/BuildsPage/ComponentSelectPage'
+import BuildSummary from './pages/BuildsPage/BuildSummary'
 import Profile from './pages/ProfilePage/Profile'
 import './App.css'
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/builds/shared/:token" element={<SharedBuild />}/>
           <Route element={<ProtectedRoute />}>
             <Route path="/builds/new" element={<Builds />}/>
+            <Route path="/builds/new/review" element={<BuildSummary />}/>
             <Route path="/builds/new/select/:category" element={<ComponentSelectPage />}/>
             <Route path="/profile/:username" element={<Profile />}/>
           </Route>

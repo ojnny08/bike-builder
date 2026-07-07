@@ -98,7 +98,6 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
             <div className="build-card-meta">
                 <span>{frame ? `${frame.brand} ${frame.name}` : "No frame"}</span>
                 <span>{crank ? `${crank.brand} ${crank.name}` : "No crank"}</span>
-                <span className="build-card-meta-date">{new Date(build.created_at).toLocaleDateString()}</span>
             </div>
             {(onDelete || onEdit) && (
                 <div className="build-card-actions">

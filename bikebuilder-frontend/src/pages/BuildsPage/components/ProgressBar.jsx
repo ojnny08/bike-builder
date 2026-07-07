@@ -1,4 +1,4 @@
-import "./style/Builds.css";
+import "../style/Builds.css";
 
 const fmt = str => str.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 
@@ -12,6 +12,7 @@ const ProgressBar = ({ steps, currentStep, selectedByCategory, onStepClick }) =>
                     const isPast = i < currentStep;
                     const isFirst = i === 0;
                     const isLast = i === steps.length - 1;
+                
                     return (
                         <button
                             key={type}

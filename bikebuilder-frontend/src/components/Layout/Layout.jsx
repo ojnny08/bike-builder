@@ -1,14 +1,24 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import NavBar from '../Bars/NavBar'
+import { useBuild } from '../../context/BuildContext'
 import './Layout.css'
 
-const Layout = () => (
-    <div>
-        <NavBar />
-        <main className="page-wrapper">
-            <Outlet />
-        </main>
-    </div>
-);
+const Layout = () => {
+    const location = useLocation();
+    const { build } = useBuild();
+
+    // Once a bike type is chosen the builder takes over the whole screen with
+    // its own top bar, so the site navbar is hidden across the builder flow.
+    const inBuilder = location.pathname.startsWith('/builds/new') && build.bikeType;
+
+    return (
+        <div>
+            {!inBuilder && <NavBar />}
+            <main className="page-wrapper">
+                <Outlet />
+            </main>
+        </div>
+    );
+};
 
 export default Layout;

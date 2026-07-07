@@ -1,18 +1,25 @@
 .public-builds-page {}
 
+/* Full-bleed black bar: negative side margins cancel the .page-wrapper
+   padding (var(--page-x)) and the negative top margin pulls it up to the
+   navbar, then padding re-insets the title. */
 .public-builds-header {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 36px;
+    align-items: center;
+    justify-content: center;
+    margin: -32px calc(-1 * var(--page-x)) 36px;
+    padding: 28px var(--page-x);
+    background: #fff;
+    border-bottom: 1px solid var(--border);
 }
 
 .public-builds-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text);
+    font-size: 2rem;
+    font-weight: 800;
+    color: #000;
     letter-spacing: -0.03em;
-    margin-bottom: 4px;
+    margin-bottom: 0;
+    text-align: center;
 }
 
 .public-builds-subtitle {
@@ -390,4 +397,101 @@
     .build-view {
         grid-template-columns: 1fr;
     }
+}
+
+/* ── Featured builds ────────────────────────────────────────────────────── */
+
+/* Sectioned-off band: full-bleed off-white background (like the homepage
+   sections) so the featured builds read as their own section. */
+.featured-builds-section {
+    margin: 0 calc(-1 * var(--page-x)) 40px;
+    padding: 48px var(--page-x);
+    background: var(--bg);
+}
+
+.featured-builds-title {
+    font-size: clamp(1.35rem, 2.2vw, 1.65rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.featured-builds {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.featured-builds > * {
+    flex: 0 1 320px;
+    max-width: 320px;
+}
+
+/* Featured cards keep a compact white info block below the image: build
+   details on the left, user on the right. Grid areas group the stacked
+   details (header + meta) beside the user without changing the markup. */
+.featured-builds .build-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+        "image  image"
+        "header user"
+        "meta   user";
+    align-items: start;
+    row-gap: 4px;
+    padding-bottom: 14px;
+}
+
+.featured-builds .build-card-image {
+    grid-area: image;
+    aspect-ratio: 4 / 3.4;
+}
+
+.featured-builds .build-card-header {
+    grid-area: header;
+    margin: 0;
+    padding: 14px 8px 0 16px;
+}
+
+.featured-builds .build-bike-type { font-size: 1rem; }
+
+.featured-builds .build-card-meta {
+    grid-area: meta;
+    margin: 0;
+    padding: 0 8px 0 16px;
+}
+
+.featured-builds .build-card-user {
+    grid-area: user;
+    justify-self: end;
+    align-self: start;
+    margin: 0;
+    padding: 14px 16px 0 8px;
+}
+
+/* Hover colour: lift the card and warm the surface / border on hover. */
+.featured-builds .build-card:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Scroll reveal: cards are visible by default (no-JS / headless safe). When
+   JS arms `.reveal-ready` they hide, then slide in once the row scrolls into
+   view. The inline animationDelay staggers them left-to-right. */
+.featured-builds.reveal-ready > * {
+    opacity: 0;
+}
+
+.featured-builds.is-visible > * {
+    animation: featuredSlideIn 700ms var(--ease-out) both;
+}
+
+@keyframes featuredSlideIn {
+    from { opacity: 0; transform: translate(-28px, -10px); }
+    to   { opacity: 1; transform: translate(0, 0); }
 }

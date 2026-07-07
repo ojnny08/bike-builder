@@ -15,6 +15,11 @@
 - API routes prefixed with /api/
 - Compatibility filtering handled server-side
 
+## Styling css
+- Dont make every word capatialized
+
+## General
+- dont add comments
 ### Code style
 - Avoid writting unessesaary code that tries to cover every type of issue
 - Prefer functional programming patterns over object-oriented design. Use early returns to minimize nesting.

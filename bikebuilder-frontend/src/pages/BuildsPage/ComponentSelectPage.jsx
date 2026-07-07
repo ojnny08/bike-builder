@@ -4,6 +4,7 @@ import { useBuild } from "../../context/BuildContext";
 import { fetchComponentsByCategory, fetchCompatibleComponents } from "../../services/componentService";
 import { useComponentFilters } from "../../hooks/useComponentFilters";
 import FilterBar from "../../components/Filters/FilterBar";
+import BuilderNav from "./components/BuilderNav";
 import "./style/Builds.css";
 
 const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -113,6 +114,8 @@ const ComponentSelectPage = () => {
     const compatCount = components.filter(c => c.compatible).length;
 
     return (
+        <div className="bb-wrapper">
+        <BuilderNav onSave={() => navigate("/builds/new/review")} />
         <div className="cs-page">
             <header className="cs-head">
                 <div className="cs-head-text">
@@ -147,6 +150,7 @@ const ComponentSelectPage = () => {
                     ))}
                 </div>
             )}
+        </div>
         </div>
     );
 };
