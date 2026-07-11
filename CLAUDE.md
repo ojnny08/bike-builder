@@ -20,7 +20,13 @@
 
 ## General
 - dont add comments
-### Code style
+
+
+## Code style
 - Avoid writting unessesaary code that tries to cover every type of issue
 - Prefer functional programming patterns over object-oriented design. Use early returns to minimize nesting.
 - for designs do not wrap everything in a rectangle with curved edges
+
+## Must do
+- Always ask me question instead of assuming
+- Always make a plan to review before implmeneting code

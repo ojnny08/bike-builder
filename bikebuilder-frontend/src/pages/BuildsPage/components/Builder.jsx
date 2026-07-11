@@ -73,6 +73,7 @@ const Builder = () => {
 
     const requiredFilled = required.filter(t => selectedByCategory[t]).length;
     const allRequiredFilled = required.length > 0 && requiredFilled === required.length;
+    const progress = required.length ? requiredFilled / required.length : 0;
 
     // Group the bike type's categories per PART_GROUPS, keeping only categories
     // this bike type uses and appending any uncovered ones under "More".
@@ -93,7 +94,25 @@ const Builder = () => {
             <BuilderNav onSave={() => navigate("/builds/new/review")} />
             <div className="bb-main">
                 <div className="bb-topbar">
-                    <span className="bb-build-type">{build.bikeType.name}</span>
+                    <div className="bb-progress" aria-label={`${requiredFilled} of ${required.length} essential parts selected`}>
+                        <span className="bb-bike" style={{ left: `calc(${progress} * (100% - 40px))` }}>
+                            <svg className="bb-bike-svg" viewBox="0 0 34 22" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path strokeWidth="1.6" d="M7 15h9M16 15l-3-9M13 6h11M24 6l3 9M13 6L7 15M16 15l8-9M24 6l2.4-2M13 6l-2.4-.4" />
+                                <circle cx="16" cy="15" r="1.1" strokeWidth="1.3" />
+                                <g className="bb-wheel">
+                                    <circle cx="7" cy="15" r="5.2" strokeWidth="1.4" />
+                                    <path strokeWidth="0.9" d="M7 9.8v10.4M1.8 15h10.4M3.3 11.3l7.4 7.4M10.7 11.3l-7.4 7.4" />
+                                </g>
+                                <g className="bb-wheel">
+                                    <circle cx="27" cy="15" r="5.2" strokeWidth="1.4" />
+                                    <path strokeWidth="0.9" d="M27 9.8v10.4M21.8 15h10.4M23.3 11.3l7.4 7.4M30.7 11.3l-7.4 7.4" />
+                                </g>
+                            </svg>
+                        </span>
+                        <span className="bb-bar-track">
+                            <span className="bb-bar-fill" style={{ transform: `scaleX(${progress})` }} />
+                        </span>
+                    </div>
                 </div>
 
                 <div className="bb-list">

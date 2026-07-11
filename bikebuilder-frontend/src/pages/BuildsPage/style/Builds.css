@@ -79,38 +79,28 @@
 .bn-brand-icon { color: var(--accent); display: block; transition: transform var(--dur) var(--ease-out); }
 .bn-brand:hover .bn-brand-icon { transform: rotate(-8deg) scale(1.05); }
 
-.bn-progress {
+.bn-info {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 12px;
     flex: 1;
     min-width: 0;
     margin: 0 24px;
+    justify-content: center;
 }
-.bn-bar-track {
-    flex: 1;
-    height: 12px;
-    border-radius: 999px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    overflow: hidden;
+.bn-type-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
 }
-.bn-bar-fill {
-    display: block;
-    height: 100%;
-    width: 100%;
-    background: var(--accent);
-    border-radius: 999px;
-    transform-origin: left center;
-    transition: transform var(--dur) var(--ease-out);
-}
-.bn-bar-text {
+.bn-count {
     font-size: 0.78rem;
     font-weight: 600;
     color: var(--text-secondary);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
-    flex-shrink: 0;
 }
 
 .bn-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
@@ -121,17 +111,53 @@
     align-items: center;
     gap: 16px;
     padding: 0 64px;
-    height: 56px;
+    height: 72px;
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
 }
 
-.bb-build-type {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.01em;
-    white-space: nowrap;
+.bb-progress {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    padding-top: 22px;
+}
+.bb-bar-track {
+    display: block;
+    height: 20px;
+    border-radius: 999px;
+    background: transparent;
+    border: 2px solid var(--accent-hover);
+    overflow: hidden;
+}
+.bb-bar-fill {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    border-radius: 999px;
+    transform-origin: left center;
+    transition: transform var(--dur) var(--ease-out);
+}
+.bb-bike {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: var(--accent);
+    pointer-events: none;
+    transition: left var(--dur) var(--ease-out);
+}
+.bb-bike-svg { display: block; width: 40px; height: 26px; }
+.bb-wheel {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: bb-wheel-spin 1.4s linear infinite;
+}
+@keyframes bb-wheel-spin {
+    to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .bb-wheel { animation: none; }
 }
 
 /* ── Parts list ─────────────────────────────────────────────────────────── */
@@ -256,6 +282,200 @@
 
 .bb-footer-cta { display: flex; align-items: center; gap: 16px; }
 .bb-footer-hint { font-size: 0.8rem; color: var(--text-secondary); }
+
+/* ═══ 3D stage builder — split view: canvas · component panel ════════════════ */
+.bs-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 32px);
+    overflow: hidden;
+}
+
+.bs-topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 62px;
+    padding: 0 32px;
+    background: var(--navbar-bg, var(--surface));
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+.bs-topbar-side { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.bs-topbar-side-end { justify-content: flex-end; }
+.bs-topbar-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.bs-brandrow {
+    display: flex;
+    align-items: center;
+    padding: 18px 32px 8px;
+    flex-shrink: 0;
+}
+.bs-brandrow .bb-progress { padding-top: 22px; }
+.bs-brandrow .bb-bar-track { height: 8px; border-width: 1px; border-color: var(--border-strong); }
+
+.bs-stage-layout {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+    gap: 24px;
+    padding: 8px 32px 24px;
+}
+
+.bs-canvas {
+    position: relative;
+    border-radius: 12px;
+    background: var(--text);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+.bs-canvas-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    padding: 24px;
+}
+.bs-canvas-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+}
+.bs-canvas-sub { font-size: 0.95rem; font-weight: 600; color: rgba(255, 255, 255, 0.72); }
+
+.bs-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+.bs-panel-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 4px 6px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.bs-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 18px 20px 22px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: border-color var(--dur-fast), box-shadow var(--dur), transform var(--dur) var(--ease-out);
+}
+.bs-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.bs-card:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-ring); }
+.bs-card.is-focused { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow-md); }
+
+.bs-card-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.bs-card-cat {
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+.bs-card-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.bs-card-meta { color: var(--text-secondary); font-weight: 400; font-variant-numeric: tabular-nums; }
+.bs-card-placeholder { font-size: 1.05rem; font-weight: 500; color: var(--text-secondary); }
+.bs-card.is-filled .bs-card-cat { color: var(--text-secondary); }
+
+.bs-card-add {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+}
+.bs-card-add svg { width: 20px; height: 20px; }
+.bs-card-add:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.bs-card-add:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-ring); }
+.bs-card.is-filled .bs-card-add { color: var(--accent); }
+
+.bs-panel-footer {
+    flex-shrink: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 18px;
+    margin: 10px 4px 4px;
+    padding: 8px 8px 8px 22px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+.bs-metric {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    white-space: nowrap;
+}
+.bs-pill-label {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text-muted);
+}
+.bs-panel-price {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+}
+.bs-panel-weight { font-size: 0.9rem; font-weight: 400; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+
+.bs-finish-pill {
+    margin-left: auto;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+    .bs-wrapper { height: auto; overflow: visible; }
+    .bs-stage-layout {
+        grid-template-columns: 1fr;
+        padding: 8px 20px 24px;
+    }
+    .bs-canvas { min-height: 320px; }
+    .bs-panel { min-height: 0; }
+    .bs-panel-list { max-height: 60vh; }
+    .bs-topbar { padding: 0 20px; }
+    .bs-brandrow { padding: 16px 20px 6px; }
+}
 
 /* ═══ Component picker — card grid ══════════════════════════════════════════ */
 .cs-page {

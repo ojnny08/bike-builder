@@ -32,14 +32,9 @@ const BuilderNav = ({ onSave, saveLabel = "Save build", hideSave = false }) => {
                 Bikco
             </button>
 
-            <div className="bn-progress" aria-label={`${requiredFilled} of ${required.length} essential parts selected`}>
-                <span className="bn-bar-track">
-                    <span
-                        className="bn-bar-fill"
-                        style={{ transform: `scaleX(${required.length ? requiredFilled / required.length : 0})` }}
-                    />
-                </span>
-                <span className="bn-bar-text">{requiredFilled}/{required.length}</span>
+            <div className="bn-info">
+                <span className="bn-type-name">{build.bikeType?.name}</span>
+                <span className="bn-count">{requiredFilled}/{required.length}</span>
             </div>
 
             <div className="bn-actions">

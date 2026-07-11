@@ -1,6 +1,6 @@
 import { useBuild } from "../../context/BuildContext";
 import BikeTypeSelection from "./components/BikeTypeSelection";
-import Builder from "./components/Builder";
+import BikeStageBuilder from "./components/BikeStageBuilder";
 
 const Builds = () => {
     const { build, updateBuild } = useBuild();
@@ -10,7 +10,7 @@ const Builds = () => {
     };
 
     return build.bikeType
-        ? <Builder />
+        ? <BikeStageBuilder />
         : <BikeTypeSelection onSelect={handleSelectBikeType} />;
 };
 
