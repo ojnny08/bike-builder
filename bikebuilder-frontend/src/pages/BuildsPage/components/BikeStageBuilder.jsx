@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../../context/BuildContext";
+import BikeCanvas from "../../../threejs/3d-bike/BikeCanvas";
 import "../style/Builds.css";
 
 const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -129,6 +130,7 @@ const BikeStageBuilder = () => {
 
             <div className="bs-stage-layout">
                 <div className="bs-canvas">
+                    <BikeCanvas />
                     <div className="bs-canvas-hint">
                         <span className="bs-canvas-title">3D preview</span>
                         <span className="bs-canvas-sub">

@@ -332,12 +332,26 @@
 .bs-canvas {
     position: relative;
     border-radius: 12px;
-    background: var(--text);
+    background-color: var(--surface);
+    background-image:
+        linear-gradient(to right, rgba(100, 105, 115, 0.18) 2px, transparent 2px),
+        linear-gradient(to bottom, rgba(100, 105, 115, 0.18) 2px, transparent 2px),
+        linear-gradient(to right, rgba(100, 105, 115, 0.09) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(100, 105, 115, 0.09) 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
     display: grid;
     place-items: center;
     overflow: hidden;
 }
+.bs-canvas canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
 .bs-canvas-hint {
+    position: relative;
+    pointer-events: none;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -350,9 +364,9 @@
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--text-muted);
 }
-.bs-canvas-sub { font-size: 0.95rem; font-weight: 600; color: rgba(255, 255, 255, 0.72); }
+.bs-canvas-sub { font-size: 0.95rem; font-weight: 600; color: var(--text-secondary); }
 
 .bs-panel {
     display: flex;
