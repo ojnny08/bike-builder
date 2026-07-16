@@ -20,32 +20,15 @@ const PlusGlyph = () => (
     </svg>
 );
 
-const ProgressBike = ({ progress }) => (
-    <span className="bb-bike" style={{ left: `calc(${progress} * (100% - 40px))` }}>
-        <svg className="bb-bike-svg" viewBox="0 0 34 22" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path strokeWidth="1.6" d="M7 15h9M16 15l-3-9M13 6h11M24 6l3 9M13 6L7 15M16 15l8-9M24 6l2.4-2M13 6l-2.4-.4" />
-            <circle cx="16" cy="15" r="1.1" strokeWidth="1.3" />
-            <g className="bb-wheel">
-                <circle cx="7" cy="15" r="5.2" strokeWidth="1.4" />
-                <path strokeWidth="0.9" d="M7 9.8v10.4M1.8 15h10.4M3.3 11.3l7.4 7.4M10.7 11.3l-7.4 7.4" />
-            </g>
-            <g className="bb-wheel">
-                <circle cx="27" cy="15" r="5.2" strokeWidth="1.4" />
-                <path strokeWidth="0.9" d="M27 9.8v10.4M21.8 15h10.4M23.3 11.3l7.4 7.4M30.7 11.3l-7.4 7.4" />
-            </g>
-        </svg>
-    </span>
-);
-
-const PartCard = ({ category, selected, focused, onFocus, onChoose }) => (
+const PartCard = ({ category, selected, focused, locked, prereq, onFocus, onChoose }) => (
     <div
-        className={`bs-card${selected ? ' is-filled' : ''}${focused ? ' is-focused' : ''}`}
+        className={`bs-card${selected ? ' is-filled' : ''}${focused ? ' is-focused' : ''}${locked ? ' is-locked' : ''}`}
         role="button"
-        tabIndex={0}
+        tabIndex={locked ? -1 : 0}
         aria-pressed={focused}
-        onClick={onFocus}
-        onDoubleClick={onChoose}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onChoose(); } }}
+        aria-disabled={locked}
+        onClick={locked ? undefined : onFocus}
+        onDoubleClick={locked ? undefined : onChoose}
     >
         <div className="bs-card-main">
             <span className="bs-card-cat">{formatCat(category)}</span>
@@ -54,18 +37,22 @@ const PartCard = ({ category, selected, focused, onFocus, onChoose }) => (
                     {selected.name}
                     <span className="bs-card-meta"> · {money(parseFloat(selected.price) || 0)}</span>
                 </span>
+            ) : locked ? (
+                <span className="bs-card-placeholder">Select {formatCat(prereq)} first</span>
             ) : (
                 <span className="bs-card-placeholder">Not selected</span>
             )}
         </div>
-        <button
-            type="button"
-            className="bs-card-add"
-            aria-label={`Choose ${formatCat(category).toLowerCase()}`}
-            onClick={e => { e.stopPropagation(); onChoose(); }}
-        >
-            <PlusGlyph />
-        </button>
+        {!locked && focused && (
+            <button
+                type="button"
+                className="bs-card-add"
+                aria-label={`Choose ${formatCat(category).toLowerCase()}`}
+                onClick={e => { e.stopPropagation(); onChoose(); }}
+            >
+                <PlusGlyph />
+            </button>
+        )}
     </div>
 );
 
@@ -74,13 +61,18 @@ const BikeStageBuilder = () => {
     const navigate = useNavigate();
     const [focusedCategory, setFocusedCategory] = useState(null);
 
-    const { required = [], optional = [] } = build.bikeType.rules;
+    const { required = [], optional = [], prerequisites = {} } = build.bikeType.rules;
 
     const selectedByCategory = Object.fromEntries(
         build.components.map(c => [c.component_type, c])
     );
 
     const allCategories = [...required, ...optional];
+
+    const isLocked = category => {
+        const dep = prerequisites[category];
+        return dep && allCategories.includes(dep) && !selectedByCategory[dep];
+    };
     const orderedCats = [
         ...ASSEMBLY_ORDER.filter(c => allCategories.includes(c)),
         ...allCategories.filter(c => !ASSEMBLY_ORDER.includes(c)),
@@ -106,7 +98,7 @@ const BikeStageBuilder = () => {
                     <button className="bb-btn-ghost" onClick={() => navigate(-1)}>← Back</button>
                     <button className="bb-btn-ghost" onClick={() => navigate("/")}>Home</button>
                 </div>
-                <span className="bs-topbar-title">Builder</span>
+                
                 <div className="bs-topbar-side bs-topbar-side-end">
                     <button className="bb-btn-ghost" onClick={handleStartOver}>Start over</button>
                     <button
@@ -119,38 +111,21 @@ const BikeStageBuilder = () => {
                 </div>
             </header>
 
-            <div className="bs-brandrow">
-                <div className="bb-progress" aria-label={`${requiredFilled} of ${required.length} essential parts selected`}>
-                    <ProgressBike progress={progress} />
-                    <span className="bb-bar-track">
-                        <span className="bb-bar-fill" style={{ transform: `scaleX(${progress})` }} />
-                    </span>
-                </div>
-            </div>
-
             <div className="bs-stage-layout">
-                <div className="bs-canvas">
-                    <BikeCanvas />
-                    <div className="bs-canvas-hint">
-                        <span className="bs-canvas-title">3D preview</span>
-                        <span className="bs-canvas-sub">
-                            {focusedCategory ? `Focused · ${formatCat(focusedCategory)}` : "Select a part to focus the view"}
-                        </span>
-                    </div>
-                </div>
-
-                <aside className="bs-panel">
-                    <div className="bs-panel-list">
-                        {orderedCats.map(category => (
-                            <PartCard
-                                key={category}
-                                category={category}
-                                selected={selectedByCategory[category]}
-                                focused={focusedCategory === category}
-                                onFocus={() => setFocusedCategory(category)}
-                                onChoose={() => navigate(`/builds/new/select/${category}`)}
-                            />
-                        ))}
+                <div className="bs-stage-left">
+                    <div className="bs-canvas">
+                        <div className="bb-progress bs-canvas-progress" aria-label={`${requiredFilled} of ${required.length} essential parts selected`}>
+                            <span className="bb-bar-track">
+                                <span className="bb-bar-fill" style={{ transform: `scaleX(${progress})` }} />
+                            </span>
+                        </div>
+                        <BikeCanvas />
+                        <div className="bs-canvas-hint">
+                            <span className="bs-canvas-title">3D preview</span>
+                            <span className="bs-canvas-sub">
+                                {focusedCategory ? `Focused · ${formatCat(focusedCategory)}` : "Select a part to focus the view"}
+                            </span>
+                        </div>
                     </div>
 
                     <div className="bs-panel-footer">
@@ -170,7 +145,25 @@ const BikeStageBuilder = () => {
                             Finish build
                         </button>
                     </div>
-                </aside>
+                </div>
+
+                <div className="bs-panel">
+                    <div className="bs-panel-head">Components</div>
+                    <div className="bs-panel-list">
+                        {orderedCats.map(category => (
+                            <PartCard
+                                key={category}
+                                category={category}
+                                selected={selectedByCategory[category]}
+                                focused={focusedCategory === category}
+                                locked={isLocked(category)}
+                                prereq={prerequisites[category]}
+                                onFocus={() => setFocusedCategory(category)}
+                                onChoose={() => navigate(`/builds/new/select/${category}`)}
+                            />
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );
