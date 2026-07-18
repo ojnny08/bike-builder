@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../../context/BuildContext";
 import BikeCanvas from "../../../threejs/3d-bike/BikeCanvas";
+import CategoryIcon from "./CategoryIcons";
 import "../style/Builds.css";
+import BuilderNav from "./BuilderNav";
 
 const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 const money = n => `$${n.toFixed(2)}`;
@@ -30,20 +32,23 @@ const PartCard = ({ category, selected, focused, locked, prereq, onFocus, onChoo
         onClick={locked ? undefined : onFocus}
         onDoubleClick={locked ? undefined : onChoose}
     >
+        
         <div className="bs-card-main">
-            <span className="bs-card-cat">{formatCat(category)}</span>
+            <span className="bs-card-placeholder">{formatCat(category)}</span>
+            
             {selected ? (
                 <span className="bs-card-name">
                     {selected.name}
                     <span className="bs-card-meta"> · {money(parseFloat(selected.price) || 0)}</span>
                 </span>
             ) : locked ? (
-                <span className="bs-card-placeholder">Select {formatCat(prereq)} first</span>
+                <span className="bs-card-cat">Select {formatCat(prereq)} first</span>
             ) : (
-                <span className="bs-card-placeholder">Not selected</span>
+                <span className="bs-card-cat">Not selected</span>
             )}
         </div>
-        {!locked && focused && (
+        <span className="bs-card-icon"><CategoryIcon category={category} /></span>
+        {!locked && focused ? (
             <button
                 type="button"
                 className="bs-card-add"
@@ -52,7 +57,10 @@ const PartCard = ({ category, selected, focused, locked, prereq, onFocus, onChoo
             >
                 <PlusGlyph />
             </button>
+        ) : (
+            ""
         )}
+        {}
     </div>
 );
 
@@ -60,7 +68,7 @@ const BikeStageBuilder = () => {
     const { build, emptyBuild } = useBuild();
     const navigate = useNavigate();
     const [focusedCategory, setFocusedCategory] = useState(null);
-
+    const [componentList, setComponentList] = useState(false);
     const { required = [], optional = [], prerequisites = {} } = build.bikeType.rules;
 
     const selectedByCategory = Object.fromEntries(
@@ -93,39 +101,24 @@ const BikeStageBuilder = () => {
 
     return (
         <div className="bb-wrapper bs-wrapper">
-            <header className="bs-topbar">
-                <div className="bs-topbar-side">
-                    <button className="bb-btn-ghost" onClick={() => navigate(-1)}>← Back</button>
-                    <button className="bb-btn-ghost" onClick={() => navigate("/")}>Home</button>
-                </div>
-                
-                <div className="bs-topbar-side bs-topbar-side-end">
-                    <button className="bb-btn-ghost" onClick={handleStartOver}>Start over</button>
-                    <button
-                        className="bb-btn-primary"
-                        onClick={() => navigate("/builds/new/review")}
-                        disabled={!hasComponents}
-                    >
-                        Save progress
-                    </button>
-                </div>
-            </header>
-
+            <div className="bs-topbar"><BuilderNav /></div>
             <div className="bs-stage-layout">
                 <div className="bs-stage-left">
                     <div className="bs-canvas">
-                        <div className="bb-progress bs-canvas-progress" aria-label={`${requiredFilled} of ${required.length} essential parts selected`}>
-                            <span className="bb-bar-track">
-                                <span className="bb-bar-fill" style={{ transform: `scaleX(${progress})` }} />
-                            </span>
-                        </div>
                         <BikeCanvas />
-                        <div className="bs-canvas-hint">
-                            <span className="bs-canvas-title">3D preview</span>
-                            <span className="bs-canvas-sub">
-                                {focusedCategory ? `Focused · ${formatCat(focusedCategory)}` : "Select a part to focus the view"}
+                        {!hasComponents && (
+                            <div className="bs-canvas-hint">
+                            <span className="bs-canvas-title">
+                                {componentList ? "" : "3D preview \n Select a part to focus the view"}
                             </span>
                         </div>
+                        )}
+                    </div>
+
+                    <div className="bb-progress bs-stage-progress" aria-label={`${requiredFilled} of ${required.length} essential parts selected`}>
+                        <span className="bb-bar-track">
+                            <span className="bb-bar-fill" style={{ transform: `scaleX(${progress})` }} />
+                        </span>
                     </div>
 
                     <div className="bs-panel-footer">

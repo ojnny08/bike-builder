@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../../context/BuildContext";
+import "../style/Builds.css";
 
 // Dedicated top bar for the builder flow. Replaces the site navbar so the
 // screen stays focused on building: brand, progress, start over, save.
-const BuilderNav = ({ onSave, saveLabel = "Save build", hideSave = false }) => {
+const BuilderNav = () => {
     const { build, emptyBuild } = useBuild();
     const navigate = useNavigate();
 
@@ -18,38 +19,20 @@ const BuilderNav = ({ onSave, saveLabel = "Save build", hideSave = false }) => {
         navigate("/builds/new");
     };
 
-    const handleSave = onSave ?? (() => navigate("/builds/new/review"));
-
     return (
-        <header className="bn-bar">
-            <button className="bn-brand" onClick={() => navigate("/")}>
-                <svg className="bn-brand-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <circle cx="18.5" cy="17.5" r="3.5" />
-                    <circle cx="5.5" cy="17.5" r="3.5" />
-                    <circle cx="15" cy="5" r="1" />
-                    <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
-                </svg>
-                Bikco
-            </button>
-
-            <div className="bn-info">
-                <span className="bn-type-name">{build.bikeType?.name}</span>
-                <span className="bn-count">{requiredFilled}/{required.length}</span>
-            </div>
-
-            <div className="bn-actions">
+        <>
+            <div className="bs-topbar-side">
+                <button className="bb-btn-ghost" onClick={() => navigate(-1)}>←</button>
+                <button className="bb-btn-ghost" onClick={() => navigate("/")}>Home</button>
                 <button className="bb-btn-ghost" onClick={handleStartOver}>Start over</button>
-                {!hideSave && (
-                    <button
-                        className="bb-btn-primary"
-                        onClick={handleSave}
-                        disabled={build.components.length === 0}
-                    >
-                        {saveLabel}
-                    </button>
-                )}
+                <button
+                    className="bb-btn-primary"
+                    onClick={() => navigate("/builds/new/review")}
+                >
+                    Save progress
+                </button>
             </div>
-        </header>
+        </>
     );
 };
 
