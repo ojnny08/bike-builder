@@ -42,9 +42,9 @@ const NavBar = () => {
                     </NavLink>
                 </div>
                 <div className="navbar-links">
-                    <NavLink to="/builds/new">Bike Builder</NavLink>
+                    <NavLink to="/builds/new">Builder</NavLink>
                     <NavLink to="/components">Products</NavLink>
-                    <NavLink to="/builds" end>Completed Builds</NavLink>
+                    <NavLink to="/builds" end>Completed Bikes</NavLink>
                 </div>
                 <div className="navbar-auth">
                     {currentUser ? (

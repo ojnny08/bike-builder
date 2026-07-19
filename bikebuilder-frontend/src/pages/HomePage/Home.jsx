@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
 
@@ -17,6 +18,11 @@ const steps = [
 ];
 
 const HomePage = () => {
+    useEffect(() => {
+        document.documentElement.classList.add("home-snap");
+        return () => document.documentElement.classList.remove("home-snap");
+    }, []);
+
     return (
         <div className="home">
             <section className="home-hero">
@@ -29,24 +35,7 @@ const HomePage = () => {
                             Start building
                             <svg width="16" height="16" viewBox="0 0 24 24" {...stroke} strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
                         </Link>
-                        
-                    </div>
-                    <div className="home-stats">
-                        <div className="home-stat">
-                            <span className="home-stat-num">3</span>
-                            <span className="home-stat-label">Bike types</span>
-                        </div>
-                        <div className="home-stat-sep" />
-                        <div className="home-stat">
-                            <span className="home-stat-num">100+</span>
-                            <span className="home-stat-label">Components</span>
-                        </div>
-                        <div className="home-stat-sep" />
-                        <div className="home-stat">
-                            <span className="home-stat-num">Live</span>
-                            <span className="home-stat-label">Pricing</span>
-                        </div>
-                    </div>
+                </div>   
                 </div>
                 <div className="home-hero-visual">
                     <div className="home-hero-grid" />
