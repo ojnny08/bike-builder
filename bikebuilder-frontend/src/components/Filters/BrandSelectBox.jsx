@@ -24,7 +24,7 @@ const BrandSelectBox = ({ brands, value, onChange }) => {
     };
 
     return (
-        <div className="combobox" ref={ref}>
+        <div className="filter-combo" ref={ref}>
             <input
                 type="text"
                 className="filter-input"
@@ -39,11 +39,11 @@ const BrandSelectBox = ({ brands, value, onChange }) => {
             />
 
             {open && (
-                <ul className="combobox-list" id="brand-listbox" role="listbox">
+                <ul className="filter-combo-list" id="brand-listbox" role="listbox">
                     <li
                         role="option"
                         aria-selected={value === ""}
-                        className={`combobox-option${value === "" ? " is-selected" : ""}`}
+                        className={`filter-combo-option${value === "" ? " is-selected" : ""}`}
                         onMouseDown={() => select("")}
                     >
                         All brands
@@ -53,14 +53,14 @@ const BrandSelectBox = ({ brands, value, onChange }) => {
                             key={b}
                             role="option"
                             aria-selected={value === b}
-                            className={`combobox-option${value === b ? " is-selected" : ""}`}
+                            className={`filter-combo-option${value === b ? " is-selected" : ""}`}
                             onMouseDown={() => select(b)}
                         >
                             {b}
                         </li>
                     ))}
                     {filtered.length === 0 && (
-                        <li className="combobox-empty">No brands match</li>
+                        <li className="filter-combo-empty">No brands match</li>
                     )}
                 </ul>
             )}

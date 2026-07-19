@@ -1,0 +1,177 @@
+/* ── Single build view ────────────────────────────────────────────────────── */
+
+/* The page is normally --surface; on the detail page the whole
+   background matches the --bg container. */
+.build-detail-page {
+    background: var(--bg);
+}
+
+/* Centered two-column layout: photo + about + comments on the left, the
+   components list running tall on the right. The max-width leaves wide
+   --bg margins on both sides. */
+.build-view {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    column-gap: 72px;
+    row-gap: 0;
+    align-items: start;
+    max-width: 1050px;
+    margin: 48px auto 48px;
+}
+
+.build-view-main {
+    min-width: 0;
+    padding-top: 20;
+}
+
+.build-view-heading {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.build-view-name {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.build-view-author {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.build-view-browse {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    padding-top: 6px;
+    transition: color var(--dur-fast);
+}
+
+.build-view-browse:hover {
+    color: var(--text);
+}
+
+
+
+.build-view-components {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.build-view-component {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 4px 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.build-view-part-cat {
+    grid-column: 1 / -1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.build-view-part-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.build-view-part-brand {
+    color: var(--text);
+    font-weight: 400;
+}
+
+.build-view-part-price {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.build-view-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text);
+}
+
+.build-view-total-price {
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    color: var(--text);
+}
+
+.build-view-photo {
+    margin-bottom: 40px;
+}
+
+.build-view-img {
+    width: 100%;
+    display: flex;
+    border: 1px;
+    border-radius: 15px;
+
+}
+
+.build-view-img-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--surface-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.build-view-description {
+    margin-bottom: 40px;
+}
+
+.build-view-description-text {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+}
+
+/* The Comments component brings its own title; restyle it here to match the
+   underlined section headings. */
+.build-view-comments .comments {
+    margin-top: 0;
+    max-width: none;
+}
+
+.build-view-comments .comments-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 720px) {
+    .build-view {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}

@@ -18,6 +18,7 @@ const Comments = ({ buildId }) => {
     const [myUsername, setMyUsername] = useState(null);
     const [draft, setDraft] = useState("");
     const [posting, setPosting] = useState(false);
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         if (!buildId) return;
@@ -42,6 +43,7 @@ const Comments = ({ buildId }) => {
             const created = await createComment(buildId, text);
             setComments((prev) => [created, ...prev]);
             setDraft("");
+            setShowForm(false);
         } finally {
             setPosting(false);
         }
@@ -71,24 +73,40 @@ const Comments = ({ buildId }) => {
             </h3>
 
             {currentUser ? (
-                <form className="comment-form" onSubmit={handlePost}>
-                    <label htmlFor="comment-input" className="sr-only">Add a comment</label>
-                    <textarea
-                        id="comment-input"
-                        className="comment-input"
-                        placeholder="Share your thoughts on this build…"
-                        value={draft}
-                        maxLength={1000}
-                        rows={3}
-                        onChange={(e) => setDraft(e.target.value)}
-                    />
-                    <div className="comment-form-footer">
-                        <span className="comment-charcount">{draft.length}/1000</span>
-                        <button type="submit" className="comment-submit" disabled={!draft.trim() || posting}>
-                            {posting ? "Posting…" : "Post comment"}
-                        </button>
-                    </div>
-                </form>
+                showForm ? (
+                    <form className="comment-form" onSubmit={handlePost}>
+                        <label htmlFor="comment-input" className="sr-only">Add a comment</label>
+                        <textarea
+                            id="comment-input"
+                            className="comment-input"
+                            placeholder="Share your thoughts on this build…"
+                            value={draft}
+                            maxLength={1000}
+                            rows={3}
+                            autoFocus
+                            onChange={(e) => setDraft(e.target.value)}
+                        />
+                        <div className="comment-form-footer">
+                            <span className="comment-charcount">{draft.length}/1000</span>
+                            <div className="comment-form-actions">
+                                <button
+                                    type="button"
+                                    className="comment-btn-ghost"
+                                    onClick={() => { setShowForm(false); setDraft(""); }}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="comment-submit" disabled={!draft.trim() || posting}>
+                                    {posting ? "Posting…" : "Post comment"}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                ) : (
+                    <button type="button" className="comment-add-btn" onClick={() => setShowForm(true)}>
+                        Add a comment
+                    </button>
+                )
             ) : (
                 <p className="comments-signed-out">Sign in to join the conversation.</p>
             )}

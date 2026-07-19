@@ -1,15 +1,6 @@
-.page-wrapper {
-    padding: 32px var(--page-x);
+.page {
+    padding: 88px var(--page-x) 32px;
     min-height: calc(100vh - 110px);
     box-sizing: border-box;
     background: var(--surface);
-}
-
-.page-wrapper--with-nav {
-    padding-top: 88px;
-}
-
-.page-wrapper--home {
-    padding: 0;
-    min-height: 0;
 }

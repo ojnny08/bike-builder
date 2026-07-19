@@ -2,17 +2,19 @@
 
 :root {
   /* Canvas & surfaces — crisp white panels on a light neutral-gray canvas */
-  --bg:             #f5f5f6;
+  --bg:             #F7F5F2;
   --surface:        #ffffff;
   --surface-2:      #fafafa;
-  --surface-hover:  #f1f1f2;
-  --navbar-bg:      var(--surface-hover);  /* cohesive navbar block — the usual light grey */
+  --surface-hover:  #6F6860;
+  --navbar-bg:      #6F6860;  /* cohesive navbar block */
   --border:         #e6e6e9;
   --border-strong:  #cdcdd2;
 
   /* Text — true neutral greys */
-  --text:           #0a0a0b;
-  --text-secondary: #56565c;
+  --text:           #363636;
+  --text-secondary: #f1f1f1;
+  --text-orange: #B4543B;
+  --text-blue: #212931;
   --text-muted:     #97979e;
 
   /* Accent — monochrome (near-black on white) */
@@ -37,16 +39,6 @@
   /* Layout */
   --page-x: 64px;
 
-  /* Semantic — surface tints (-bg) and AA-legible text shades (-ink) */
-  --green:          #1aae39;
-  --green-bg:       rgba(26, 174, 57, 0.08);
-  --green-ink:      #178a2e;
-  --yellow:         #dd5b00;
-  --yellow-bg:      rgba(221, 91, 0, 0.08);
-  --error:          #f87171;
-  --error-bg:       rgba(248, 113, 113, 0.08);
-  --error-border:   rgba(248, 113, 113, 0.2);
-  --error-ink:      #b42318;
 }
 
 *, *::before, *::after {

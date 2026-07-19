@@ -7,23 +7,23 @@ const FilterBar = ({ filters, children, panel, searchPlaceholder = "Search produ
     const [open, setOpen] = useState(false);
 
     const toolbarClass = [
-        "components-toolbar",
-        centered && "components-toolbar--centered",
+        "filter-bar",
+        centered && "filter-bar--centered",
         className,
     ].filter(Boolean).join(" ");
 
     return (
         <>
             <div className={toolbarClass}>
-                <div className="toolbar-search">
-                    <svg className="toolbar-search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <div className="filter-search">
+                    <svg className="filter-search-icon" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
                         <path d="M16.5 16.5L21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                     <input
                         id="filter-search"
                         type="search"
-                        className="toolbar-search-input"
+                        className="filter-search-input"
                         placeholder={searchPlaceholder}
                         value={search}
                         onChange={e => setSearch(e.target.value)}

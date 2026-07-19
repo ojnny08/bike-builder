@@ -1,5 +1,0 @@
-.page-wrapper {
-    padding: 32px var(--page-x);
-    min-height: calc(100vh - 110px);
-    box-sizing: border-box;
-}

@@ -93,7 +93,7 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
                 <span className="build-card-username">{build.user.display_name}</span>
             </div>
             <div className="build-card-header">
-                <span className="build-bike-type">{build.name}</span>
+                <span className="build-card-type">{build.name}</span>
             </div>
             <div className="build-card-meta">
                 <span>{frame ? `${frame.brand} ${frame.name}` : "No frame"}</span>

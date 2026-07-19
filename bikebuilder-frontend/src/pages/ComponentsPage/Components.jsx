@@ -29,23 +29,23 @@ const Components = () => {
     const typeLabels = Object.fromEntries(filters.componentTypes.map(t => [t.value, t.label]));
 
     return (
-        <div className="components-page">
+        <div className="page components-page">
             <div className="components-header">
                 <div>
                     <h1 className="components-title">{total} Products </h1>
                 </div>
             </div>
 
-            <div className="cmp-toolbar-row">
-                <div className="toolbar-search">
-                    <svg className="toolbar-search-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <div className="components-toolbar">
+                <div className="filter-search">
+                    <svg className="filter-search-icon" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
                         <path d="M16.5 16.5L21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                     <input
                         id="filter-search"
                         type="search"
-                        className="toolbar-search-input"
+                        className="filter-search-input"
                         placeholder="Search products..."
                         value={filters.search}
                         onChange={e => filters.setSearch(e.target.value)}
@@ -67,7 +67,7 @@ const Components = () => {
                 </button>
             </div>
 
-            <div className="cmp-body">
+            <div className="components-body">
                 <FilterSidebar filters={filters} />
 
                 <div className="components-results">
@@ -87,9 +87,9 @@ const Components = () => {
                             ))}
                         </div>
                     ) : components.length === 0 ? (
-                        <div className="products-empty">
-                            <p className="products-empty-title">No components match</p>
-                            <p className="products-empty-hint">
+                        <div className="product-empty">
+                            <p className="product-empty-title">No components match</p>
+                            <p className="product-empty-hint">
                                 Try widening the price range or clearing a filter.
                             </p>
                             {filters.hasFilters && (
@@ -106,29 +106,28 @@ const Components = () => {
                                         {comp.image_url ? (
                                             <img src={comp.image_url} alt={comp.name} loading="lazy" />
                                         ) : (
-                                            <svg className="product-media-placeholder" viewBox="0 0 48 48" aria-hidden="true">
-                                                <circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" strokeWidth="2" />
-                                                <circle cx="24" cy="24" r="5.5" fill="none" stroke="currentColor" strokeWidth="2" />
-                                                <path
-                                                    d="M24 9v6.5M24 32.5V39M9 24h6.5M32.5 24H39M13.4 13.4l4.6 4.6M30 30l4.6 4.6M34.6 13.4L30 18M18 30l-4.6 4.6"
-                                                    stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                                />
-                                            </svg>
+                                            ""
                                         )}
-                                        <span className="product-type">
-                                            {typeLabels[comp.component_type] || comp.component_type}
-                                        </span>
                                     </div>
                                     <div className="product-card-body">
-                                        <p className="product-brand">{comp.brand}</p>
-                                        <h3 className="product-name">{comp.name}</h3>
+                                        <h1 className="product-brand">{comp.brand}</h1>
+                                        <p className="product-name">{comp.name}</p>
+                                        <div className="product-meta">
+                                            <div className="product-price">${comp.price}</div>
+                                            <div className="product-weight">{comp.weight_grams}g</div>
+                                        </div>
+                                        
+                                        
+                                        
                                         {comp.description && (
                                             <p className="product-desc">{comp.description}</p>
                                         )}
+                                      
+                                                                                   
+
                                     </div>
                                     <div className="product-card-footer">
-                                        <span className="product-price">${comp.price}</span>
-                                        <span className="product-weight">{comp.weight_grams}g</span>
+
                                     </div>
                                 </article>
                             ))}

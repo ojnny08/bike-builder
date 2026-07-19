@@ -1,11 +1,11 @@
-.components-toolbar {
+.filter-bar {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-bottom: 24px;
 }
 
-.toolbar-search {
+.filter-search {
     position: relative;
     flex: 1;
     display: flex;
@@ -13,15 +13,15 @@
 }
 
 /* Centered, narrow variant — search + button sit as one centered group. */
-.components-toolbar--centered {
+.filter-bar--centered {
     justify-content: center;
 }
 
-.components-toolbar--centered .toolbar-search {
+.filter-bar--centered .filter-search {
     flex: 0 1 320px;
 }
 
-.toolbar-search-icon {
+.filter-search-icon {
     position: absolute;
     left: 14px;
     width: 18px;
@@ -30,7 +30,7 @@
     pointer-events: none;
 }
 
-.toolbar-search-input {
+.filter-search-input {
     width: 100%;
     height: 44px;
     padding: 0 14px 0 40px;
@@ -38,20 +38,21 @@
     border: 1px solid var(--border);
     border-radius: 999px;
     font-size: 0.875rem;
+    font-weight: 600;
     color: var(--text);
     transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
 }
 
-.toolbar-search-input::placeholder {
+.filter-search-input::placeholder {
     color: var(--text-muted);
 }
 
-.toolbar-search-input:hover {
+.filter-search-input:hover {
     border-color: var(--border-strong);
 }
 
-.toolbar-search-input:focus,
-.toolbar-search-input:focus-visible {
+.filter-search-input:focus,
+.filter-search-input:focus-visible {
     outline: none;
 }
 
@@ -62,12 +63,12 @@
     gap: 8px;
     height: 44px;
     padding: 0 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: #B4543B;
+    border: 1px solid #B4543B;
     border-radius: 999px;
     font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text);
+    font-weight: 700;
+    color: var(--text-secondary);
     cursor: pointer;
     transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
 }
@@ -202,16 +203,17 @@
 .filter-price-sep {
     color: var(--text-muted);
     font-size: 0.875rem;
+    
 }
 
 .filter-clear {
-    flex: 0 0 auto;
+    flex: auto;
     padding: 8px 14px;
     height: 44px;
-    background: transparent;
+    background: var(--text-orange);
     border: 1px solid var(--border);
     border-radius: 999px;
-    font-size: 0.8rem;
+    font-weight: 600;
     color: var(--text-secondary);
     cursor: pointer;
     transition: border-color var(--dur-fast), color var(--dur-fast);
@@ -222,11 +224,11 @@
     color: var(--text);
 }
 
-.combobox {
+.filter-combo {
     position: relative;
 }
 
-.combobox-list {
+.filter-combo-list {
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
@@ -243,7 +245,7 @@
     box-shadow: var(--shadow-md);
 }
 
-.combobox-option {
+.filter-combo-option {
     padding: 8px 10px;
     border-radius: 6px;
     font-size: 0.875rem;
@@ -252,16 +254,16 @@
     transition: background-color var(--dur-fast);
 }
 
-.combobox-option:hover {
+.filter-combo-option:hover {
     background: var(--surface-hover);
 }
 
-.combobox-option.is-selected {
+.filter-combo-option.is-selected {
     background: var(--accent-bg);
     font-weight: 600;
 }
 
-.combobox-empty {
+.filter-combo-empty {
     padding: 8px 10px;
     font-size: 0.8rem;
     color: var(--text-muted);

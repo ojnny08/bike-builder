@@ -21,7 +21,7 @@ const SharedBuild = () => {
     if (error || !build) return <p className="loading-text">This build link is invalid or no longer exists.</p>;
 
     return (
-        <div className="public-builds-page">
+        <div className="page public-builds-page">
             <div className="public-builds-header">
                 <div>
                     <h2 className="public-builds-title">{build.name}</h2>

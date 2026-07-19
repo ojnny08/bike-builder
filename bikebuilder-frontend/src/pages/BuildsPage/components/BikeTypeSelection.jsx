@@ -40,7 +40,7 @@ const BikeTypeSelection = ({ onSelect }) => {
   };
 
   return (
-    <div className="bike-type-selection">
+    <div className="page bike-type-selection">
       <div className="bike-type-selection-header">
         <h2 className="bike-type-selection-title">Choose Your Niche</h2>
       </div>

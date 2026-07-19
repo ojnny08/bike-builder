@@ -1,28 +1,5 @@
-/* --- top row: search narrowed, Import beside it --- */
-.cmp-toolbar-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-    /* indent so the search lines up with the results column, past the sidebar */
-    padding-left: calc(210px + 28px);
-}
-
-.cmp-toolbar-row .toolbar-search {
-    flex: 1 1 auto;
-}
-
-/* --- two-column body: narrow sidebar + results --- */
-.cmp-body {
-    display: grid;
-    grid-template-columns: 210px 1fr;
-    gap: 28px;
-    align-items: start;
-}
-
 .filter-sidebar {
     position: static;
-    top: 24px;
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -38,7 +15,7 @@
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.08em;
-    color: var(--text-secondary);
+    color: var(--text);
 }
 
 .filter-sidebar-fields {

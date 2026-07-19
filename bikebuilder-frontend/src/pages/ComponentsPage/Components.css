@@ -1,3 +1,7 @@
+.components-page {
+    background: var(--bg);
+}
+
 .components-header {
     display: flex;
     align-items: flex-start;
@@ -5,124 +9,41 @@
     margin-bottom: 36px;
 }
 
-/* Import modal */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: grid;
-    place-items: center;
-    padding: 24px;
-    background: rgba(0, 0, 0, 0.5);
-    animation: fadeIn var(--dur-fast) var(--ease-out) both;
-}
-
-.modal {
-    position: relative;
-    width: 100%;
-    max-width: 440px;
-    padding: 28px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    box-shadow: var(--shadow-lg);
-    animation: fadeInUp var(--dur) var(--ease-out) both;
-}
-
-.modal-close {
-    position: absolute;
-    top: 14px;
-    right: 16px;
-    width: 30px;
-    height: 30px;
-    display: grid;
-    place-items: center;
-    background: none;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.4rem;
-    line-height: 1;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: background var(--dur-fast), color var(--dur-fast);
-}
-
-.modal-close:hover {
-    background: var(--surface-hover);
-    color: var(--text);
-}
-
-.modal-title {
-    font-size: 1.15rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--text);
-}
-
-.modal-subtitle {
-    margin-top: 6px;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.modal-form {
+/* top row: search narrowed, Import beside it */
+.components-toolbar {
     display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 20px;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    /* indent so the search lines up with the results column, past the sidebar */
+    padding-left: calc(210px + 28px);
 }
 
-.modal-error {
-    font-size: 0.8rem;
-    color: var(--danger, #e5484d);
+.components-toolbar .filter-search {
+    flex: 1 1 auto;
 }
 
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 4px;
-}
-
-.modal-submit {
-    padding: 8px 18px;
-    height: 44px;
-    background: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-    transition: opacity var(--dur-fast);
-}
-
-.modal-submit:hover {
-    opacity: 0.9;
-}
-
-.modal-submit:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+/* two-column body: narrow sidebar + results */
+.components-body {
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 28px;
+    align-items: start;
 }
 
 .components-title {
     font-size: 1.5rem;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 600;
     color: var(--text);
     letter-spacing: -0.03em;
     margin-bottom: 4px;
 }
 
-.components-subtitle {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
+    gap: 40px 32px;
 }
 
 @media (max-width: 768px) {
@@ -134,18 +55,13 @@
 .product-card {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: var(--shadow-sm);
-    transition: border-color var(--dur-fast), box-shadow var(--dur) var(--ease-out);
+    background: transparent;
+    transition: transform var(--dur) var(--ease-out);
     animation: fadeInUp var(--dur) var(--ease-out) both;
 }
 
 .product-card:hover {
-    border-color: var(--border-strong);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
 }
 
 .product-media {
@@ -154,7 +70,7 @@
     display: grid;
     place-items: center;
     background: var(--surface-2);
-    border-bottom: 1px solid var(--border);
+    border-radius: 16px;
 }
 
 .product-media img {
@@ -162,11 +78,8 @@
     height: 100%;
     object-fit: contain;
     padding: 18px;
+    border-radius: 16px;
     transition: transform var(--dur) var(--ease-out);
-}
-
-.product-card:hover .product-media img {
-    transform: scale(1.03);
 }
 
 .product-media-placeholder {
@@ -186,7 +99,6 @@
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.04em;
-    text-transform: uppercase;
     color: var(--text-secondary);
 }
 
@@ -203,22 +115,34 @@
     flex-direction: column;
     gap: 5px;
     flex: 1;
-    padding: 16px 20px 14px;
+    margin: 0;
+    padding: 12px 4px 0;
+    background: transparent;
 }
 
 .product-brand {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-}
-
-.product-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text);
     letter-spacing: -0.02em;
+    
+}
+
+.product-name {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+}
+
+.product-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
 }
 
 .product-desc {
@@ -227,22 +151,17 @@
     line-height: 1.5;
 }
 
-.product-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 20px;
-    padding: 12px 0 16px;
-    border-top: 1px solid var(--border);
-}
+
 
 .product-price {
+    text-align: left;
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text);
 }
 
 .product-weight {
+    text-align: right;
     font-size: 0.75rem;
     color: var(--text-muted);
 }
@@ -270,7 +189,7 @@
 }
 
 /* Empty state */
-.products-empty {
+.product-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -282,13 +201,13 @@
     border-radius: 12px;
 }
 
-.products-empty-title {
+.product-empty-title {
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text);
 }
 
-.products-empty-hint {
+.product-empty-hint {
     font-size: 0.8rem;
     color: var(--text-secondary);
     margin-bottom: 10px;

@@ -4,9 +4,8 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .bb-wrapper {
-    margin: -32px calc(-1 * var(--page-x));
     background: var(--surface);
-    min-height: calc(100vh - 32px);
+    min-height: 100vh;
 }
 
 .bb-main {

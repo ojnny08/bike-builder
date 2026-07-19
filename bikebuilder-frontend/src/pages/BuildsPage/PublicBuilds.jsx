@@ -56,12 +56,7 @@ const PublicBuilds = () => {
     const filters = { search, setSearch, activeCount: componentIds.length };
 
     return (
-        <div className="public-builds-page">
-            <div className="public-builds-header">
-                <div>
-                    <h2 className="public-builds-title">Completed Builds</h2>
-                </div>
-            </div>
+        <div className="page public-builds-page">
 
             {featuredBuilds.length > 0 && (
                 <section className="featured-builds-section">

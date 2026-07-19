@@ -28,11 +28,11 @@ const NavBar = () => {
     }, []);
 
     return (
-        <nav className="navbar">
-            <div className="navbar-top">
-                <div className="navbar-left">
-                    <NavLink to="/" className="navbar-brand">
-                        <svg className="navbar-brand-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <nav className="nav">
+            <div className="nav-top">
+                <div className="nav-left">
+                    <NavLink to="/" className="nav-brand">
+                        <svg className="nav-brand-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                             <circle cx="18.5" cy="17.5" r="3.5" />
                             <circle cx="5.5" cy="17.5" r="3.5" />
                             <circle cx="15" cy="5" r="1" />
@@ -40,28 +40,28 @@ const NavBar = () => {
                         </svg>
                         Bikco
                     </NavLink>
+                    <div className="nav-links">
+                        <NavLink to="/builds/new">Builder</NavLink>
+                        <NavLink to="/components">Products</NavLink>
+                        <NavLink to="/builds" end>Completed Bikes</NavLink>
+                    </div>
                 </div>
-                <div className="navbar-links">
-                    <NavLink to="/builds/new">Builder</NavLink>
-                    <NavLink to="/components">Products</NavLink>
-                    <NavLink to="/builds" end>Completed Bikes</NavLink>
-                </div>
-                <div className="navbar-auth">
+                <div className="nav-auth">
                     {currentUser ? (
-                        <div className="navbar-user" ref={dropdownRef}>
-                            <div className="navbar-user-info" onClick={() => profileUsername && navigate(`/profile/${profileUsername}`)}>
+                        <div className="nav-user" ref={dropdownRef}>
+                            <div className="nav-user-info" onClick={() => profileUsername && navigate(`/profile/${profileUsername}`)}>
                                 {currentUser.photoURL && !imgFailed
-                                    ? <img src={currentUser.photoURL} alt={currentUser.displayName} className="navbar-avatar" referrerPolicy="no-referrer" onError={() => setImgFailed(true)} />
-                                    : <div className="navbar-avatar-placeholder">{currentUser.displayName?.[0] ?? "?"}</div>
+                                    ? <img src={currentUser.photoURL} className="nav-avatar" referrerPolicy="no-referrer" onError={() => setImgFailed(true)} />
+                                    : <div className="nav-avatar-fallback">{currentUser.displayName?.[0] ?? "?"}</div>
                                 }
-                                <span className="navbar-username">{currentUser.displayName}</span>
+
                             </div>
-                            <button className="navbar-chevron" onClick={() => setDropdownOpen(prev => !prev)}>
-                                <span className={`navbar-chevron-icon ${dropdownOpen ? "open" : ""}`} />
+                            <button className="nav-chevron" onClick={() => setDropdownOpen(prev => !prev)}>
+                                <span className={`nav-chevron-icon ${dropdownOpen ? "open" : ""}`} />
                             </button>
                             {dropdownOpen && (
-                                <div className="navbar-dropdown">
-                                    <button className="navbar-dropdown-item" onClick={() => { logout(); setDropdownOpen(false); }}>
+                                <div className="nav-dropdown">
+                                    <button className="nav-dropdown-item" onClick={() => { logout(); setDropdownOpen(false); }}>
                                         Log Out
                                     </button>
                                 </div>
@@ -69,9 +69,9 @@ const NavBar = () => {
                         </div>
                     ) : (
                         <>
-                            <Link to="/login" className="navbar-auth-link">Log In</Link>
-                            <span className="navbar-auth-sep">|</span>
-                            <Link to="/signup" className="navbar-auth-link">Sign Up</Link>
+                            <Link to="/login" className="nav-auth-link">Log In</Link>
+                            <span className="nav-sep">|</span>
+                            <Link to="/signup" className="nav-auth-link">Sign Up</Link>
                         </>
                     )}
                 </div>

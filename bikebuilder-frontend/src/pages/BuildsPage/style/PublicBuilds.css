@@ -1,6 +1,10 @@
-.public-builds-page {}
 
-/* Full-bleed black bar: negative side margins cancel the .page-wrapper
+
+.public-builds-page {
+    background: var(--bg);
+}
+
+/* Full-bleed black bar: negative side margins cancel the .page
    padding (var(--page-x)) and the negative top margin pulls it up to the
    navbar, then padding re-insets the title. */
 .public-builds-header {
@@ -28,30 +32,7 @@
     letter-spacing: 0.02em;
 }
 
-.new-build-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 9px 18px;
-    background: var(--accent);
-    color: var(--on-accent);
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    box-shadow: var(--shadow-sm);
-    transition: background var(--dur-fast), transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
-}
 
-.new-build-btn:hover {
-    background: var(--accent-hover);
-    box-shadow: var(--shadow-accent);
-}
-
-.new-build-btn:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-sm);
-}
 
 .builds-grid {
     display: grid;
@@ -60,7 +41,7 @@
 }
 
 /* Space between the builds grid and the filter toolbar below it. */
-.public-builds-page .components-toolbar {
+.public-builds-page .filter-bar {
     margin-top: 40px;
 }
 
@@ -203,7 +184,7 @@
 .build-card-username {
     font-size: 0.8rem;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--text-muted);
 }
 
 .build-card-header {
@@ -213,7 +194,7 @@
     margin-bottom: 12px;
 }
 
-.build-bike-type {
+.build-card-type {
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--text);
@@ -232,8 +213,6 @@
     color: var(--text-secondary);
     margin-bottom: 18px;
 }
-
-.build-card-meta-date { color: var(--text-muted); }
 
 /* ── Card actions ─────────────────────────────────────────────────────────── */
 
@@ -255,7 +234,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    color: var(--text-secondary);
+    color: var(--text-muted);
     cursor: pointer;
     transition: border-color var(--dur-fast), color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast) var(--ease-out);
 }
@@ -274,131 +253,6 @@
     background: var(--error-bg);
 }
 
-/* ── Single build view ────────────────────────────────────────────────────── */
-
-.build-view {
-    display: grid;
-    grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.55fr);
-    gap: 28px;
-    align-items: start;
-    margin-bottom: 32px;
-}
-
-.build-view-section-title {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    margin-bottom: 14px;
-}
-
-.build-view-components {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.build-view-component {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: baseline;
-    gap: 4px 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.build-view-comp-cat {
-    grid-column: 1 / -1;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-}
-
-.build-view-comp-name {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text);
-}
-
-.build-view-comp-brand {
-    color: var(--text-secondary);
-    font-weight: 400;
-}
-
-.build-view-comp-price {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text);
-    white-space: nowrap;
-}
-
-.build-view-total {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding-top: 16px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-secondary);
-}
-
-.build-view-total-price {
-    font-size: 1.05rem;
-    letter-spacing: -0.01em;
-    color: var(--text);
-}
-
-.build-view-photo {
-    position: static;
-    display: flex;
-    justify-content: center;
-}
-
-.build-view-img {
-    width: 100%;
-    max-width: 640px;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-sm);
-    display: block;
-}
-
-.build-view-img-placeholder {
-    width: 100%;
-    max-width: 640px;
-    aspect-ratio: 4 / 3;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    background: var(--surface-hover);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
-.build-view-description {
-    margin-top: 24px;
-}
-
-.build-view-description-text {
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: var(--text-secondary);
-    white-space: pre-wrap;
-}
-
-@media (max-width: 720px) {
-    .build-view {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* ── Featured builds ────────────────────────────────────────────────────── */
 
 /* Sectioned-off band: full-bleed off-white background (like the homepage
@@ -410,8 +264,9 @@
 }
 
 .featured-builds-title {
-    font-size: clamp(1.35rem, 2.2vw, 1.65rem);
+    font-size: 3rem;
     font-weight: 700;
+    font-family: Georgia;
     letter-spacing: -0.03em;
     color: var(--text);
     text-align: center;
@@ -456,7 +311,7 @@
     padding: 14px 8px 0 16px;
 }
 
-.featured-builds .build-bike-type { font-size: 1rem; }
+.featured-builds .build-card-type { font-size: 1rem; }
 
 .featured-builds .build-card-meta {
     grid-area: meta;

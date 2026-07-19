@@ -1,12 +1,9 @@
 .bike-type-selection {
-    margin: -32px calc(-1 * var(--page-x));
     background: var(--bg);
-    min-height: calc(100vh - 110px);
-    box-sizing: border-box;
 }
 
 .bike-type-selection-header {
-    padding: 32px var(--page-x) 24px;
+    padding-bottom: 24px;
 }
 
 .bike-type-selection-title {
@@ -18,7 +15,7 @@
 }
 
 .bike-type-selection-body {
-    padding: 0 var(--page-x);
+    padding: 0;
 }
 
 .bike-type-cards {

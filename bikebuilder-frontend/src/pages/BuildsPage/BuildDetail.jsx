@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getSharedBuild } from "../../services/buildService";
 import Comments from "../../components/Comments/Comments";
-import "./style/PublicBuilds.css";
+import "./style/BuildDetail.css";
 
 const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
@@ -25,17 +25,13 @@ const BuildDetail = () => {
     const totalPrice = build.components.reduce((sum, c) => sum + (parseFloat(c.price) || 0), 0);
 
     return (
-        <div className="public-builds-page">
-            <div className="public-builds-header">
-                <div>
-                    <h2 className="public-builds-title">{build.name}</h2>
-                    <p className="public-builds-subtitle">by {build.user.display_name}</p>
-                </div>
-                <Link to="/builds" className="new-build-btn">Browse Builds</Link>
-            </div>
-
+        <div className="page build-detail-page">
             <div className="build-view">
+                <div className="build-view-heading">
+                        <Link to="/builds" className="build-view-browse">Browse builds</Link>
+                    </div>
                 <div className="build-view-main">
+
                     <div className="build-view-photo">
                         {build.image_url
                             ? <img src={build.image_url} alt={build.name} className="build-view-img" />
@@ -45,12 +41,15 @@ const BuildDetail = () => {
 
                     {build.description && (
                         <div className="build-view-description">
-                            <h3 className="build-view-section-title">Description</h3>
+                            <h2 className="build-view-name">{build.name}</h2>
+                            <p className="build-view-author">by {build.user.display_name}</p>
                             <p className="build-view-description-text">{build.description}</p>
                         </div>
                     )}
 
-                    <Comments buildId={build.id} />
+                    <div className="build-view-comments">
+                        <Comments buildId={build.id} />
+                    </div>
                 </div>
 
                 <div className="build-view-specs">
@@ -58,12 +57,12 @@ const BuildDetail = () => {
                     <ul className="build-view-components">
                         {build.components.map(c => (
                             <li key={c.id} className="build-view-component">
-                                <span className="build-view-comp-cat">{formatCat(c.component_type)}</span>
-                                <span className="build-view-comp-name">
+                                <span className="build-view-part-cat">{formatCat(c.component_type)}</span>
+                                <span className="build-view-part-name">
                                     {c.name}
-                                    {c.brand && <span className="build-view-comp-brand"> · {c.brand}</span>}
+                                    {c.brand && <span className="build-view-part-brand"> · {c.brand}</span>}
                                 </span>
-                                <span className="build-view-comp-price">
+                                <span className="build-view-part-price">
                                     {c.price ? `$${parseFloat(c.price).toFixed(2)}` : '—'}
                                 </span>
                             </li>

@@ -52,7 +52,7 @@ const Profile = () => {
     if (!profile) return <p className="loading-text">Profile not found.</p>;
 
     return (
-        <div className="profile-page">
+        <div className="page profile-page">
             <div className="profile-header">
                 {profile.photo_url ? (
                     <img className="profile-avatar" src={profile.photo_url} alt={profile.display_name} />

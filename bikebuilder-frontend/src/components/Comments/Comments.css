@@ -32,6 +32,28 @@
     color: var(--text-muted);
 }
 
+/* ---- add trigger ---- */
+.comment-add-btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 8px 16px;
+    margin-bottom: 28px;
+    background: var(--accent);
+    color: var(--on-accent);
+    border: none;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+}
+
+.comment-add-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+}
+
 /* ---- composer ---- */
 .comment-form {
     background: var(--surface);
@@ -75,6 +97,11 @@
     font-size: 0.72rem;
     color: var(--text-muted);
     font-variant-numeric: tabular-nums;
+}
+
+.comment-form-actions {
+    display: flex;
+    gap: 8px;
 }
 
 .comment-submit {
@@ -249,7 +276,7 @@
 .comment-text {
     font-size: 0.975rem;
     line-height: 1.6;
-    color: var(--text-secondary);
+    color: var(--text);
     white-space: pre-wrap;
     word-break: break-word;
 }
