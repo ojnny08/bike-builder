@@ -41,6 +41,7 @@ const NavBar = () => {
                         Bikco
                     </NavLink>
                     <div className="nav-links">
+                        <NavLink to="/">Home</NavLink>
                         <NavLink to="/builds/new">Builder</NavLink>
                         <NavLink to="/components">Products</NavLink>
                         <NavLink to="/builds" end>Completed Bikes</NavLink>

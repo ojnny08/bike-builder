@@ -91,8 +91,8 @@
     width: min(620px, 100%);
     aspect-ratio: 4 / 3;
     border-radius: 16px;
-    background: var(--bg);
-    border: 1px solid var(--border);
+    background: #fff;
+    border: 1px solid  #fff;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -104,6 +104,7 @@
 .home-hero-grid {
     position: absolute;
     inset: 0;
+    pointer-events: none;
     background-image:
         linear-gradient(var(--border) 1px, transparent 1px),
         linear-gradient(90deg, var(--border) 1px, transparent 1px);
@@ -149,6 +150,7 @@
     letter-spacing: -0.03em;
     color: var(--on-accent);
     margin-bottom: 12px;
+    opacity: 0;
 }
 
 /* Steps */
@@ -165,7 +167,15 @@
     align-items: center;
     gap: 16px;
     padding: 28px 20px;
-    animation: fadeInUp var(--dur) var(--ease-out) both;
+    opacity: 0;
+    text-decoration: none; color: inherit;
+}
+
+.home-section.in-view .home-section-title {
+    animation: fadeInUp var(--dur) var(--ease-out) 300ms both;
+}
+.home-section.in-view .home-step {
+    animation: fadeInUp var(--dur) var(--ease-out) 550ms both;
 }
 
 .home-step-icon {

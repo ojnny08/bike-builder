@@ -1,19 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { fetchComponentsByCategory } from "../../services/componentService";
 import { useComponentFilters } from "../../hooks/useComponentFilters";
 import FilterSidebar from "../../components/Filters/FilterSidebar";
 import ImportModal from "./ImportModal";
+import CategoryIcon from "../../components/Icons/CategoryIcons";
 import "./Components.css";
 
 const Components = () => {
     const filters = useComponentFilters();
     const { query } = filters;
-
     const [components, setComponents] = useState([]);
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [importOpen, setImportOpen] = useState(false);
     const [reloadToken, setReloadToken] = useState(0);
+    const rowRef = useRef(null);
+
+    const scrollRow = (dir) => {
+        rowRef.current?.scrollBy({ left: dir * 240, behavior: "smooth" });
+    };
 
     useEffect(() => {
         setLoading(true);
@@ -26,14 +31,38 @@ const Components = () => {
             .finally(() => setLoading(false));
     }, [query.type, query.search, query.brand, query.priceMin, query.priceMax, reloadToken]);
 
-    const typeLabels = Object.fromEntries(filters.componentTypes.map(t => [t.value, t.label]));
-
     return (
         <div className="page components-page">
             <div className="components-header">
                 <div>
                     <h1 className="components-title">{total} Products </h1>
                 </div>
+            </div>
+
+            <div className="component-quick-search-container">
+                <button type="button" className="quick-nav" onClick={() => scrollRow(-1)} aria-label="Previous">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                </button>
+                <div className="quick-filter-row" ref={rowRef}>
+                    {filters.componentTypes.map((type) => (
+                        <button
+                            key={type.value}
+                            type="button"
+                            title={type.label}
+                            className={`quick-filter${filters.type === type.value ? " is-active" : ""}`}
+                            onClick={() => filters.selectType(filters.type === type.value ? "" : type.value)}
+                        >
+                            <CategoryIcon category={type.value} />
+                        </button>
+                    ))}
+                </div>
+                <button type="button" className="quick-nav" onClick={() => scrollRow(1)} aria-label="Next">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                </button>
             </div>
 
             <div className="components-toolbar">

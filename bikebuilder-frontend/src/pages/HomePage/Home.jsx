@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import BikeCanvas from "../../threejs/3d-bike/BikeCanvas"
 import "./Home.css";
 
 const stroke = {
@@ -11,7 +13,7 @@ const stroke = {
 
 
 const features = [
-    {
+    {   
         title: "Bike Builder",
         desc: "Spec your dream build and watch the total weight and price update in real time.",
         icon: (
@@ -22,6 +24,7 @@ const features = [
                 <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
             </svg>
         ),
+        to: "/builds/new",
     },
     {
         title: "Community",
@@ -34,6 +37,7 @@ const features = [
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
         ),
+        to: "/builds",
     },
     {
         title: "Components",
@@ -45,10 +49,27 @@ const features = [
                 <polyline points="2 12 12 17 22 12" />
             </svg>
         ),
+        to: "/components"
     },
 ];
 
 const HomePage = () => {
+    const offerRef = useRef(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("in-view");
+                    observer.unobserve(entry.target);
+                }
+            },
+            { threshold: 0.2 }
+        );
+        if (offerRef.current) observer.observe(offerRef.current);
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <div className="home">
             <section className="home-hero">
@@ -64,23 +85,23 @@ const HomePage = () => {
                 </div>
                 <div className="home-hero-visual">
                     <div className="home-hero-grid" />
-                    <img src="/engine11.png" alt="Bicycle component" className="home-hero-img" />
+                    <BikeCanvas />
                 </div>
             </section>
 
-            <section className="home-section">
+            <section className="home-section" ref={offerRef}>
                 <div className="home-section-head">
                     <h2 className="home-section-title">What We Offer</h2>
                 </div>
                 <div className="home-steps">
-                    {features.map((f, i) => (
-                        <div className="home-step" key={f.title} style={{ animationDelay: `${i * 70}ms` }}>
+                    {features.map((f) => (
+                        <Link className="home-step" to={f.to} key={f.title}>
                             <span className="home-step-icon">{f.icon}</span>
                             <div className="home-step-body">
                                 <h3 className="home-step-title">{f.title}</h3>
                                 <p className="home-step-desc">{f.desc}</p>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </section>

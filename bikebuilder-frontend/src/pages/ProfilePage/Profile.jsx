@@ -13,7 +13,7 @@ const Profile = () => {
     const { editBuild } = useBuild();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-
+    
     useEffect(() => {
         Promise.all([
             fetchCurrentPublicProfile(username),
@@ -53,26 +53,32 @@ const Profile = () => {
 
     return (
         <div className="page profile-page">
-            <div className="profile-header">
-                {profile.photo_url ? (
-                    <img className="profile-avatar" src={profile.photo_url} alt={profile.display_name} />
-                ) : (
-                    <div className="profile-avatar-placeholder">
-                        {profile.display_name?.[0] ?? "?"}
-                    </div>
-                )}
-                <h2 className="profile-name">{profile.display_name}</h2>
-            </div>
+            <div className="profile-view">
+                <div className="profile-header">
+                    {profile.photo_url ? (
+                        <img className="profile-avatar" src={profile.photo_url} alt={profile.display_name} />
+                    ) : (
+                        <div className="profile-avatar-placeholder">
+                            {profile.display_name?.[0] ?? "?"}
+                        </div>
+                    )}
+                    <h2 className="profile-name">{profile.display_name}</h2>
+                </div>
 
-            <div className="profile-build-card">
-                {buildsList.map((build) => (
-                    <BuildsCard
-                        key={build.id}
-                        build={build}
-                        onDelete={handleDelete}
-                        onEdit={handleEdit}
-                        onUploadImage={handleUploadImage} />
-                ))}
+                <div className="profile-about">
+                    How I Ride 
+                </div>
+
+                <div className="profile-build-card">
+                    {buildsList.map((build) => (
+                        <BuildsCard
+                            key={build.id}
+                            build={build}
+                            onDelete={handleDelete}
+                            onEdit={handleEdit}
+                            onUploadImage={handleUploadImage} />
+                    ))}
+                </div>
             </div>
         </div>
     );

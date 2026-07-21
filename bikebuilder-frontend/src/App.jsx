@@ -20,15 +20,16 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/builds/new" element={<Builds />}/>
+          <Route path="/builds/new/select/:category" element={<ComponentSelectPage />}/>
+          <Route path="/profile/:username" element={<Profile />}/>
           <Route path="/components" element={<Components />}/>
           <Route path="/builds" element={<PublicBuilds />}/>
           <Route path="/builds/view/:token" element={<BuildDetail />}/>
           <Route path="/builds/shared/:token" element={<SharedBuild />}/>
           <Route element={<ProtectedRoute />}>
-            <Route path="/builds/new" element={<Builds />}/>
             <Route path="/builds/new/review" element={<BuildSummary />}/>
-            <Route path="/builds/new/select/:category" element={<ComponentSelectPage />}/>
-            <Route path="/profile/:username" element={<Profile />}/>
+
           </Route>
         </Route>
       </Routes>

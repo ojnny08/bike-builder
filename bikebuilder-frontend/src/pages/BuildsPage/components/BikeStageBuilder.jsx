@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../../context/BuildContext";
 import BikeCanvas from "../../../threejs/3d-bike/BikeCanvas";
-import CategoryIcon from "./CategoryIcons";
+import CategoryIcon from "../../../components/Icons/CategoryIcons";
 import "../style/Builds.css";
 import BuilderNav from "./BuilderNav";
 

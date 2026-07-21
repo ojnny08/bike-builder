@@ -8,6 +8,7 @@ const icons = {
             <path fillRule="evenodd" d="M10.6 46A2.6 2.6 0 1 0 5.4 46A2.6 2.6 0 1 0 10.6 46ZM9.1 46A1.1 1.1 0 1 0 6.9 46A1.1 1.1 0 1 0 9.1 46Z"/>
         </>
     ),
+
     bottom_bracket: (
         <>
             <path fillRule="evenodd" d="M18 27L46 27L46 37L18 37Z"/>
