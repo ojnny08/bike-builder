@@ -67,7 +67,7 @@
 .home-btn svg { transition: transform var(--dur) var(--ease-out); }
 
 .home-btn-primary {
-    background: #1E252D;
+    background: var(--text-blue);
     color: var(--on-accent);
     box-shadow: var(--shadow-sm);
 }

@@ -5,6 +5,7 @@ import FilterSidebar from "../../components/Filters/FilterSidebar";
 import ImportModal from "./ImportModal";
 import CategoryIcon from "../../components/Icons/CategoryIcons";
 import "./Components.css";
+import ComponentCard, { ComponentCardSkeleton } from "../../components/BikeComponents/ComponentCard";
 
 const Components = () => {
     const filters = useComponentFilters();
@@ -102,17 +103,8 @@ const Components = () => {
                 <div className="components-results">
                 {loading ? (
                         <div className="product-grid" aria-hidden="true">
-                            {Array.from({ length: 6 }, (_, i) => (
-                                <div key={i} className="product-card is-skeleton">
-                                    <div className="product-media" />
-                                    <div className="product-card-body">
-                                        <span className="skeleton-line skeleton-line--brand" />
-                                        <span className="skeleton-line skeleton-line--name" />
-                                    </div>
-                                    <div className="product-card-footer">
-                                        <span className="skeleton-line skeleton-line--price" />
-                                    </div>
-                                </div>
+                            {Array.from({ length: 10 }, (_, i) => (
+                                <ComponentCardSkeleton key={i} />
                             ))}
                         </div>
                     ) : components.length === 0 ? (
@@ -130,35 +122,9 @@ const Components = () => {
                     ) : (
                         <div className="product-grid">
                             {components.map(comp => (
-                                <article key={comp.id} className="product-card">
-                                    <div className="product-media">
-                                        {comp.image_url ? (
-                                            <img src={comp.image_url} alt={comp.name} loading="lazy" />
-                                        ) : (
-                                            ""
-                                        )}
-                                    </div>
-                                    <div className="product-card-body">
-                                        <h1 className="product-brand">{comp.brand}</h1>
-                                        <p className="product-name">{comp.name}</p>
-                                        <div className="product-meta">
-                                            <div className="product-price">${comp.price}</div>
-                                            <div className="product-weight">{comp.weight_grams}g</div>
-                                        </div>
-                                        
-                                        
-                                        
-                                        {comp.description && (
-                                            <p className="product-desc">{comp.description}</p>
-                                        )}
-                                      
-                                                                                   
-
-                                    </div>
-                                    <div className="product-card-footer">
-
-                                    </div>
-                                </article>
+                                <ComponentCard 
+                                    key={comp.id}
+                                    comp={comp}/>
                             ))}
                         </div>
                     )}

@@ -5,6 +5,7 @@ import { fetchComponentsByCategory, fetchCompatibleComponents } from "../../serv
 import { useComponentFilters } from "../../hooks/useComponentFilters";
 import FilterBar from "../../components/Filters/FilterBar";
 import BuilderNav from "./components/BuilderNav";
+import ComponentCard, { ComponentCardSkeleton } from "../../components/BikeComponents/ComponentCard";
 import "./style/Builds.css";
 
 const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -17,44 +18,7 @@ const PartGlyph = () => (
     </svg>
 );
 
-const ComponentCard = ({ comp, isSelected, onSelect }) => {
-    const blocked = !comp.compatible;
-    return (
-        <button
-            type="button"
-            className={`cs-card${blocked ? ' is-blocked' : ''}${isSelected ? ' is-selected' : ''}`}
-            onClick={() => !blocked && onSelect(comp)}
-            disabled={blocked}
-            aria-label={`${comp.brand} ${comp.name}, $${comp.price}${blocked ? ', incompatible' : ''}`}
-        >
-            <div className="cs-card-media">
-                {comp.image_url
-                    ? <img src={comp.image_url} alt="" loading="lazy" className="cs-card-img" />
-                    : <span className="cs-card-glyph"><PartGlyph /></span>}
-                {isSelected && (
-                    <span className="cs-card-badge cs-card-badge-selected">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        Selected
-                    </span>
-                )}
-                {blocked && <span className="cs-card-badge cs-card-badge-blocked">Incompatible</span>}
-            </div>
-            <div className="cs-card-body">
-                <span className="cs-card-brand">{comp.brand}</span>
-                <span className="cs-card-name">{comp.name}</span>
-            </div>
-            <div className="cs-card-foot">
-                <span className="cs-card-price">
-                    {comp.price ? `$${parseFloat(comp.price).toFixed(2)}` : '—'}
-                </span>
-                {comp.weight_grams ? <span className="cs-card-weight">{comp.weight_grams} g</span> : null}
-            </div>
-        </button>
-    );
-};
+
 
 const ComponentSelectPage = () => {
     const { category } = useParams();
@@ -126,15 +90,14 @@ const ComponentSelectPage = () => {
                             {components.length > compatCount && ` · ${components.length - compatCount} incompatible`}
                         </p>
                     )}
-                    <button className="bb-btn-ghost" onClick={() => navigate("/builds/new")}>← Back to build</button>
                 </div>
             </header>
 
             <FilterBar filters={filters} iconOnly centered />
 
             {loading ? (
-                <div className="cs-grid">
-                    {Array.from({ length: 8 }).map((_, i) => <div key={i} className="cs-card-skeleton" />)}
+                <div className="product-grid">
+                    {Array.from({ length: 10 }).map((_, i) => <ComponentCardSkeleton key={i} />)}
                 </div>
             ) : components.length === 0 ? (
                 <p className="empty-state">No {formatCat(category).toLowerCase()} components found.</p>

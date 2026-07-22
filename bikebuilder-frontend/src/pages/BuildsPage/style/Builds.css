@@ -379,10 +379,10 @@
     display: block;
 }
 .bs-card-icon svg { width: 100%; height: 100%; display: block; }
-.bs-card.is-filled .bs-card-icon { color: var(--text-secondary); }
+.bs-card.is-filled .bs-card-icon { color: var(--text); }
 .bs-card.is-focused .bs-card-icon { color: var(--accent); }
 
-.bs-card-meta { color: var(--text-secondary); font-weight: 400; font-variant-numeric: tabular-nums; }
+.bs-card-meta { color: var(--text); font-weight: 400; font-variant-numeric: tabular-nums; }
 .bs-card-placeholder { font-size: 1.2rem; font-weight: 600; color: var(--text); }
 .bs-card.is-filled .bs-card-cat { color: var(--text); }
 
