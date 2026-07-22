@@ -36,7 +36,7 @@
     padding: 0 14px 0 40px;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 999px;
+    border-radius: var(--border-raduis-value);
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--text);
@@ -65,7 +65,7 @@
     padding: 0 16px;
     background: #B4543B;
     border: 1px solid #B4543B;
-    border-radius: 999px;
+    border-radius: var(--border-raduis-value);
     font-size: 0.875rem;
     font-weight: 700;
     color: var(--text-secondary);
@@ -113,7 +113,7 @@
     height: 20px;
     padding: 0 6px;
     background: var(--accent-bg);
-    border-radius: 999px;
+    border-radius: var(--border-raduis-value);
     font-size: 0.7rem;
     font-weight: 600;
     color: var(--text);
@@ -163,7 +163,7 @@
     padding: 0 12px;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 999px;
+    border-radius: var(--border-raduis-value);
     font-size: 0.875rem;
     color: var(--text);
     transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
@@ -212,7 +212,7 @@
     height: 44px;
     background: var(--text-orange);
     border: 1px solid var(--border);
-    border-radius: 999px;
+    border-radius: var(--border-raduis-value);
     font-weight: 600;
     color: var(--text-secondary);
     cursor: pointer;
@@ -241,13 +241,13 @@
     list-style: none;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--border-raduis-value);
     box-shadow: var(--shadow-md);
 }
 
 .filter-combo-option {
     padding: 8px 10px;
-    border-radius: 6px;
+    border-radius: var(--border-raduis-value);
     font-size: 0.875rem;
     color: var(--text);
     cursor: pointer;

@@ -233,7 +233,7 @@
     flex-shrink: 0;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--border-raduis-value);
     color: var(--text-muted);
     cursor: pointer;
     transition: border-color var(--dur-fast), color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast) var(--ease-out);

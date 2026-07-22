@@ -128,7 +128,7 @@
     width: 100%;
     display: flex;
     border: 1px;
-    border-radius: 15px;
+    border-radius: var(--border-raduis-value);
 
 }
 

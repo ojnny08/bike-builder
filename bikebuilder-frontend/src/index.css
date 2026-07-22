@@ -38,6 +38,7 @@
 
   /* Layout */
   --page-x: 64px;
+  --border-raduis-value: 999px;
 
 }
 
@@ -92,7 +93,7 @@ input:focus-visible,
 [tabindex]:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--accent-ring);
-  border-radius: 6px;
+  border-radius: var(--border-raduis-value);
 }
 
 @keyframes fadeInUp {

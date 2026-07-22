@@ -16,7 +16,7 @@
     padding: 28px;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--border-raduis-value);
     box-shadow: var(--shadow-lg);
     animation: fadeInUp var(--dur) var(--ease-out) both;
 }
@@ -31,7 +31,7 @@
     place-items: center;
     background: none;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--border-raduis-value);
     font-size: 1.4rem;
     line-height: 1;
     color: var(--text-muted);
@@ -81,7 +81,7 @@
     height: 44px;
     background: var(--accent);
     border: 1px solid var(--accent);
-    border-radius: 8px;
+    border-radius: var(--border-raduis-value);
     font-size: 0.875rem;
     font-weight: 600;
     color: #fff;

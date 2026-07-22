@@ -21,7 +21,7 @@
 .profile-avatar-placeholder {
     width: 76px;
     height: 76px;
-    border-radius: 999px;
+    border-radius: var(--border-raduis-value);
     flex-shrink: 0;
     background: var(--surface);
     border: 1px solid var(--border);

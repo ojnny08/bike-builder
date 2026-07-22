@@ -101,7 +101,7 @@ const BikeStageBuilder = () => {
 
     return (
         <div className="bb-wrapper bs-wrapper">
-            <div className="bs-topbar"><BuilderNav /></div>
+            <BuilderNav />
             <div className="bs-stage-layout">
                 <div className="bs-stage-left">
                     <div className="bs-canvas">
@@ -113,12 +113,6 @@ const BikeStageBuilder = () => {
                             </span>
                         </div>
                         )}
-                    </div>
-
-                    <div className="bb-progress bs-stage-progress" aria-label={`${requiredFilled} of ${required.length} essential parts selected`}>
-                        <span className="bb-bar-track">
-                            <span className="bb-bar-fill" style={{ transform: `scaleX(${progress})` }} />
-                        </span>
                     </div>
 
                     <div className="bs-panel-footer">
@@ -141,7 +135,6 @@ const BikeStageBuilder = () => {
                 </div>
 
                 <div className="bs-panel">
-                    <div className="bs-panel-head">Components</div>
                     <div className="bs-panel-list">
                         {orderedCats.map(category => (
                             <PartCard

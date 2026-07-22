@@ -53,7 +53,7 @@
     align-items: center;
     gap: 9px;
     padding: 13px 24px;
-    border-radius: 10px;
+    border-radius: var(--border-raduis-value);
     font-size: 0.9rem;
     font-weight: 600;
     text-decoration: none;
@@ -90,7 +90,7 @@
     position: relative;
     width: min(620px, 100%);
     aspect-ratio: 4 / 3;
-    border-radius: 16px;
+    border-radius: var(--border-raduis-value);
     background: #fff;
     border: 1px solid  #fff;
     overflow: hidden;

@@ -63,7 +63,7 @@
     padding: 12px;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--border-raduis-value);
     color: var(--text);
     cursor: pointer;
     scroll-snap-align: start;
@@ -146,7 +146,7 @@
     display: grid;
     place-items: center;
     background: var(--surface-2);
-    border-radius: 16px;
+    border-radius: var(--border-raduis-value);
 }
 
 .product-media img {
@@ -154,7 +154,7 @@
     height: 100%;
     object-fit: contain;
     padding: 18px;
-    border-radius: 16px;
+    border-radius: var(--border-raduis-value);
     transition: transform var(--dur) var(--ease-out);
 }
 
@@ -171,7 +171,7 @@
     padding: 3px 8px;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: var(--border-raduis-value);
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -250,7 +250,7 @@
 
 .skeleton-line {
     height: 12px;
-    border-radius: 6px;
+    border-radius: var(--border-raduis-value);
     background: var(--surface-hover);
     animation: skeletonPulse 1.4s var(--ease-out) infinite;
 }
@@ -274,7 +274,7 @@
     text-align: center;
     background: var(--surface);
     border: 1px dashed var(--border-strong);
-    border-radius: 12px;
+    border-radius: var(--border-raduis-value);
 }
 
 .product-empty-title {
