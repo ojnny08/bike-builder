@@ -45,16 +45,7 @@
     margin-top: 40px;
 }
 
-.build-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    padding-bottom: 20px;
-    box-shadow: var(--shadow-sm);
-    animation: fadeInUp var(--dur) var(--ease-out) both;
-    transition: transform var(--dur) var(--ease-out), border-color var(--dur-fast), box-shadow var(--dur);
-}
+
 
 .builds-grid > :nth-child(1) { animation-delay: 0ms; }
 .builds-grid > :nth-child(2) { animation-delay: 45ms; }
@@ -63,195 +54,7 @@
 .builds-grid > :nth-child(5) { animation-delay: 180ms; }
 .builds-grid > :nth-child(6) { animation-delay: 225ms; }
 
-.build-card > *:not(.build-card-image) {
-    padding-left: 24px;
-    padding-right: 24px;
-}
 
-.build-card-image {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    background: var(--surface-hover);
-    position: relative;
-}
-
-.build-card-image-clickable { cursor: pointer; }
-
-.build-card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: opacity var(--dur-fast), transform 0.4s var(--ease-out);
-}
-
-.build-card-image-clickable:hover .build-card-img { opacity: 0.85; }
-
-.build-card-img-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.build-card-img-prompt {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-}
-
-.build-card-image-clickable:hover .build-card-img-prompt { color: var(--text-secondary); }
-
-.build-card-img-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    background: rgba(10,10,15,0.5);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    opacity: 0;
-    transition: opacity 0.15s;
-}
-
-.build-card-image-clickable:hover .build-card-img-overlay { opacity: 1; }
-
-.build-card-share {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(10, 10, 15, 0.35);
-    backdrop-filter: blur(4px);
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.15s;
-}
-
-.build-card-share:hover { background: rgba(10, 10, 15, 0.6); }
-
-.build-card-share.is-copied { background: var(--accent); }
-
-.build-card-user {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-    cursor: pointer;
-    padding-top: 16px;
-}
-
-.build-card-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-}
-
-.build-card-avatar-placeholder {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--surface-hover);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    flex-shrink: 0;
-}
-
-.build-card-username {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-muted);
-}
-
-.build-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.build-card-type {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: -0.02em;
-}
-
-.build-card-clickable {
-    cursor: pointer;
-}
-
-.build-card-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    font-size: 0.78rem;
-    color: var(--text-secondary);
-    margin-bottom: 18px;
-}
-
-/* ── Card actions ─────────────────────────────────────────────────────────── */
-
-.build-card-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-}
-
-/* Square icon-only buttons (edit / delete) */
-.icon-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--border-raduis-value);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: border-color var(--dur-fast), color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast) var(--ease-out);
-}
-
-.icon-btn:hover {
-    border-color: var(--border-strong);
-    color: var(--text);
-    transform: translateY(-2px);
-}
-
-.icon-btn:active { transform: translateY(0); }
-
-.icon-btn-danger:hover {
-    border-color: var(--error);
-    color: var(--error);
-    background: var(--error-bg);
-}
 
 /* ── Featured builds ────────────────────────────────────────────────────── */
 
@@ -327,12 +130,9 @@
     padding: 14px 16px 0 8px;
 }
 
-/* Hover colour: lift the card and warm the surface / border on hover. */
+/* Lift the card on hover. */
 .featured-builds .build-card:hover {
-    background: var(--surface-hover);
-    border-color: var(--border-strong);
     transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
 }
 
 /* Scroll reveal: cards are visible by default (no-JS / headless safe). When

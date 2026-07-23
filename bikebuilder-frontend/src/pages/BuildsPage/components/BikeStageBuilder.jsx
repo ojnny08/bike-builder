@@ -44,7 +44,7 @@ const PartCard = ({ category, selected, focused, locked, prereq, onFocus, onChoo
             ) : locked ? (
                 <span className="bs-card-cat">Select {formatCat(prereq)} first</span>
             ) : (
-                <span className="bs-card-cat">Not selected</span>
+                <span className="bs-card-cat">Not Selected</span>
             )}
         </div>
         <span className="bs-card-icon"><CategoryIcon category={category} /></span>
@@ -129,7 +129,7 @@ const BikeStageBuilder = () => {
                             onClick={() => navigate("/builds/new/review")}
                             disabled={!hasComponents}
                         >
-                            Finish build
+                            Finish Build
                         </button>
                     </div>
                 </div>

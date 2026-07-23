@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./BuildsCard.css"
 
 const iconProps = {
     width: 15,
@@ -43,6 +44,11 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
         e.target.value = "";
     };
 
+    const goToProfile = (e) => {
+        e.stopPropagation();
+        navigate(`/profile/${build.user.username}`);
+    };
+
     const handleShare = async (e) => {
         e.stopPropagation();
         const url = `${window.location.origin}/builds/shared/${build.share_token}`;
@@ -76,25 +82,27 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
     );
 
     return (
-        <div
-            className="build-card build-card-clickable"
-            onClick={() => navigate(`/builds/view/${build.share_token}`)}
-        >
-            {imageBlock}
-            {onUploadImage && (
-                <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
-            )}
 
-            <div className="build-card-user" onClick={(e) => { e.stopPropagation(); navigate(`/profile/${build.user.username}`); }}>
-                {build.user.photo_url
-                    ? <img src={build.user.photo_url} alt={build.user.display_name} className="build-card-avatar" />
-                    : <div className="build-card-avatar-placeholder">{build.user.display_name?.[0] ?? "?"}</div>
-                }
-                <span className="build-card-username">{build.user.display_name}</span>
-            </div>
+            <div
+                className="build-card"
+                onClick={() => navigate(`/builds/view/${build.share_token}`)}
+            >
+                {imageBlock}
+                {onUploadImage && (
+                    <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+                )}
+            
+
             <div className="build-card-header">
-                <span className="build-card-type">{build.name}</span>
+                <div className="build-card-info">
+                    <span className="build-card-type">{build.name}</span>
+                </div>
+                {build.user.photo_url
+                    ? <img src={build.user.photo_url} alt={build.user.display_name} className="build-card-avatar" onClick={goToProfile} />
+                    : <div className="build-card-avatar-placeholder" onClick={goToProfile}>{build.user.display_name?.[0] ?? "?"}</div>
+                }
             </div>
+
             <div className="build-card-meta">
                 <span>{frame ? `${frame.brand} ${frame.name}` : "No frame"}</span>
                 <span>{crank ? `${crank.brand} ${crank.name}` : "No crank"}</span>
@@ -106,6 +114,7 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
                 </div>
             )}
         </div>
+
     );
 };
 

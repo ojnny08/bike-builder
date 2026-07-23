@@ -1,0 +1,193 @@
+.build-card {
+    background: transparent;
+    overflow: hidden;
+    padding-bottom: 20px;
+    cursor: pointer;
+    border: transparent;
+    border-radius: 1 0px;
+    animation: fadeInUp var(--dur) var(--ease-out) both;
+    transition: transform var(--dur) var(--ease-out), box-shadow var(--dur);
+}
+
+.build-card > *:not(.build-card-image) {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.build-card-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    position: relative;
+}
+
+.build-card-image-clickable { cursor: pointer; }
+
+.build-card-img {
+    border: transparent;
+    border-radius: 14px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity var(--dur-fast), transform 0.4s var(--ease-out);
+}
+
+.build-card-image-clickable:hover .build-card-img { opacity: 0.85; }
+
+.build-card-img-placeholder {
+
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.build-card-img-prompt {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+}
+
+.build-card-image-clickable:hover .build-card-img-prompt { color: var(--text-secondary); }
+
+.build-card-img-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: rgba(10,10,15,0.5);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.build-card-image-clickable:hover .build-card-img-overlay { opacity: 1; }
+
+.build-card-share {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(10, 10, 15, 0.35);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.build-card-share:hover { background: rgba(10, 10, 15, 0.6); }
+
+.build-card-share.is-copied { background: var(--accent); }
+
+.build-card-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.build-card-avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.build-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.build-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.build-card-type {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+}
+
+.build-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 18px;
+}
+
+/* ── Card actions ─────────────────────────────────────────────────────────── */
+
+.build-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Square icon-only buttons (edit / delete) */
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--border-raduis-value);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: border-color var(--dur-fast), color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+}
+
+.icon-btn:hover {
+    border-color: var(--border-strong);
+    color: var(--text);
+    transform: translateY(-2px);
+}
+
+.icon-btn:active { transform: translateY(0); }
+
+.icon-btn-danger:hover {
+    border-color: var(--error);
+    color: var(--error);
+    background: var(--error-bg);
+}

@@ -25,12 +25,24 @@
         transform var(--dur-fast) var(--ease-out);
 }
 
+.bb-btn-back {
+    background-color: #1e1f22;
+    border: 1px solid var(--border);
+    border-radius: var(--border-raduis-value);
+    height: 30px;
+    width: 30px;
+    border-color: #1e1f22;
+    color: var(--on-accent);
+}
+
 .bb-btn-ghost {
     background-color: #2D2E51;
     border: 1px solid var(--border);
     border-color: #2D2E51;
     color: var(--on-accent);
 }
+
+
 .bb-btn-ghost:hover:not(:disabled) { color: var(--text); border-color: var(--border-strong); }
 
 .bb-btn-primary {
@@ -107,21 +119,30 @@
     position: relative;
     flex: 1;
     min-width: 0;
-    padding-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.bb-progress-count {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-blue);
+    white-space: nowrap;
 }
 .bb-bar-track {
     display: block;
-    height: 20px;
+    flex: 1;
+    height: 12px;
     border-radius: var(--border-raduis-value);
     background: transparent;
-    border: 2px solid var(--accent-hover);
+    border: 2px solid #A99F96;
     overflow: hidden;
 }
 .bb-bar-fill {
     display: block;
     height: 100%;
     width: 100%;
-    background: #000;
+    background: #A99F96;
     border-radius: var(--border-raduis-value);
     transform-origin: left center;
     transition: transform var(--dur) var(--ease-out);
@@ -236,7 +257,7 @@
 }
 
 .bb-footer-totals { display: flex; align-items: baseline; gap: 16px; }
-.bb-footer-weight { font-size: 0.85rem; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.bb-footer-weight { font-size: 0.85rem; color: var(--text); font-variant-numeric: tabular-nums; }
 .bb-footer-price {
     font-size: 1.4rem;
     font-weight: 700;
@@ -245,8 +266,7 @@
     font-variant-numeric: tabular-nums;
 }
 
-.bb-footer-cta { display: flex; align-items: center; gap: 16px; }
-.bb-footer-hint { font-size: 0.8rem; color: var(--text-secondary); }
+
 
 /* ═══ 3D stage builder — split view: canvas · component panel ════════════════ */
 .bs-wrapper {
@@ -454,10 +474,12 @@
     font-size: 1rem;
     font-weight: 500;
     color: var(--text);
-    font-variant-numeric: tabular-nums;
 }
-.bs-panel-weight { font-size: 0.9rem; font-weight: 400; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
-
+.bs-panel-weight { 
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+}
 .bs-finish-pill {
     margin-left: auto;
     border-radius: 0;

@@ -25,7 +25,7 @@ const BuilderNav = ({ hideSave = false }) => {
     return (
         <div className="bs-topbar">
             <div className="bs-topbar-left">
-                <button className="bb-btn-ghost" onClick={() => navigate(-1)}>←</button>
+                <button className="bb-btn-back" onClick={() => navigate(-1)}>←</button>
                 <button className="bb-btn-ghost" onClick={() => navigate("/")}>Home</button>
             </div>
 
@@ -36,13 +36,13 @@ const BuilderNav = ({ hideSave = false }) => {
             )}
 
             <div className="bs-topbar-right">
-                <button className="bb-btn-ghost" onClick={handleStartOver}>Start over</button>
+                <button className="bb-btn-ghost" onClick={handleStartOver}>Start Over</button>
                 {!hideSave && (
                     <button
                         className="bb-btn-primary"
                         onClick={() => navigate("/builds/new/review")}
                     >
-                        Save progress
+                        Save Progress
                     </button>
                 )}
             </div>
