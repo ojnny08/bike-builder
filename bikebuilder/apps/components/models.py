@@ -17,7 +17,7 @@ class ComponentType(models.TextChoices):
     HANDLEBAR = "handlebar", "Handlebar"
     STEM = "stem", "Stem"
     BRAKE = "brake", "Brake"
-    SADDLE = "saddle", "Saddle"
+    SADDLE = "saddle", "Saddle" 
     SEATPOST = "seatpost", "Seatpost"
     PEDALS = "pedals", "Pedals"
    
@@ -71,18 +71,20 @@ class ComponentSubmission(models.Model):
 
     def __str__(self):
         return self.url
+
+class ShellType(models.TextChoices):
+    THREADED_BSA = "threaded_bsa", "Threaded (BSA/English)"
+    THREADED_ITA = "threaded_ita", "Threaded (Italian)"
+    T47 = "t47", "T47 Threaded"
     
+    PRESS_FIT_86_92 = "pf86_92", "Press Fit (BB86/BB92)"
+    PRESS_FIT_30 = "pf30", "PressFit 30"
+    BB30 = "bb30", "BB30"
 
 class Frame(Components):
     class Generation(models.TextChoices):
         MODERN = "modern", "Modern"
         VINTAGE = "vintage", "Vintage"
-
-    class BBShell(models.TextChoices):
-        THREADED = "threaded", "Threaded (BSA)"
-        PRESS_FIT = "press_fit", "Press Fit"
-        T47 = "t47", "T47"
-        BB30 = "bb30", "BB30"
 
     class RearAxleFit(models.TextChoices):
         TRACK = 'track_120', 'Track 120mm' 
@@ -91,21 +93,27 @@ class Frame(Components):
         THRU_142 = 'thru_142', 'Thru Axle 142mm'
         THRU_148 = 'thur_148', 'Thru Axle 148mm'
 
-    size = models.CharField(max_length=10)
-    bb_shell = models.CharField(max_length=20, choices=BBShell.choices)
+    bb_type = models.CharField(max_length=20, choices=ShellType.choices, null=True, blank=True)
+    bb_width_mm = models.SmallIntegerField(null=True, blank=True)
+    fork_brake_drilled = models.BooleanField(default=False)
+    frame_brake_drilled = models.BooleanField(default=False)
     rear_axle_standard = models.CharField(max_length=20, choices=RearAxleFit.choices)
+    seat_tube = models.PositiveSmallIntegerField(null=True, blank=True)
     max_tire_clearance_mm = models.PositiveSmallIntegerField()
 
 
+class FrameOption(models.Model):
+    frame = models.ForeignKey(Frame, on_delete=models.CASCADE, related_name="sizes")
+    size = models.CharField(max_length=20)
+
+    class Meta:
+        ordering = ["frame", "size"]
+
+    def __str__(self):
+        return f"{self.frame} — {self.size}"
+
+
 class BottomBracket(Components):
-    class ShellType(models.TextChoices):
-        THREADED_BSA = "threaded_bsa", "Threaded (BSA/English)"
-        THREADED_ITA = "threaded_ita", "Threaded (Italian)"
-        T47 = "t47", "T47 Threaded"
-        
-        PRESS_FIT_86_92 = "pf86_92", "Press Fit (BB86/BB92)"
-        PRESS_FIT_30 = "pf30", "PressFit 30"
-        BB30 = "bb30", "BB30"
 
     class SpindleInterface(models.TextChoices):
         # Square Taper
@@ -120,9 +128,9 @@ class BottomBracket(Components):
         MM_30 = "30mm", "30mm (BB30/386EVO)"
         DUB = "dub", "SRAM DUB (28.99mm)"
 
-    shell_type = models.CharField(max_length=20, choices=ShellType.choices)
+    bb_type = models.CharField(max_length=20, choices=ShellType.choices,)
     spindle_interface = models.CharField(max_length=20, choices=SpindleInterface.choices)
-    shell_width_mm = models.PositiveSmallIntegerField()
+    bb_width_mm= models.PositiveSmallIntegerField()
 
 
 class Crankset(Components):
@@ -142,10 +150,25 @@ class Crankset(Components):
     class ArmLength(models.TextChoices):
         ARM_160mm = "160mm", "160mm"
         ARM_165mm = "165mm", "165mm"
+        ARM_1675mm = "167.5mm", "167.5mm"
         ARM_170mm = "170mm", "170mm"
 
     spindle_interface = models.CharField(max_length=20, choices=SpindleInterface.choices)
-    arm_length_mm = models.CharField(max_length=5, choices=ArmLength.choices)
+
+
+class CrankOption(models.Model):
+    crankset = models.ForeignKey(Crankset, on_delete=models.CASCADE, related_name="options")
+    color = models.CharField(max_length=40, blank=True)
+    length_mm = models.CharField(max_length=10, choices=Crankset.ArmLength.choices)
+    chainring_teeth = models.PositiveSmallIntegerField(null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        ordering = ["crankset", "color", "length_mm"]
+
+    def __str__(self):
+        return f"{self.crankset} — {self.color} {self.length_mm}".strip()
+
 
 class Wheel(Components):
     class WheelSize(models.TextChoices):

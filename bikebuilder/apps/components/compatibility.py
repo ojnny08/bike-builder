@@ -3,7 +3,7 @@ from .models import (
 )
 
 RULES = {
-    'bottom_bracket': (BottomBracket, 'frame',        lambda f:  {'shell_type': f.bb_shell}),
+    'bottom_bracket': (BottomBracket, 'frame',        lambda f:  {'bb_type': f.bb_type, 'bb_width_mm': f.bb_width_mm}),
     'crankset':       (Crankset,      'bottom_bracket', lambda bb: {'spindle_interface': bb.spindle_interface}),
     'wheel':          (Wheel,         'frame',          lambda f:  {'axle_standard': f.rear_axle_standard}),
     'handlebar':      (Handlebar,     'stem',           lambda s:  {'clamp_diameter_mm': s.bar_clamp_diameter_mm}),
