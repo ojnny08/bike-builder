@@ -120,8 +120,3 @@ class ComponentSubmissionSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Link must point to an approved retailer.")
         return value
 
-
-class ComponentTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ComponentType
-        fields = ['id', 'frame']

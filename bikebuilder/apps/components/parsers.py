@@ -1,6 +1,6 @@
 import re
 
-from .models import Frame, ShellType
+from .models import Frame, ShellType, Crankset, BottomBracket
 
 AXLE_BY_WIDTH = {
     120: Frame.RearAxleFit.TRACK,
@@ -60,3 +60,49 @@ def parse_bb_shell(raw):
         raise ValueError(f"no bb width in {raw!r}")
 
     return shell, int(width.group(1))
+
+
+SPINDLE_ALIASES = [
+    ("octalink", Crankset.SpindleInterface.OCTALINK),
+    ("isis", Crankset.SpindleInterface.ISIS),
+    ("hollowtech", Crankset.SpindleInterface.MM_24),
+    ("gxp", Crankset.SpindleInterface.GXP),
+    ("dub", Crankset.SpindleInterface.DUB),
+    ("386evo", Crankset.SpindleInterface.MM_30),
+    ("bb30", Crankset.SpindleInterface.MM_30),
+    ("24mm", Crankset.SpindleInterface.MM_24),
+]
+
+
+def parse_spindle(text):
+    t = (text or "").lower()
+
+    if "square" in t and "taper" in t:
+        if "iso" in t:
+            return Crankset.SpindleInterface.SQUARE_TAPER_ISO
+        return Crankset.SpindleInterface.SQUARE_TAPER_JIS
+
+    return next(
+        (iface for key, iface in SPINDLE_ALIASES if key in t),
+        Crankset.SpindleInterface.SQUARE_TAPER_JIS,
+    )
+
+
+def parse_bb_spindle(category, name):
+    cat = (category or "").lower()
+    n = (name or "").lower()
+
+    if "octalink" in cat:
+        return BottomBracket.SpindleInterface.OCTALINK
+
+    if "square taper" in cat:
+        return BottomBracket.SpindleInterface.SQUARE_TAPER_JIS
+
+    if "gxp" in n:
+        return BottomBracket.SpindleInterface.GXP
+    if "dub" in n:
+        return BottomBracket.SpindleInterface.DUB
+    if "bb30" in n or "386" in n or "30mm" in n:
+        return BottomBracket.SpindleInterface.MM_30
+
+    return BottomBracket.SpindleInterface.MM_24

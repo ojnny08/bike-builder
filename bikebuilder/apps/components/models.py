@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 from django.core.validators import URLValidator
 from ..category.models import BikeType
 
@@ -131,6 +132,7 @@ class BottomBracket(Components):
     bb_type = models.CharField(max_length=20, choices=ShellType.choices,)
     spindle_interface = models.CharField(max_length=20, choices=SpindleInterface.choices)
     bb_width_mm= models.PositiveSmallIntegerField()
+    colors = ArrayField(models.CharField(max_length=40), default=list, blank=True)
 
 
 class Crankset(Components):

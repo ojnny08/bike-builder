@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtextedRoute/ProtectedRoute'
 import Login from './pages/LoginPage/Login'
 import HomePage from './pages/HomePage/Home'
 import Components from './pages/ComponentsPage/Components'
+import ComponentDetails from './pages/ComponentsPage/ComponentDetails'
 import Builds from './pages/BuildsPage/Builds'
 import PublicBuilds from './pages/BuildsPage/PublicBuilds'
 import SharedBuild from './pages/BuildsPage/SharedBuild'
@@ -24,6 +25,7 @@ function App() {
           <Route path="/builds/new/select/:category" element={<ComponentSelectPage />}/>
           <Route path="/profile/:username" element={<Profile />}/>
           <Route path="/components" element={<Components />}/>
+          <Route path="/components/:id" element={<ComponentDetails />}/>
           <Route path="/builds" element={<PublicBuilds />}/>
           <Route path="/builds/view/:token" element={<BuildDetail />}/>
           <Route path="/builds/shared/:token" element={<SharedBuild />}/>

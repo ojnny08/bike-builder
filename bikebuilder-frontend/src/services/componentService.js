@@ -20,6 +20,11 @@ export const fetchComponentTypes = async () => {
     return res.data;
 };
 
+export const fetchComponentDetails = async (id) => {
+    const res = await api.get(`/api/components/${id}/`);
+    return res.data;
+}
+
 export const fetchBrands = async (category) => {
     const res = await api.get("/api/components/brands/", {
         params: { component_type: category },

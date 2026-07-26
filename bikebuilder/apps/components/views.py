@@ -72,7 +72,7 @@ class ComponentsViewSet(ViewSet):
 
     def retrieve(self, request, pk=None):
         key = f"components:detail:{pk}"
-        try:
+        try: 
             return _cached(key, 60 * 60, lambda: ComponentsSerializer(Components.objects.get(pk=pk)).data)
         except Components.DoesNotExist:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)

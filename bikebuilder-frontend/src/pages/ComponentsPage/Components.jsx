@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { fetchComponentsByCategory } from "../../services/componentService";
 import { useComponentFilters } from "../../hooks/useComponentFilters";
 import FilterSidebar from "../../components/Filters/FilterSidebar";
@@ -8,6 +9,7 @@ import "./Components.css";
 import ComponentCard, { ComponentCardSkeleton } from "../../components/BikeComponents/ComponentCard";
 
 const Components = () => {
+    const navigate = useNavigate();
     const filters = useComponentFilters();
     const { query } = filters;
     const [components, setComponents] = useState([]);
@@ -122,9 +124,10 @@ const Components = () => {
                     ) : (
                         <div className="product-grid">
                             {components.map(comp => (
-                                <ComponentCard 
+                                <ComponentCard
                                     key={comp.id}
-                                    comp={comp}/>
+                                    comp={comp}
+                                    onSelect={() => navigate(`/components/${comp.id}`)}/>
                             ))}
                         </div>
                     )}

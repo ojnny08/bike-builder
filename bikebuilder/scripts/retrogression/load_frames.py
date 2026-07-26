@@ -12,7 +12,7 @@ django.setup()
 from apps.components.models import Frame, FrameOption
 from apps.components.parsers import parse_axle_spacing, parse_bb_shell
 
-FRAME_JSON = os.path.join(os.path.dirname(__file__), "retrogression", "frame.json")
+FRAME_JSON = os.path.join(os.path.dirname(__file__), "extracted", "frame.json")
 
 
 def strip_size(name):
