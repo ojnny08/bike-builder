@@ -75,7 +75,7 @@ const HomePage = () => {
             <section className="home-hero">
                 <div className="home-hero-text">
                     <h1 className="home-title">
-                        Build & Share your Bike With Others
+                        Build & Share your Bikes
                     </h1>
                     <div className="home-cta-row">
                         <Link to="/builds/new" className="home-btn home-btn-primary">

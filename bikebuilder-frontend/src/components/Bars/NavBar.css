@@ -174,7 +174,6 @@
     display: flex;
     align-items: stretch;
     height: 100%;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 .nav-links a {
@@ -185,6 +184,7 @@
     text-decoration: none;
     padding: 0 24px;
     font-size: 1rem;
+    font-family: 'Jost', sans-serif;
     font-weight: 800;
     letter-spacing: 0.03em;
     transition: color var(--dur-fast);

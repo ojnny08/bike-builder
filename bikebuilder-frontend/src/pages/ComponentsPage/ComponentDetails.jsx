@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchComponentDetails } from "../../services/componentService";
+import VariantOptions from "../../components/BikeComponents/VariantOptions";
 import "./ComponentDetails.css";
 
 const ComponentDetails = () => {
@@ -9,8 +10,10 @@ const ComponentDetails = () => {
     const [comp, setComp] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const [resolved, setResolved] = useState(null);
 
     useEffect(() => {
+        setResolved(null);
         setLoading(true);
         setError(false);
         fetchComponentDetails(id)
@@ -39,9 +42,11 @@ const ComponentDetails = () => {
                     <p className="detail-name">{comp.name}</p>
 
                     <div className="detail-meta">
-                        <span className="detail-price">${comp.price}</span>
+                        <span className="detail-price">${resolved ? resolved.price : comp.price}</span>
                         <span className="detail-weight">{comp.weight_grams}g</span>
                     </div>
+
+                    <VariantOptions options={comp.options} onResolve={setResolved} />
 
                     {comp.import_url && (
                         <a className="detail-link" href={comp.import_url} target="_blank" rel="noreferrer">

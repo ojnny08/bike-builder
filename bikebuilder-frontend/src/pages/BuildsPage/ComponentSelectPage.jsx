@@ -6,6 +6,7 @@ import { useComponentFilters } from "../../hooks/useComponentFilters";
 import FilterBar from "../../components/Filters/FilterBar";
 import BuilderNav from "./components/BuilderNav";
 import ComponentCard, { ComponentCardSkeleton } from "../../components/BikeComponents/ComponentCard";
+import VariantModal from "../../components/BikeComponents/VariantModal";
 import "./style/Builds.css";
 
 const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -28,24 +29,15 @@ const ComponentSelectPage = () => {
     const { query } = filters;
     const [components, setComponents] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    const { prerequisites = {} } = build.bikeType?.rules ?? {};
+    const [active, setActive] = useState(null);
 
     const selectedByCategory = Object.fromEntries(
         build.components.map(c => [c.component_type, c])
     );
     const currentSelectedId = selectedByCategory[category]?.id;
 
-    const getSelectedIds = () => {
-        const ids = {};
-        let current = category;
-        while (prerequisites[current]) {
-            const dep = prerequisites[current];
-            if (selectedByCategory[dep]) ids[`${dep}_id`] = selectedByCategory[dep].id;
-            current = dep;
-        }
-        return ids;
-    };
+    const getSelectedIds = () =>
+        Object.fromEntries(build.components.map(c => [`${c.component_type}_id`, c.id]));
 
     useEffect(() => {
         const load = async () => {
@@ -70,8 +62,12 @@ const ComponentSelectPage = () => {
         load();
     }, [category, query.search, query.brand, query.priceMin, query.priceMax]);
 
-    const handleSelect = (comp) => {
-        addComponent(comp);
+    const handleAdd = (comp, option) => {
+        addComponent({
+            ...comp,
+            selectedOption: option,
+            price: option ? option.price : comp.price,
+        });
         navigate("/builds/new");
     };
 
@@ -108,12 +104,19 @@ const ComponentSelectPage = () => {
                             key={comp.id}
                             comp={comp}
                             isSelected={comp.id === currentSelectedId}
-                            onSelect={handleSelect}
+                            onSelect={setActive}
                         />
                     ))}
                 </div>
             )}
         </div>
+        {active && (
+            <VariantModal
+                component={active}
+                onClose={() => setActive(null)}
+                onAdd={handleAdd}
+            />
+        )}
         </div>
     );
 };

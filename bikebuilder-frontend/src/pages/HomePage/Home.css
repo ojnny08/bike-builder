@@ -31,8 +31,8 @@
     justify-content: flex-start;
     align-items: center;
     font-size: clamp(2rem, 4vw, 4rem);
-    font-weight: 700;
-    font-family: Georgia;
+    font-weight: 600;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     line-height: 1;
     letter-spacing: -0.045em;
     color: var(--text);
