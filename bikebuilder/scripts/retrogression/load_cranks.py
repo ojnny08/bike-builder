@@ -10,7 +10,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bikebuilder.settings")
 django.setup()
 
 from apps.components.models import Crankset, CrankOption
-from apps.components.parsers import parse_spindle
+from apps.components.parsers import parse_spindle, parse_spindle_length
 
 CRANK_JSON = os.path.join(os.path.dirname(__file__), "extracted", "crankset.json")
 
@@ -60,7 +60,14 @@ def color_of(row, opts):
 
 
 def spindle_text(row):
-    return f"{row['name']} {' '.join(str(v) for v in row['specs'].values())} {row.get('description', '')}"
+    notes = " ".join(row.get("spec_notes", []))
+    return f"{row['name']} {' '.join(str(v) for v in row['specs'].values())} {notes} {row.get('description', '')}"
+
+
+def length_text(row):
+    specs = " ".join(str(v) for v in row["specs"].values())
+    notes = " ".join(row.get("spec_notes", []))
+    return f"{specs} {notes} {row['name']}"
 
 
 def collapse(rows):
@@ -76,6 +83,7 @@ def load():
     loaded, options, skipped = 0, 0, []
 
     for r in collapse(rows):
+        iface = parse_spindle(spindle_text(r))
         crank, _ = Crankset.objects.update_or_create(
             import_url=r["source_url"],
             defaults=dict(
@@ -86,7 +94,8 @@ def load():
                 weight_grams=int(r["weight_grams"]),
                 description=r["description"],
                 image_url=r["image_url"],
-                spindle_interface=parse_spindle(spindle_text(r)),
+                spindle_interface_mm=iface,
+                spindle_length_mm=parse_spindle_length(length_text(r), iface),
             ),
         )
 

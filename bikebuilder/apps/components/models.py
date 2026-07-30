@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.postgres.fields import ArrayField
 from django.core.validators import URLValidator
 from ..category.models import BikeType
 
@@ -13,6 +12,8 @@ class ComponentType(models.TextChoices):
     SPROCKET = "sprocket", "Sprocket"
     CHAIN = "chain", "Chain"
     WHEEL = "wheel", "Wheel"
+    WHEELSET = "wheelset", "Wheelset"
+    RIM = "rim", "Rim"
     TRACKHUB = "track_hub", "Track Hub"
     TIRE = "tire", "Tire"
     HANDLEBAR = "handlebar", "Handlebar"
@@ -74,9 +75,9 @@ class ComponentSubmission(models.Model):
         return self.url
 
 class ShellType(models.TextChoices):
-    THREADED_BSA = "threaded_bsa", "Threaded (BSA/English)"
-    THREADED_ITA = "threaded_ita", "Threaded (Italian)"
-    T47 = "t47", "T47 Threaded"
+    BSA = "bsa", "BSA"
+    ITA = "ita", "Italian"
+    T47 = "t47", "T47"
     
     PRESS_FIT_86_92 = "pf86_92", "Press Fit (BB86/BB92)"
     PRESS_FIT_30 = "pf30", "PressFit 30"
@@ -87,21 +88,18 @@ class Frame(Components):
         MODERN = "modern", "Modern"
         VINTAGE = "vintage", "Vintage"
 
-    class RearAxleFit(models.TextChoices):
-        TRACK = 'track_120', 'Track 120mm' 
-        QR_130 = 'qr_130', 'Quick Release 130mm' # older road/fixed 
-        QR_135 = 'qr_135', 'Quick Release 135mm'
-        THRU_142 = 'thru_142', 'Thru Axle 142mm'
-        THRU_148 = 'thur_148', 'Thru Axle 148mm'
+    class ForkType(models.TextChoices):
+        TAPERED = "tapered", "Tapered"
+        STRAIGHT = "straight", "Straight"
 
+    fork_type = models.CharField(max_length=10, choices=ForkType.choices, null=True, blank=True )
     bb_type = models.CharField(max_length=20, choices=ShellType.choices, null=True, blank=True)
     bb_width_mm = models.SmallIntegerField(null=True, blank=True)
     fork_brake_drilled = models.BooleanField(default=False)
     frame_brake_drilled = models.BooleanField(default=False)
-    rear_axle_standard = models.CharField(max_length=20, choices=RearAxleFit.choices)
-    seat_tube = models.PositiveSmallIntegerField(null=True, blank=True)
+    seatpost_size = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
     max_tire_clearance_mm = models.PositiveSmallIntegerField()
-
+ 
 
 class FrameOption(models.Model):
     frame = models.ForeignKey(Frame, on_delete=models.CASCADE, related_name="sizes")
@@ -113,10 +111,7 @@ class FrameOption(models.Model):
     def __str__(self):
         return f"{self.frame} — {self.size}"
 
-
-class BottomBracket(Components):
-
-    class SpindleInterface(models.TextChoices):
+class SpindleInterface(models.TextChoices):
         # Square Taper
         SQUARE_TAPER_ISO = "square_taper_iso", "Square Taper ISO"
         SQUARE_TAPER_JIS = "square_taper_jis", "Square Taper JIS"
@@ -124,39 +119,39 @@ class BottomBracket(Components):
         OCTALINK = "octalink", "Shimano Octalink"
         ISIS = "isis", "ISIS Drive"
         
-        MM_24 = "24mm", "24mm (Shimano Hollowtech II)"
+        HOLLOWTECH_24 = "24mm", "24mm (Shimano Hollowtech II)"
         GXP = "gxp", "SRAM GXP (24mm/22mm stepped)"
         MM_30 = "30mm", "30mm (BB30/386EVO)"
         DUB = "dub", "SRAM DUB (28.99mm)"
 
-    bb_type = models.CharField(max_length=20, choices=ShellType.choices,)
-    spindle_interface = models.CharField(max_length=20, choices=SpindleInterface.choices)
-    bb_width_mm= models.PositiveSmallIntegerField()
-    colors = ArrayField(models.CharField(max_length=40), default=list, blank=True)
+class BottomBracket(Components):
+    spindle_interface_mm = models.CharField(max_length=20, choices=SpindleInterface.choices)
+    spindle_length_mm = models.PositiveSmallIntegerField(null=True, blank=True)
+    bb_width_mm= models.PositiveSmallIntegerField(null=True, blank=True)
+
+
+class BottomBracketOption(models.Model):
+    bottom_bracket = models.ForeignKey(BottomBracket, on_delete=models.CASCADE, related_name="options")
+    bb_type = models.CharField(max_length=20, choices=ShellType.choices)
+    color = models.CharField(max_length=40, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        ordering = ["bottom_bracket", "color", "bb_type"]
+
+    def __str__(self):
+        return f"{self.bottom_bracket} — {self.color} {self.bb_type}".strip()
 
 
 class Crankset(Components):
-    class SpindleInterface(models.TextChoices):
-        # Square Taper
-        SQUARE_TAPER_ISO = "square_taper_iso", "Square Taper ISO"
-        SQUARE_TAPER_JIS = "square_taper_jis", "Square Taper JIS"
-        
-        OCTALINK = "octalink", "Shimano Octalink"
-        ISIS = "isis", "ISIS Drive"
-        
-        MM_24 = "24mm", "24mm (Shimano Hollowtech II)"
-        GXP = "gxp", "SRAM GXP (24mm/22mm stepped)"
-        MM_30 = "30mm", "30mm (BB30/386EVO)"
-        DUB = "dub", "SRAM DUB (28.99mm)"
-    
     class ArmLength(models.TextChoices):
         ARM_160mm = "160mm", "160mm"
         ARM_165mm = "165mm", "165mm"
         ARM_1675mm = "167.5mm", "167.5mm"
         ARM_170mm = "170mm", "170mm"
 
-    spindle_interface = models.CharField(max_length=20, choices=SpindleInterface.choices)
-
+    spindle_interface_mm = models.CharField(max_length=20, choices=SpindleInterface.choices)
+    spindle_length_mm = models.PositiveSmallIntegerField(null=True, blank=True)
 
 class CrankOption(models.Model):
     crankset = models.ForeignKey(Crankset, on_delete=models.CASCADE, related_name="options")
@@ -166,45 +161,88 @@ class CrankOption(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
-        ordering = ["crankset", "color", "length_mm"]
+        ordering = ["crankset", "color", "chainring_teeth", "length_mm"]
 
     def __str__(self):
         return f"{self.crankset} — {self.color} {self.length_mm}".strip()
 
+class WheelSize(models.TextChoices):
+    TWENTY_SIX = "26", '26"'
+    TWENTY_SEVEN_FIVE = "27.5", '27.5"'
+    TWENTY_NINE = "29", '29"'
+    SEVEN_HUNDRED = "700c", "700c"
+    SIX_FIFTY = "650b", "650b"
 
-class Wheel(Components):
-    class WheelSize(models.TextChoices):
-        TWENTY_SIX = "26", '26"'
-        TWENTY_SEVEN_FIVE = "27.5", '27.5"'
-        TWENTY_NINE = "29", '29"'
-        SEVEN_HUNDRED = "700c", "700c"
-        SIX_FIFTY = "650b", "650b"
+class HubPosition(models.TextChoices):
+    FRONT = "front", "Front"
+    REAR = "rear", "Rear"
 
-    class Position(models.TextChoices):
-        FRONT = "front", "Front"
-        REAR = "rear", "Rear"
+class HubSpacing(models.TextChoices):
+    FRONT_100MM = "100mm", "100mm"
+    REAR_110MM = "110mm", "110mm"
+    REAR_120MM = "120mm", "120mm"
+    REAR_130MM = "130mm", "130mm"
 
-    class AxleStandard(models.TextChoices):
-        TRACK = "track_120", "Track 120mm"
-        QR_FRONT = "qr_100", "Quick Release Front (100mm)"
-        QR_130 = "qr_130", "Quick Release (130mm)"   
-        QR_135 = "qr_135", "Quick Release (135mm)"    
-        THRU_FRONT_100 = "thru_100", "Thru Axle Front (100mm)"
-        THRU_FRONT_110 = "thru_110", "Thru Axle Front Boost (110mm)"
-        THRU_142 = "thru_142", "Thru Axle (142mm)"    
-        THRU_148 = "thru_148", "Thru Axle Boost (148mm)"
-    
+class CogInterface(models.TextChoices):
+    FIXED_SINGLE = "fixed_single", "Single-Sided Fixed"
+    FLIP_FLOP_FIX_FREE = "flip_flop_fix_free", "Flip-Flop (Fixed / Freewheel)"
+    FLIP_FLOP_FIX_FIX = "flip_flop_fix_fix", "Flip-Flop (Fixed / Fixed)"
+    SPLINED_TRACK = "splined", "Splined Track (e.g., Miche / Shimano)"
+
+class ThreadStandard(models.TextChoices):
+    ISO_ENGLISH = "iso_english", "Standard English/ISO (1.37 x 24 TPI)"
+    NJS_JIS = "njs_jis", "NJS/JIS (Keirin standard)"
+    CAMPAGNOLO = "campagnolo", "Campagnolo Threading"
+    FRENCH = "french", "Vintage French Threading"
+
+
+class WheelSpecs(models.Model):
+    wheel_size = models.CharField(max_length=10, choices=WheelSize.choices)
+    max_tire_width_mm = models.PositiveSmallIntegerField()
+
+    class Meta:
+        abstract = True
+
+class Rim(Components, WheelSpecs):
+    hole_count = models.PositiveSmallIntegerField(null=True, blank=True)
+
+class HubSpecs(models.Model):
+    position = models.CharField(max_length=10, choices=HubPosition.choices, blank=True, default="")
+    hub_spacing = models.CharField(max_length=6, choices=HubSpacing.choices, blank=True, default="")
+    threading = models.CharField(max_length=25, choices=ThreadStandard.choices, blank=True, default="")
+
+    class Meta:
+        abstract = True
+
+class TrackHub(Components, HubSpecs):
+    pass
+
+class HubOption(models.Model):
+    track_hub = models.ForeignKey(TrackHub, on_delete=models.CASCADE, related_name="options")
+    color = models.CharField(max_length=40, blank=True)
+    hole_count = models.PositiveSmallIntegerField()
+    cog_interface = models.CharField(max_length=20, choices=CogInterface.choices, blank=True, default="")
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        ordering = ["track_hub", "color", "hole_count", "cog_interface"]
+
+    def __str__(self):
+        return f"{self.track_hub} — {self.color} {self.hole_count}h {self.cog_interface}".strip()
+
+class SingleWheel(Components, WheelSpecs, HubSpecs):
     class HubType(models.TextChoices):
         THREADED = "threaded", "Threaded"
         SPLINE = "spline", "Spline"
-    
 
-    wheel_size = models.CharField(max_length=10, choices=WheelSize.choices)
-    position = models.CharField(max_length=10, choices=Position.choices)
-    axle_standard = models.CharField(max_length=20, choices=AxleStandard.choices)
     hub_type = models.CharField(max_length=10, choices=HubType.choices, default="threaded")
-    max_tire_width_mm = models.PositiveSmallIntegerField()
-    tubeless_ready = models.BooleanField(default=False)
+    cog_interface = models.CharField(max_length=20, choices=CogInterface.choices, blank=True, default="")
+
+class WheelSet(Components, WheelSpecs):
+    rim_name = models.CharField(max_length=200, blank=True)
+    hub_name = models.CharField(max_length=200, blank=True)
+    rear_hub_spacing = models.CharField(max_length=6, choices=HubSpacing.choices, blank=True)
+    cog_interface = models.CharField(max_length=20, choices=CogInterface.choices, blank=True)
 
 class Sprocket(Components):
     class MountType(models.TextChoices):
@@ -311,30 +349,6 @@ class Seatpost(Components):
     post_type = models.CharField(max_length=20, choices=PostType.choices, default=PostType.STANDARD)
 
 
-class TrackHub(Components):
-    class HubPosition(models.TextChoices):
-        FRONT = "front", "Front Hub"
-        REAR = "rear", "Rear Hub"
 
-    class AxleType(models.TextChoices):
-        BOLT_ON_M9 = "bolt_on_m9", "Bolt-On M9 (Standard Front Axle)"
-        BOLT_ON_M10 = "bolt_on_m10", "Bolt-On M10 (Standard Rear Axle)"
-        FEMALE_BOLT = "female_bolt", "Female Allen Bolt System"
 
-    class HubSpacing(models.TextChoices):
-        FRONT_100MM = "100mm", "100mm (Standard Front)"
-        REAR_120MM = "120mm", "120mm (Standard Track Rear)"
-        REAR_110MM = "110mm", "110mm (Vintage NJS / Keirin Rear)"
-        REAR_130MM = "130mm", "130mm (Single-Speed Conversion Rear)"
 
-    class CogInterface(models.TextChoices):
-        FIXED_SINGLE = "fixed_single", "Single-Sided Fixed"
-        FLIP_FLOP_FIX_FREE = "flip_flop_fix_free", "Flip-Flop (Fixed / Freewheel)"
-        FLIP_FLOP_FIX_FIX = "flip_flop_fix_fix", "Flip-Flop (Fixed / Fixed)"
-        SPLINED_TRACK = "splined", "Splined Track (e.g., Miche / Shimano)"
-
-    class ThreadStandard(models.TextChoices):
-        ISO_ENGLISH = "iso_english", "Standard English/ISO (1.37 x 24 TPI)"
-        NJS_JIS = "njs_jis", "NJS/JIS (Keirin standard)"
-        CAMPAGNOLO = "campagnolo", "Campagnolo Threading"
-        FRENCH = "french", "Vintage French Threading"

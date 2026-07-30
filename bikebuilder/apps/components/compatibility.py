@@ -1,11 +1,10 @@
 from .models import (
-    Components, BottomBracket, Crankset, Wheel, Tire, Handlebar, Stem, Sprocket, Chain
+    Components, BottomBracket, Crankset, Tire, Handlebar, Stem, Sprocket, Chain
 )
 
 RULES = {
-    'bottom_bracket': (BottomBracket, 'frame',        lambda f:  {'bb_type': f.bb_type, 'bb_width_mm': f.bb_width_mm}),
-    'crankset':       (Crankset,      'bottom_bracket', lambda bb: {'spindle_interface': bb.spindle_interface}),
-    'wheel':          (Wheel,         'frame',          lambda f:  {'axle_standard': f.rear_axle_standard}),
+    'bottom_bracket': (BottomBracket, 'frame',        lambda f:  {'options__bb_type': f.bb_type, 'bb_width_mm': f.bb_width_mm}),
+    'crankset':       (Crankset,      'bottom_bracket', lambda bb: {'spindle_interface_mm': bb.spindle_interface_mm}),
     'handlebar':      (Handlebar,     'stem',           lambda s:  {'clamp_diameter_mm': s.bar_clamp_diameter_mm}),
     'sprocket':       (Sprocket,      'wheel',          lambda w:  {'mount_type': w.hub_type}),
     'chain':          (Chain,         'sprocket',       lambda s:  {'chain_width': s.sprocket_width}),
@@ -22,7 +21,9 @@ def get_compatible_queryset(category, selected):
 
     model, dep_key, get_filters = rule
     dep = selected.get(dep_key)
-    return model.objects.filter(**get_filters(dep)) if dep else model.objects.all()
+    if not dep:
+        return model.objects.all()
+    return model.objects.filter(**get_filters(dep)).distinct()
 
 
 def _filter_tires(wheel, frame):

@@ -1,26 +1,7 @@
 import re
+from decimal import Decimal
 
-from .models import Frame, ShellType, Crankset, BottomBracket
-
-AXLE_BY_WIDTH = {
-    120: Frame.RearAxleFit.TRACK,
-    130: Frame.RearAxleFit.QR_130,
-    135: Frame.RearAxleFit.QR_135,
-    142: Frame.RearAxleFit.THRU_142,
-    148: Frame.RearAxleFit.THRU_148,
-}
-
-
-def parse_axle_spacing(raw):
-    nums = re.findall(r"\d{3}", raw or "")
-    if not nums:
-        raise ValueError(f"no rear spacing in {raw!r}")
-
-    width = int(nums[0])
-    if width not in AXLE_BY_WIDTH:
-        raise ValueError(f"unknown rear spacing {width} in {raw!r}")
-
-    return AXLE_BY_WIDTH[width]
+from .models import Frame, ShellType, SpindleInterface
 
 
 def parse_tire_clearance(raw):
@@ -30,12 +11,13 @@ def parse_tire_clearance(raw):
 
     return min(nums)
 
+
 SHELL_ALIASES = {
-    "bsa": ShellType.THREADED_BSA,
-    "english": ShellType.THREADED_BSA,
-    "iso": ShellType.THREADED_BSA,
-    "italian": ShellType.THREADED_ITA,
-    "ita": ShellType.THREADED_ITA,
+    "bsa": ShellType.BSA,
+    "english": ShellType.BSA,
+    "iso": ShellType.BSA,
+    "italian": ShellType.ITA,
+    "ita": ShellType.ITA,
     "t47": ShellType.T47,
     "bb86": ShellType.PRESS_FIT_86_92,
     "bb92": ShellType.PRESS_FIT_86_92,
@@ -45,7 +27,7 @@ SHELL_ALIASES = {
     "bb30": ShellType.BB30,
 }
 
-WIDTH_RE = re.compile(r"(?<![a-z0-9])(\d{2,3})(?:\s*\d{2,3})?\s*mm")
+WIDTH_RE = re.compile(r"(?<![a-z0-9])(\d{2})(?:\s*\d{2})?\s*mm")
 
 
 def parse_bb_shell(raw):
@@ -62,47 +44,59 @@ def parse_bb_shell(raw):
     return shell, int(width.group(1))
 
 
+def parse_fork_type(raw):
+    t = (raw or "").lower()
+    if "1.5" in t or "tapered" in t:
+        return Frame.ForkType.TAPERED
+    return Frame.ForkType.STRAIGHT
+
+
+SEATPOST_SIZES = {"27.2", "30.9", "31.6"}
+
+
+def parse_seatpost_size(raw):
+    m = next((s for s in re.findall(r"\d{2}(?:\.\d)?", raw or "") if s in SEATPOST_SIZES), None)
+    return Decimal(m) if m else None
+
+
 SPINDLE_ALIASES = [
-    ("octalink", Crankset.SpindleInterface.OCTALINK),
-    ("isis", Crankset.SpindleInterface.ISIS),
-    ("hollowtech", Crankset.SpindleInterface.MM_24),
-    ("gxp", Crankset.SpindleInterface.GXP),
-    ("dub", Crankset.SpindleInterface.DUB),
-    ("386evo", Crankset.SpindleInterface.MM_30),
-    ("bb30", Crankset.SpindleInterface.MM_30),
-    ("24mm", Crankset.SpindleInterface.MM_24),
+    ("octalink", SpindleInterface.OCTALINK),
+    ("isis", SpindleInterface.ISIS),
+    ("hollowtech", SpindleInterface.HOLLOWTECH_24),
+    ("gxp", SpindleInterface.GXP),
+    ("dub", SpindleInterface.DUB),
+    ("386", SpindleInterface.MM_30),
+    ("bb30", SpindleInterface.MM_30),
+    ("30mm", SpindleInterface.MM_30),
+    ("24mm", SpindleInterface.HOLLOWTECH_24),
 ]
 
 
-def parse_spindle(text):
+def _spindle(text, default):
     t = (text or "").lower()
 
     if "square" in t and "taper" in t:
         if "iso" in t:
-            return Crankset.SpindleInterface.SQUARE_TAPER_ISO
-        return Crankset.SpindleInterface.SQUARE_TAPER_JIS
+            return SpindleInterface.SQUARE_TAPER_ISO
+        return SpindleInterface.SQUARE_TAPER_JIS
 
-    return next(
-        (iface for key, iface in SPINDLE_ALIASES if key in t),
-        Crankset.SpindleInterface.SQUARE_TAPER_JIS,
-    )
+    return next((iface for key, iface in SPINDLE_ALIASES if key in t), default)
 
 
-def parse_bb_spindle(category, name):
-    cat = (category or "").lower()
-    n = (name or "").lower()
+def parse_spindle(text):
+    return _spindle(text, SpindleInterface.SQUARE_TAPER_JIS)
 
-    if "octalink" in cat:
-        return BottomBracket.SpindleInterface.OCTALINK
 
-    if "square taper" in cat:
-        return BottomBracket.SpindleInterface.SQUARE_TAPER_JIS
+def parse_bb_spindle(text):
+    return _spindle(text, SpindleInterface.HOLLOWTECH_24)
 
-    if "gxp" in n:
-        return BottomBracket.SpindleInterface.GXP
-    if "dub" in n:
-        return BottomBracket.SpindleInterface.DUB
-    if "bb30" in n or "386" in n or "30mm" in n:
-        return BottomBracket.SpindleInterface.MM_30
 
-    return BottomBracket.SpindleInterface.MM_24
+TAPER = {SpindleInterface.SQUARE_TAPER_ISO, SpindleInterface.SQUARE_TAPER_JIS}
+
+
+def parse_spindle_length(text, interface):
+    if interface not in TAPER:
+        return None
+
+    m = re.search(r"(1[0-1]\d)\s*mm", text or "")
+    return int(m.group(1)) if m else None

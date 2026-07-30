@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from urllib.parse import urlparse
-from .models import Components, ComponentType, ComponentSubmission
+from .models import (
+    Components, ComponentType, ComponentSubmission,
+    Crankset, CrankOption, BottomBracket, BottomBracketOption,
+    TrackHub, HubOption,
+)
 
 ALLOWED_HOSTS = {
     # --- Major online bike retailers ---
@@ -103,6 +107,51 @@ class ComponentsSerializer(serializers.ModelSerializer):
         if not any(host == d or host.endswith("." + d) for d in ALLOWED_HOSTS):
             raise serializers.ValidationError("Link must point to an approved retailer.")
         return value
+
+BASE_FIELDS = ['id', 'component_type', 'name', 'brand', 'weight_grams', 'price', 'image_url', 'import_url']
+
+
+class CrankOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CrankOption
+        fields = ['id', 'color', 'length_mm', 'chainring_teeth', 'price']
+
+
+class CranksetSerializer(serializers.ModelSerializer):
+    options = CrankOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Crankset
+        fields = BASE_FIELDS + ['spindle_interface_mm', 'spindle_length_mm', 'options']
+
+
+class BottomBracketOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BottomBracketOption
+        fields = ['id', 'bb_type', 'color', 'price']
+
+
+class BottomBracketSerializer(serializers.ModelSerializer):
+    options = BottomBracketOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BottomBracket
+        fields = BASE_FIELDS + ['bb_width_mm', 'spindle_interface_mm', 'spindle_length_mm', 'options']
+
+
+class HubOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HubOption
+        fields = ['id', 'color', 'hole_count', 'cog_interface', 'price']
+
+
+class TrackHubSerializer(serializers.ModelSerializer):
+    options = HubOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = TrackHub
+        fields = BASE_FIELDS + ['position', 'hub_spacing', 'threading', 'options']
+
 
 def _is_trusted(url):
     host = (urlparse(url).hostname or "").lower()

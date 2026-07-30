@@ -10,7 +10,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bikebuilder.settings")
 django.setup()
 
 from apps.components.models import Frame, FrameOption
-from apps.components.parsers import parse_axle_spacing, parse_bb_shell
+from apps.components.parsers import parse_bb_shell, parse_fork_type, parse_seatpost_size
 
 FRAME_JSON = os.path.join(os.path.dirname(__file__), "extracted", "frame.json")
 
@@ -20,10 +20,16 @@ def strip_size(name):
     return m.group(1) if m else name
 
 
-def tire_clearance(specs):
+def notes_matching(notes, *keywords):
+    return " ".join(n for n in notes if any(k in n.lower() for k in keywords))
+
+
+def tire_clearance(specs, notes):
     text = " ".join(v for k, v in specs.items() if "tire" in k.lower() or "clear" in k.lower())
-    nums = [int(n) for n in re.findall(r"(\d{2,3})\s*mm", text)]
-    return min(nums) if nums else None
+    nums = re.findall(r"(\d{2,3})\s*mm", text)
+    if not nums:
+        nums = re.findall(r"(\d{2,3})\s*mm", notes_matching(notes, "clear", "tire"))
+    return min(int(n) for n in nums) if nums else None
 
 
 def collapse(rows):
@@ -40,18 +46,14 @@ def load():
 
     for r in collapse(rows):
         specs = r["specs"]
-        clearance = tire_clearance(specs)
-        try:
-            rear_axle = parse_axle_spacing(specs.get("frame/fork spacing"))
-        except ValueError as e:
-            skipped.append((r["name"], str(e)))
-            continue
+        notes = r.get("spec_notes", [])
+        clearance = tire_clearance(specs, notes)
         if clearance is None:
             skipped.append((r["name"], "no tire clearance"))
             continue
 
         try:
-            bb_type, bb_width = parse_bb_shell(specs.get("BB"))
+            bb_type, bb_width = parse_bb_shell(specs.get("BB") or notes_matching(notes, "bsa", "english", "italian", "threaded", "bracket shell"))
         except ValueError:
             bb_type, bb_width = None, None
 
@@ -65,7 +67,8 @@ def load():
                 weight_grams=int(r["weight_grams"]),
                 description=r["description"],
                 image_url=r["image_url"],
-                rear_axle_standard=rear_axle,
+                fork_type=parse_fork_type(specs.get("fork") or notes_matching(notes, "fork", "steerer", "tapered")),
+                seatpost_size=parse_seatpost_size(specs.get("seatpost size") or notes_matching(notes, "seatpost", "seat post")),
                 max_tire_clearance_mm=clearance,
                 bb_type=bb_type,
                 bb_width_mm=bb_width,

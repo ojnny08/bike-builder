@@ -6,7 +6,7 @@ from .parsers import parse_bb_shell
 
 class ParseBBShellTests(SimpleTestCase):
     def test_splits_type_and_width(self):
-        self.assertEqual(parse_bb_shell("BSA 68mm"), (ShellType.THREADED_BSA, 68))
+        self.assertEqual(parse_bb_shell("BSA 68mm"), (ShellType.BSA, 68))
 
     def test_aliases_map_to_same_type(self):
         self.assertEqual(
@@ -15,11 +15,11 @@ class ParseBBShellTests(SimpleTestCase):
         )
 
     def test_italian_and_t47(self):
-        self.assertEqual(parse_bb_shell("Italian 70mm"), (ShellType.THREADED_ITA, 70))
+        self.assertEqual(parse_bb_shell("Italian 70mm"), (ShellType.ITA, 70))
         self.assertEqual(parse_bb_shell("T47 86mm"), (ShellType.T47, 86))
 
     def test_range_takes_first_width(self):
-        self.assertEqual(parse_bb_shell("BSA 68/73mm"), (ShellType.THREADED_BSA, 68))
+        self.assertEqual(parse_bb_shell("BSA 68/73mm"), (ShellType.BSA, 68))
 
     def test_unknown_shell_raises(self):
         with self.assertRaises(ValueError):
