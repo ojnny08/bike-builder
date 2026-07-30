@@ -8,8 +8,8 @@ class BikeType(models.Model):
 
       RULES = {
           "fixed": {
-              "required": ["frame", "bottom_bracket", "crankset", "wheel", "hubs", "Wheelset" "sprocket", "chain", "tire", "stem", "handlebar", "seatpost", "saddle"],
-              "optional": ["brake"],
+              "required": ["frame", "bottom_bracket", "crankset", "wheel", "sprocket", "chain", "tire", "stem", "handlebar", "seatpost", "saddle"],
+              "optional": ["brake", "wheelset"],
               "prerequisites": {
                   "bottom_bracket": "frame",
                   "crankset":       "bottom_bracket",

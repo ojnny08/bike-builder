@@ -61,6 +61,14 @@ const icons = {
             </g>
         </>
     ),
+    wheelset: (
+        <g fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+            <circle cx="20" cy="32" r="15"/>
+            <circle cx="20" cy="32" r="3.5"/>
+            <circle cx="44" cy="32" r="15"/>
+            <circle cx="44" cy="32" r="3.5"/>
+        </g>
+    ),
     track_hub: (
         <>
             <path fillRule="evenodd" d="M20 26L44 26L44 38L20 38Z"/>

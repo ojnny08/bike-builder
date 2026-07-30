@@ -11,7 +11,7 @@ const money = n => `$${n.toFixed(2)}`;
 
 const ASSEMBLY_ORDER = [
     "frame", "bottom_bracket", "crankset", "chainring", "sprocket",
-    "chain", "wheel", "tire", "seatpost", "saddle", "stem", "brake",
+    "chain", "wheel", "wheelset", "tire", "seatpost", "saddle", "stem", "brake",
     "handlebar", "pedals",
 ];
 
