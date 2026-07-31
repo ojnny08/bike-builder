@@ -7,13 +7,15 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.core.cache import cache
 from .serializer import (
     ComponentsSerializer, ComponentSubmissionSerializer,
-    CranksetSerializer, BottomBracketSerializer, TrackHubSerializer,
+    CranksetSerializer, CrankArmSerializer, ChainringSerializer, BottomBracketSerializer, TrackHubSerializer,
 )
-from .models import Components, ComponentType, Frame, BottomBracket, Crankset, SingleWheel, Stem, Sprocket, TrackHub
+from .models import Components, ComponentType, Frame, BottomBracket, Crankset, CrankArm, Chainring, SingleWheel, Stem, Sprocket, TrackHub
 from .compatibility import get_compatible_queryset
 
 TYPE_MODELS = {
     'crankset': (Crankset, CranksetSerializer),
+    'crank_arm': (CrankArm, CrankArmSerializer),
+    'chainring': (Chainring, ChainringSerializer),
     'bottom_bracket': (BottomBracket, BottomBracketSerializer),
     'track_hub': (TrackHub, TrackHubSerializer),
 }
@@ -122,6 +124,7 @@ class ComponentsViewSet(ViewSet):
             'frame': _fetch(Frame, request, 'frame_id'),
             'bottom_bracket': _fetch(BottomBracket, request, 'bottom_bracket_id'),
             'crankset': _fetch(Crankset, request, 'crankset_id'),
+            'crank_arm': _fetch(CrankArm, request, 'crank_arm_id'),
             'wheel': _fetch(SingleWheel, request, 'wheel_id'),
             'stem': _fetch(Stem, request, 'stem_id'),
             'sprocket': _fetch(Sprocket, request, 'sprocket_id'),

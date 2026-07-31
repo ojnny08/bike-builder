@@ -2,8 +2,8 @@ from rest_framework import serializers
 from urllib.parse import urlparse
 from .models import (
     Components, ComponentType, ComponentSubmission,
-    Crankset, CrankOption, BottomBracket, BottomBracketOption,
-    TrackHub, HubOption,
+    Crankset, CrankOption, CrankArm, CrankArmOption, Chainring, ChainringOption,
+    BottomBracket, BottomBracketOption, TrackHub, HubOption,
 )
 
 ALLOWED_HOSTS = {
@@ -123,6 +123,34 @@ class CranksetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Crankset
         fields = BASE_FIELDS + ['spindle_interface_mm', 'spindle_length_mm', 'options']
+
+
+class CrankArmOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CrankArmOption
+        fields = ['id', 'color', 'length_mm', 'price']
+
+
+class CrankArmSerializer(serializers.ModelSerializer):
+    options = CrankArmOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = CrankArm
+        fields = BASE_FIELDS + ['spindle_interface_mm', 'spindle_length_mm', 'options']
+
+
+class ChainringOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChainringOption
+        fields = ['id', 'color', 'chainring_teeth', 'price']
+
+
+class ChainringSerializer(serializers.ModelSerializer):
+    options = ChainringOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Chainring
+        fields = BASE_FIELDS + ['bcd', 'options']
 
 
 class BottomBracketOptionSerializer(serializers.ModelSerializer):

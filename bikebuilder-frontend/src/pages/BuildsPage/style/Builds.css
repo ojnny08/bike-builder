@@ -449,6 +449,27 @@
 .bs-card-add:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-ring); }
 .bs-card.is-filled .bs-card-add { color: var(--accent); }
 
+.bs-mode-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+.bs-mode {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+.bs-mode:hover { border-color: var(--accent); color: var(--text); }
+.bs-mode.is-active { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.bs-mode:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-ring); }
+
 .bs-panel-footer {
     flex-shrink: 0;
     display: flex;
@@ -506,6 +527,42 @@
     min-height: calc(100vh - 94px); /* viewport − page bottom padding − builder nav */
     background: var(--bg);
 }
+
+.cs-group-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+.cs-group-main { min-width: 0; }
+
+.cs-side {
+    position: sticky;
+    top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.cs-side-title { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
+.cs-side-list { display: flex; flex-direction: column; gap: 8px; list-style: none; padding: 0; margin: 0; }
+.cs-side-part {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--border-raduis-value);
+    background: var(--surface);
+    cursor: pointer;
+}
+.cs-side-part:hover:not(:disabled) { border-color: var(--accent); }
+.cs-side-part.is-active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+.cs-side-part.is-locked { opacity: 0.5; cursor: not-allowed; }
+.cs-side-part-name { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-secondary); }
+.cs-side-part-val { font-size: 0.95rem; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cs-side-done { margin-top: 8px; }
 
 .cs-head { display: flex; align-items: center; gap: 24px; margin-bottom: 24px; }
 .cs-head-text { display: flex; flex-direction: column; gap: 2px; }

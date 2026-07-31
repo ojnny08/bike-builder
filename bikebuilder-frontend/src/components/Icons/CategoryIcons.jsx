@@ -131,6 +131,9 @@ const icons = {
     ),
 };
 
+icons.crank = icons.crankset;
+icons.wheels = icons.wheel;
+
 const generic = (
     <g fill="none" stroke="currentColor" strokeWidth="3.6" strokeLinecap="round">
         <circle cx="32" cy="32" r="18"/>

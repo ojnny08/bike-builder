@@ -6,17 +6,32 @@ class BikeType(models.Model):
           ROAD_GRAVEL = "road-gravel", "Road & Gravel"
           MOUNTAIN    = "mountain",    "Mountain"
 
-      RULES = {
+      RULES = { 
           "fixed": {
-              "required": ["frame", "bottom_bracket", "crankset", "wheel", "sprocket", "chain", "tire", "stem", "handlebar", "seatpost", "saddle"],
-              "optional": ["brake", "wheelset"],
+              "required": ["frame", "bottom_bracket", "crank", "wheels", "sprocket",
+                           "chain", "tire", "stem", "handlebar", "seatpost", "saddle"],
+              "optional": ["brake"],
+              "groups": {
+                  "crank": {"label": "Crank", "default": "crankset", "modes": {
+                      "crankset": {"required": ["crankset"]},
+                      "custom":   {"required": ["crank_arm", "chainring"],
+                                   "prerequisites": {"chainring": "crank_arm"}},
+                  }},
+                  "wheels": {"label": "Wheels", "default": "wheelset", "modes": {
+                      "wheelset": {"required": ["wheelset"], "optional": ["track_hub"],
+                                   "prerequisites": {"track_hub": "wheelset"}},
+                      "single":   {"required": ["wheel"]},
+                      "custom":   {"required": ["rim", "track_hub"],
+                                   "prerequisites": {"track_hub": "rim"}},
+                  }},
+              },
               "prerequisites": {
                   "bottom_bracket": "frame",
-                  "crankset":       "bottom_bracket",
-                  "wheel":          "frame",
-                  "sprocket":       "wheel",
+                  "crank":          "bottom_bracket",
+                  "wheels":         "frame",
+                  "sprocket":       "wheels",
                   "chain":          "sprocket",
-                  "tire":           "wheel",
+                  "tire":           "wheels",
                   "handlebar":      "stem",
               },
           },

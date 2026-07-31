@@ -22,19 +22,34 @@ const PartGlyph = () => (
 
 
 const ComponentSelectPage = () => {
-    const { category } = useParams();
+    const { category: paramCategory, group, mode } = useParams();
     const { build, addComponent } = useBuild();
     const navigate = useNavigate();
+
+    const isGroup = !!group;
+    const activeMode = isGroup ? build.bikeType.rules.groups[group].modes[mode] : null;
+    const groupPrereqs = isGroup ? (activeMode.prerequisites || {}) : {};
+    const groupParts = isGroup ? [...(activeMode.required || []), ...(activeMode.optional || [])] : [];
+
+    const selectedByCategory = Object.fromEntries(
+        build.components.map(c => [c.component_type, c])
+    );
+
+    const [currentPart, setCurrentPart] = useState(() => groupParts[0]);
+    const category = isGroup ? currentPart : paramCategory;
+
     const filters = useComponentFilters({ fixedType: category });
     const { query } = filters;
     const [components, setComponents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [active, setActive] = useState(null);
 
-    const selectedByCategory = Object.fromEntries(
-        build.components.map(c => [c.component_type, c])
-    );
     const currentSelectedId = selectedByCategory[category]?.id;
+    const partLocked = part => {
+        const dep = groupPrereqs[part];
+        return dep && !selectedByCategory[dep];
+    };
+    const requiredFilled = isGroup && (activeMode.required || []).every(t => selectedByCategory[t]);
 
     const getSelectedIds = () =>
         Object.fromEntries(build.components.map(c => [`${c.component_type}_id`, c.id]));
@@ -68,7 +83,12 @@ const ComponentSelectPage = () => {
             selectedOption: option,
             price: option ? option.price : comp.price,
         });
-        navigate("/builds/new");
+        if (!isGroup) {
+            navigate("/builds/new");
+            return;
+        }
+        const next = (activeMode.required || []).find(t => t !== category && !selectedByCategory[t]);
+        if (next) setCurrentPart(next);
     };
 
     const compatCount = components.filter(c => c.compatible).length;
@@ -76,7 +96,45 @@ const ComponentSelectPage = () => {
     return (
         <div className="bb-wrapper">
         <BuilderNav onSave={() => navigate("/builds/new/review")} />
-        <div className="cs-page">
+        <div className={isGroup ? "cs-page cs-group-layout" : "cs-page"}>
+            {isGroup && (
+                <aside className="cs-side">
+                    <h2 className="cs-side-title">{build.bikeType.rules.groups[group].label}</h2>
+                    <ul className="cs-side-list">
+                        {groupParts.map(part => {
+                            const sel = selectedByCategory[part];
+                            const locked = partLocked(part);
+                            const optional = !(activeMode.required || []).includes(part);
+                            return (
+                                <li key={part}>
+                                    <button
+                                        type="button"
+                                        className={`cs-side-part${part === category ? ' is-active' : ''}${locked ? ' is-locked' : ''}`}
+                                        disabled={locked}
+                                        onClick={() => setCurrentPart(part)}
+                                    >
+                                        <span className="cs-side-part-name">
+                                            {formatCat(part)}{optional ? ' (optional)' : ''}
+                                        </span>
+                                        <span className="cs-side-part-val">
+                                            {sel ? sel.name : locked ? `Select ${formatCat(groupPrereqs[part])} first` : 'Not selected'}
+                                        </span>
+                                    </button>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                    <button
+                        type="button"
+                        className="bb-btn-primary cs-side-done"
+                        disabled={!requiredFilled}
+                        onClick={() => navigate("/builds/new")}
+                    >
+                        Back to builder
+                    </button>
+                </aside>
+            )}
+            <div className="cs-group-main">
             <header className="cs-head">
                 <div className="cs-head-text">
                     <h1 className="cs-head-title"> Select A {formatCat(category)}</h1>
@@ -109,6 +167,7 @@ const ComponentSelectPage = () => {
                     ))}
                 </div>
             )}
+            </div>
         </div>
         {active && (
             <VariantModal

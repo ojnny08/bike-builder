@@ -40,6 +40,7 @@ CATEGORIES = {
     "tire": ["Tires"],
     "track_hub": ["Hub Sets", "Rear Hubs", "Front Hubs"],
     "crankset": ["Cranksets"],
+    "crank_arm": ["Crank Arms"],
     "chainring": ["144mm BCD chainrings", "130mm BCD chainrings"],
     "sprocket": ["Cogs", "Freewheels"],
     "bottom_bracket": [
@@ -285,8 +286,11 @@ def main():
 
     for product in products:
         component_type = lookup.get(product.get("product_type"))
-        if component_type:
-            buckets[component_type] += build_records(product, component_type)
+        if not component_type:
+            continue
+        if component_type == "crank_arm" and "bottom bracket" in (product.get("title") or "").lower():
+            continue
+        buckets[component_type] += build_records(product, component_type)
 
     for component_type, records in buckets.items():
         out_path = os.path.join(OUT_DIR, f"{component_type}.json")
