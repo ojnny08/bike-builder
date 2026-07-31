@@ -142,7 +142,7 @@ class CrankArmSerializer(serializers.ModelSerializer):
 class ChainringOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChainringOption
-        fields = ['id', 'color', 'chainring_teeth', 'price']
+        fields = ['id', 'color', 'chainring_teeth', 'price', 'image_colour_url']
 
 
 class ChainringSerializer(serializers.ModelSerializer):

@@ -11,7 +11,7 @@ django.setup()
 
 from apps.components.models import Chainring, ChainringOption, BoltCircle
 
-RING_JSON = os.path.join(os.path.dirname(__file__), "chainring.json")
+RING_JSON = os.path.join(os.path.dirname(__file__), "extracted", "chainring.json")
 BCD_CHOICES = {b.value for b in BoltCircle}
 
 
@@ -79,6 +79,7 @@ def load():
                 color=colour_of(v),
                 chainring_teeth=teeth,
                 price=v["price"],
+                image_colour_url=v["image_url"] or "",
             )
             options += 1
         loaded += 1

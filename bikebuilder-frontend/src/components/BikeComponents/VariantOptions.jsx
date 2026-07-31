@@ -19,7 +19,7 @@ const isBlank = v => v === "" || v === null || v === undefined;
 export const attributeKeys = options => {
     if (!options?.length) return [];
     return Object.keys(options[0])
-        .filter(k => k !== "id" && k !== "price")
+        .filter(k => k !== "id" && k !== "price" && k !== "image_colour_url")
         .filter(k => options.some(o => !isBlank(o[k])));
 };
 

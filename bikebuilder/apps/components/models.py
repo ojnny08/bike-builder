@@ -116,6 +116,7 @@ class BottomBracketOption(models.Model):
     bottom_bracket = models.ForeignKey(BottomBracket, on_delete=models.CASCADE, related_name="options")
     bb_type = models.CharField(max_length=20, choices=ShellType.choices)
     color = models.CharField(max_length=40, blank=True)
+    image_colour_url = models.URLField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
@@ -148,6 +149,7 @@ class CrankOption(models.Model):
     length_mm = models.CharField(max_length=10, choices=ArmLength.choices)
     chainring_teeth = models.PositiveSmallIntegerField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    image_colour_url = models.URLField(blank=True)
 
     class Meta:
         ordering = ["crankset", "color", "chainring_teeth", "length_mm"]
@@ -165,6 +167,7 @@ class CrankArmOption(models.Model):
     color = models.CharField(max_length=40, blank=True)
     length_mm = models.CharField(max_length=10, choices=ArmLength.choices)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    image_colour_url = models.URLField(blank=True)
 
     class Meta:
         ordering = ["crank_arm", "color", "length_mm"]
@@ -180,6 +183,7 @@ class ChainringOption(models.Model):
     color = models.CharField(max_length=40, blank=True)
     chainring_teeth = models.PositiveSmallIntegerField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    image_colour_url = models.URLField(blank=True)
 
     class Meta:
         ordering = ["chainring", "chainring_teeth", "color"]
@@ -220,6 +224,7 @@ class ThreadStandard(models.TextChoices):
 class WheelSpecs(models.Model):
     wheel_size = models.CharField(max_length=10, choices=WheelSize.choices)
     max_tire_width_mm = models.PositiveSmallIntegerField()
+    
 
     class Meta:
         abstract = True
@@ -244,6 +249,7 @@ class HubOption(models.Model):
     hole_count = models.PositiveSmallIntegerField()
     cog_interface = models.CharField(max_length=20, choices=CogInterface.choices, blank=True, default="")
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    image_colour_url = models.URLField(blank=True)
 
     class Meta:
         ordering = ["track_hub", "color", "hole_count", "cog_interface"]

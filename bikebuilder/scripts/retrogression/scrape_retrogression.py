@@ -223,6 +223,10 @@ def variant_options(product, variant):
 
 
 def image_for(product, variant):
+    for img in product.get("images", []):
+        if variant.get("id") in (img.get("variant_ids") or []):
+            return img["src"]
+
     by_id = {img["id"]: img["src"] for img in product.get("images", [])}
     if variant.get("image_id") in by_id:
         return by_id[variant["image_id"]]

@@ -15,7 +15,7 @@ from apps.components.parsers import parse_spindle, parse_spindle_length
 BCD_CHOICES = {b.value for b in BoltCircle}
 
 CRANK_JSON = os.path.join(os.path.dirname(__file__), "extracted", "crankset.json")
-ARM_JSON = os.path.join(os.path.dirname(__file__), "crank_arm.json")
+ARM_JSON = os.path.join(os.path.dirname(__file__), "extracted", "crank_arm.json")
 
 ARM_CHOICES = {"160mm", "165mm", "167.5mm", "170mm", "172.5mm"}
 COLORS = ["black", "silver", "gold", "polished", "raw", "white", "red", "blue", "pink", "orange"]
@@ -76,7 +76,7 @@ def length_text(row):
 def collapse(rows):
     cranks = {}
     for row in rows:
-        crank = cranks.setdefault(row["image_url"], {**row, "variants": []})
+        crank = cranks.setdefault(row["source_url"], {**row, "variants": []})
         crank["variants"].append(row)
     return list(cranks.values())
 
@@ -129,6 +129,7 @@ def load():
                     color=color_of(v, opts),
                     length_mm=length,
                     price=v["price"],
+                    defaults={"image_colour_url": v["image_url"] or ""},
                 )
             else:
                 CrankOption.objects.get_or_create(
@@ -137,6 +138,7 @@ def load():
                     length_mm=length,
                     chainring_teeth=teeth_of(v, opts),
                     price=v["price"],
+                    defaults={"image_colour_url": v["image_url"] or ""},
                 )
             options += 1
 
@@ -194,6 +196,7 @@ def load_arms():
                 color=color_of(v, opts),
                 length_mm=length,
                 price=v["price"],
+                defaults={"image_colour_url": v["image_url"] or ""},
             )
             options += 1
         loaded += 1

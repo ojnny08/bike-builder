@@ -15,6 +15,7 @@ const VariantModal = ({ component, onClose, onAdd }) => {
     }, [onClose]);
 
     const price = resolved ? resolved.price : component.price;
+    const displayImage = resolved?.image_colour_url || component.image_url;
     const canAdd = !variantsExist || Boolean(resolved);
 
     const add = () => {
@@ -35,9 +36,9 @@ const VariantModal = ({ component, onClose, onAdd }) => {
                 <button type="button" className="modal-close" onClick={onClose} aria-label="Close">×</button>
 
                 <div className="variant-head">
-                    {component.image_url && (
+                    {displayImage && (
                         <div className="variant-media">
-                            <img src={component.image_url} alt={component.name} />
+                            <img src={displayImage} alt={component.name} />
                         </div>
                     )}
                     <div>
