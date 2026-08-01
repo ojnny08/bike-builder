@@ -63,7 +63,7 @@ const PublicBuilds = () => {
                     <h2 className="featured-builds-title">Top Builds This Week</h2>
                     <div className="featured-builds" ref={featuresRef}>
                         {featuredBuilds.map((f, i) => (
-                            <div key={f.id} style={{ animationDelay: `${i * 600}ms` }}>
+                            <div key={f.id} style={{ animationDelay: `${i * 120}ms` }}>
                                 <BuildsCard build={f} />
                             </div>
                         ))}

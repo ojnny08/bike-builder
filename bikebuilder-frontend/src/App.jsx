@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import ScrollToTop from './components/ScrollToTop'
 import Layout from './components/Layout/Layout'
 import ProtectedRoute from './components/ProtextedRoute/ProtectedRoute'
 import Login from './pages/LoginPage/Login'
@@ -17,6 +18,7 @@ import './App.css'
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route element={<Layout />}>

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./BuildsCard.css"
 
@@ -25,6 +25,9 @@ const TrashIcon = () => (
 const EditIcon = () => (
     <svg {...iconProps}><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>
 );
+const MoreIcon = () => (
+    <svg {...iconProps}><circle cx="12" cy="5" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="12" cy="19" r="1" /></svg>
+);
 const CameraIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
 );
@@ -33,6 +36,18 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
     const [copied, setCopied] = useState(false);
+
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
+
+    useEffect(() => {
+        if (!menuOpen) return;
+        const handleClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [menuOpen]);
 
     const frame = build.components.find((c) => c.component_type === "frame");
     const crank = build.components.find((c) => c.component_type === "crankset")
@@ -82,7 +97,6 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
     );
 
     return (
-
             <div
                 className="build-card"
                 onClick={() => navigate(`/builds/view/${build.share_token}`)}
@@ -109,10 +123,33 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
             </div>
             {(onDelete || onEdit) && (
                 <div className="build-card-actions">
-                    {onDelete && <button className="icon-btn icon-btn-danger" onClick={(e) => { e.stopPropagation(); onDelete(build.id); }} aria-label="Delete build"><TrashIcon /></button>}
-                    {onEdit && <button className="icon-btn" onClick={(e) => { e.stopPropagation(); onEdit(build.id); }} aria-label="Edit build"><EditIcon /></button>}
+                    <div className="build-card-menu" ref={menuRef}>
+                        <button
+                            className="icon-btn"
+                            onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v); }}
+                            aria-label="Build options"
+                            aria-expanded={menuOpen}
+                        >
+                            <MoreIcon />
+                        </button>
+                        {menuOpen && (
+                            <div className="build-card-dropdown">
+                                {onEdit && (
+                                    <button className="build-card-dropdown-item" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onEdit(build.id); }}>
+                                        <EditIcon /> Edit
+                                    </button>
+                                )}
+                                {onDelete && (
+                                    <button className="build-card-dropdown-item is-danger" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onDelete(build.id); }}>
+                                        <TrashIcon /> Delete
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
+
         </div>
 
     );

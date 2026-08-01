@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import BikeCanvas from "../../threejs/3d-bike/BikeCanvas"
+import sundayy from "../../utils/sundayy.png";
 import "./Home.css";
+
 
 const stroke = {
     fill: "none",
@@ -15,7 +17,7 @@ const stroke = {
 const features = [
     {   
         title: "Bike Builder",
-        desc: "Spec your dream build and watch the total weight and price update in real time.",
+        desc: "Build your bike, get automatic component compatibility, and watch the total weight and price update in real time.",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" {...stroke} aria-hidden="true">
                 <circle cx="18.5" cy="17.5" r="3.5" />
@@ -28,7 +30,7 @@ const features = [
     },
     {
         title: "Community",
-        desc: "Share your builds, ask for advice and see what everyone else is riding.",
+        desc: "Share your bikes, ask for advice, and see what everyone else is riding.",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" {...stroke} aria-hidden="true">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -41,7 +43,7 @@ const features = [
     },
     {
         title: "Components",
-        desc: "Browse a large catalog of parts and import anything that's missing.",
+        desc: "Browse our large catalog of parts and import anything components we are missing.",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" {...stroke} aria-hidden="true">
                 <polygon points="12 2 2 7 12 12 22 7 12 2" />
@@ -77,21 +79,39 @@ const HomePage = () => {
                     <h1 className="home-title">
                         Build & Share your Bikes
                     </h1>
-                    <div className="home-cta-row">
-                        <Link to="/builds/new" className="home-btn home-btn-primary">
-                            Start building
-                        </Link>
-                </div>   
+                    <p className="home-subtitle">show off your bike, view our large component selection, and rate other bikes</p>
+                    
+                    <div className="home-searchbar">
+                        <Link to="/builds/new" className="home-searchbar-seg">Builder</Link>
+                        <span className="home-searchbar-divider" aria-hidden="true" />
+                        <Link to="/components" className="home-searchbar-seg">Components</Link>
+                        <span className="home-searchbar-divider" aria-hidden="true" />
+                        <Link to="/builds" className="home-searchbar-seg">Completed bikes</Link>
+                        <span className="home-searchbar-search" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" {...stroke}>
+                                <circle cx="11" cy="11" r="7" />
+                                <path d="m21 21-4.3-4.3" />
+                            </svg>
+                        </span>
+                    </div>
                 </div>
+  
                 <div className="home-hero-visual">
                     <div className="home-hero-grid" />
-                    <BikeCanvas />
+                        <BikeCanvas />
+                    </div>
+            </section>
+
+            <section className="home-bikestores">
+                <h2 className="home-bikestores-title">Visit Sunday Cyclery</h2>
+                <div className="home-bikestores-logos">
+                    <img className="home-bikestores-logo" src={sundayy} alt="Sunday" />
                 </div>
             </section>
 
             <section className="home-section" ref={offerRef}>
                 <div className="home-section-head">
-                    <h2 className="home-section-title">What We Offer</h2>
+                    <h2 className="home-section-title">Bikeco</h2>
                 </div>
                 <div className="home-steps">
                     {features.map((f) => (
@@ -106,13 +126,72 @@ const HomePage = () => {
                 </div>
             </section>
 
-            <section className="home-band">
-                <h2 className="home-band-title">Ready to build your bike?</h2>
-                <p className="home-band-sub">No checkout, no pressure — just start speccing.</p>
-                <Link to="/builds/new" className="home-btn home-btn-invert">
-                    Start building
+            <section className="home-footer">
+                <h2 className="home-footer-title">What are you waiting for?</h2>
+                <div className="home-footer-links">
+                    <Link to="/builds/new" className="home-footer-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" {...stroke} aria-hidden="true">
+                        <path d="M14.7 6.3a4 4 0 0 0-5.4 5.3L3 18l3 3 6.4-6.3a4 4 0 0 0 5.3-5.4l-2.4 2.4-2.6-.7-.7-2.6z" />
+                    </svg>
+                    Start Building
                 </Link>
+                <Link to="/components" className="home-footer-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" {...stroke} aria-hidden="true">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                        <polyline points="2 17 12 22 22 17" />
+                        <polyline points="2 12 12 17 22 12" />
+                    </svg>
+                    Explore Components
+                </Link>
+                <Link to="/builds" className="home-footer-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" {...stroke} aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    View Completed Bikes
+                </Link>
+                </div>
             </section>
+
+            <footer className="site-footer">
+                <div className="site-footer-inner">
+                    <div className="site-footer-brand">
+                        <span className="site-footer-logo">Bikeco</span>
+                        <p className="site-footer-tag">Build & share your dream bikes.</p>
+                    </div>
+
+                    <div className="site-footer-cols">
+                        <div className="site-footer-col">
+                            <h4 className="site-footer-heading">Company</h4>
+                            <Link to="/about">About</Link>
+                            <Link to="/blog">Blog</Link>
+                            <Link to="/careers">Careers</Link>
+                            <Link to="/contact">Contact</Link>
+                        </div>
+
+                        <div className="site-footer-col">
+                            <h4 className="site-footer-heading">Social</h4>
+                            <a href="https://twitter.com" target="_blank" rel="noreferrer">Twitter</a>
+                            <a href="https://instagram.com" target="_blank" rel="noreferrer">Instagram</a>
+                            <a href="https://youtube.com" target="_blank" rel="noreferrer">YouTube</a>
+                            <a href="https://discord.com" target="_blank" rel="noreferrer">Discord</a>
+                        </div>
+
+                        <div className="site-footer-col">
+                            <h4 className="site-footer-heading">Legal</h4>
+                            <Link to="/terms">Terms</Link>
+                            <Link to="/privacy">Privacy</Link>
+                            <Link to="/cookies">Cookies</Link>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="site-footer-bottom">
+                    <span>© 2026 Bikeco. All rights reserved.</span>
+                </div>
+            </footer>
         </div>
     );
 };
