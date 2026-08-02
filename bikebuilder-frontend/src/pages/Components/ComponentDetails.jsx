@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchComponentDetails } from "../../services/componentService";
 import VariantOptions from "../../components/BikeComponents/VariantOptions";
-import "./ComponentDetails.css";
+import { titleCase, money } from "../../utils/format";
+import "./style/ComponentDetails.css";
 
 const ComponentDetails = () => {
     const { id } = useParams();
@@ -37,12 +38,12 @@ const ComponentDetails = () => {
                 </div>
 
                 <div className="detail-info">
-                    <span className="detail-type">{comp.component_type?.replace(/_/g, " ")}</span>
+                    <span className="detail-type">{comp.component_type ? titleCase(comp.component_type) : ""}</span>
                     <h1 className="detail-brand">{comp.brand}</h1>
                     <p className="detail-name">{comp.name}</p>
 
                     <div className="detail-meta">
-                        <span className="detail-price">${resolved ? resolved.price : comp.price}</span>
+                        <span className="detail-price">{money(resolved ? resolved.price : comp.price)}</span>
                         <span className="detail-weight">{comp.weight_grams}g</span>
                     </div>
 

@@ -5,7 +5,7 @@ import { useComponentFilters } from "../../hooks/useComponentFilters";
 import FilterSidebar from "../../components/Filters/FilterSidebar";
 import ImportModal from "./ImportModal";
 import CategoryIcon from "../../components/Icons/CategoryIcons";
-import "./Components.css";
+import "./style/Components.css";
 import ComponentCard, { ComponentCardSkeleton } from "../../components/BikeComponents/ComponentCard";
 
 const Components = () => {

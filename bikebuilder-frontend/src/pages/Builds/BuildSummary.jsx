@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../context/BuildContext";
 import BuilderNav from "./components/BuilderNav";
 import { createBuild, updateBuild as updateBuildApi, uploadBuildImage } from "../../services/buildService";
+import { titleCase, money, sumPrice, sumWeight } from "../../utils/format";
 import "./style/Builds.css";
-
-const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-const money = n => `$${n.toFixed(2)}`;
 
 const PartGlyph = () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4"
@@ -47,8 +45,8 @@ const BuildSummary = () => {
     const requiredFilled = required.filter(t => selectedByCategory[t]).length;
     const allRequiredFilled = required.length > 0 && requiredFilled === required.length;
 
-    const totalPrice = build.components.reduce((sum, c) => sum + (parseFloat(c.price) || 0), 0);
-    const totalWeight = build.components.reduce((sum, c) => sum + (parseFloat(c.weight_grams) || 0), 0);
+    const totalPrice = sumPrice(build.components);
+    const totalWeight = sumWeight(build.components);
 
     const handleName = (v) => { setName(v); patchBuild({ name: v }); };
     const handleDescription = (v) => { setDescription(v); patchBuild({ description: v }); };
@@ -118,10 +116,10 @@ const BuildSummary = () => {
                                 <li key={c.id} className="sm-recap-row">
                                     <Thumb src={c.image_url} />
                                     <div className="sm-recap-info">
-                                        <span className="sm-recap-cat">{formatCat(c.component_type)}</span>
+                                        <span className="sm-recap-cat">{titleCase(c.component_type)}</span>
                                         <span className="sm-recap-name">{c.name}<span className="bb-row-brand"> · {c.brand}</span></span>
                                     </div>
-                                    <span className="sm-recap-price">{c.price ? money(parseFloat(c.price)) : '—'}</span>
+                                    <span className="sm-recap-price">{c.price ? money(c.price) : '—'}</span>
                                 </li>
                             ))}
                         </ul>

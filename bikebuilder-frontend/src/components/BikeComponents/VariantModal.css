@@ -30,7 +30,6 @@
 .variant-brand {
     font-size: 0.78rem;
     color: var(--text-secondary);
-    text-transform: uppercase;
     letter-spacing: 0.04em;
 }
 

@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getSharedBuild } from "../../services/buildService";
 import Comments from "../../components/Comments/Comments";
+import { titleCase, money, sumPrice } from "../../utils/format";
 import "./style/BuildDetail.css";
-
-const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
 const BuildDetail = () => {
     const { token } = useParams();
@@ -22,7 +21,7 @@ const BuildDetail = () => {
     if (loading) return <p className="loading-text">Loading...</p>;
     if (error || !build) return <p className="loading-text">This build is unavailable.</p>;
 
-    const totalPrice = build.components.reduce((sum, c) => sum + (parseFloat(c.price) || 0), 0);
+    const totalPrice = sumPrice(build.components);
 
     return (
         <div className="page build-detail-page">
@@ -57,20 +56,20 @@ const BuildDetail = () => {
                     <ul className="build-view-components">
                         {build.components.map(c => (
                             <li key={c.id} className="build-view-component">
-                                <span className="build-view-part-cat">{formatCat(c.component_type)}</span>
+                                <span className="build-view-part-cat">{titleCase(c.component_type)}</span>
                                 <span className="build-view-part-name">
                                     {c.name}
                                     {c.brand && <span className="build-view-part-brand"> · {c.brand}</span>}
                                 </span>
                                 <span className="build-view-part-price">
-                                    {c.price ? `$${parseFloat(c.price).toFixed(2)}` : '—'}
+                                    {c.price ? money(c.price) : '—'}
                                 </span>
                             </li>
                         ))}
                     </ul>
                     <div className="build-view-total">
                         <span>Total</span>
-                        <span className="build-view-total-price">${totalPrice.toFixed(2)}</span>
+                        <span className="build-view-total-price">{money(totalPrice)}</span>
                     </div>
                 </div>
             </div>

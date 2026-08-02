@@ -1,3 +1,4 @@
+import { money } from '../../utils/format'
 import './ComponentCard.css'
 
 const ComponentCard = ({ comp, isSelected, onSelect }) => {
@@ -24,7 +25,7 @@ const ComponentCard = ({ comp, isSelected, onSelect }) => {
                 <h1 className="product-brand">{comp.brand}</h1>
                 <p className="product-name">{comp.name}</p>
                 <div className="product-meta">
-                    <div className="product-price">${comp.price}</div>
+                    <div className="product-price">{money(comp.price)}</div>
                     <div className="product-weight">{comp.weight_grams}g</div>
                 </div>
 

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import { titleCase } from "../../utils/format";
 import "./VariantModal.css";
-
-const titleCase = v => String(v).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 
 const ATTR_META = {
     bb_type: { label: "threading", format: v => String(v).toUpperCase() },

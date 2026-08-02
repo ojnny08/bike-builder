@@ -57,10 +57,10 @@ const FilterFields = ({ filters }) => {
                         onChange={e => setPriceMax(e.target.value)}
                     />
                 </div>
-                <label className="filter-label" htmlFor="filter-price-min">Weight</label>
+                <label className="filter-label" htmlFor="filter-weight-min">Weight</label>
                 <div className="filter-price-row">
                     <input
-                        id="filter-price-min"
+                        id="filter-weight-min"
                         type="number"
                         min="0"
                         className="filter-input"
@@ -70,7 +70,7 @@ const FilterFields = ({ filters }) => {
                     />
                     <span className="filter-price-sep">–</span>
                     <input
-                        id="filter-price-max"
+                        id="filter-weight-max"
                         type="number"
                         min="0"
                         className="filter-input"

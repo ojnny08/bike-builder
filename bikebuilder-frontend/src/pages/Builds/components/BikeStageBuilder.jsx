@@ -5,9 +5,7 @@ import BikeCanvas from "../../../threejs/3d-bike/BikeCanvas";
 import CategoryIcon from "../../../components/Icons/CategoryIcons";
 import "../style/Builds.css";
 import BuilderNav from "./BuilderNav";
-
-const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-const money = n => `$${n.toFixed(2)}`;
+import { titleCase, money, sumPrice, sumWeight } from "../../../utils/format";
 
 const ASSEMBLY_ORDER = [
     "frame", "bottom_bracket", "crank", "crankset", "wheels", "wheel", "wheelset",
@@ -34,15 +32,15 @@ const PartCard = ({ category, selected, focused, locked, prereq, onFocus, onChoo
     >
         
         <div className="bs-card-main">
-            <span className="bs-card-placeholder">{formatCat(category)}</span>
+            <span className="bs-card-placeholder">{titleCase(category)}</span>
             
             {selected ? (
                 <span className="bs-card-name">
                     {selected.name}
-                    <span className="bs-card-meta"> · {money(parseFloat(selected.price) || 0)}</span>
+                    <span className="bs-card-meta"> · {money(selected.price)}</span>
                 </span>
             ) : locked ? (
-                <span className="bs-card-cat">Select {formatCat(prereq)} first</span>
+                <span className="bs-card-cat">Select {titleCase(prereq)} first</span>
             ) : (
                 <span className="bs-card-cat">Not Selected</span>
             )}
@@ -52,7 +50,7 @@ const PartCard = ({ category, selected, focused, locked, prereq, onFocus, onChoo
             <button
                 type="button"
                 className="bs-card-add"
-                aria-label={`Choose ${formatCat(category).toLowerCase()}`}
+                aria-label={`Choose ${titleCase(category).toLowerCase()}`}
                 onClick={e => { e.stopPropagation(); onChoose(); }}
             >
                 <PlusGlyph />
@@ -65,7 +63,7 @@ const PartCard = ({ category, selected, focused, locked, prereq, onFocus, onChoo
 );
 
 const GroupCard = ({ group, groupKey, mode, parts, filled, focused, locked, prereq, onFocus, onSetMode, onChoose }) => {
-    const total = parts.reduce((sum, p) => sum + (parseFloat(p.price) || 0), 0);
+    const total = sumPrice(parts);
     return (
         <div
             className={`bs-card${filled ? ' is-filled' : ''}${focused ? ' is-focused' : ''}${locked ? ' is-locked' : ''}`}
@@ -85,7 +83,7 @@ const GroupCard = ({ group, groupKey, mode, parts, filled, focused, locked, prer
                         <span className="bs-card-meta"> · {money(total)}</span>
                     </span>
                 ) : locked ? (
-                    <span className="bs-card-cat">Select {formatCat(prereq)} first</span>
+                    <span className="bs-card-cat">Select {titleCase(prereq)} first</span>
                 ) : (
                     <span className="bs-card-cat">Not Selected</span>
                 )}
@@ -99,7 +97,7 @@ const GroupCard = ({ group, groupKey, mode, parts, filled, focused, locked, prer
                                 className={`bs-mode${mode === key ? ' is-active' : ''}`}
                                 onClick={e => { e.stopPropagation(); onSetMode(key); }}
                             >
-                                {formatCat(key)}
+                                {titleCase(key)}
                             </button>
                         ))}
                     </div>
@@ -172,8 +170,8 @@ const BikeStageBuilder = () => {
     const requiredFilled = required.filter(isFilled).length;
     const progress = required.length ? requiredFilled / required.length : 0;
 
-    const totalPrice = build.components.reduce((sum, c) => sum + (parseFloat(c.price) || 0), 0);
-    const totalWeight = build.components.reduce((sum, c) => sum + (parseFloat(c.weight_grams) || 0), 0);
+    const totalPrice = sumPrice(build.components);
+    const totalWeight = sumWeight(build.components);
 
     const hasComponents = build.components.length > 0;
 

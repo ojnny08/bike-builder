@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import "../../pages/ComponentsPage/ImportModal.css";
+import "../../pages/Components/ImportModal.css";
 import "./VariantModal.css";
 import VariantOptions, { hasVariants } from "./VariantOptions";
+import { money } from "../../utils/format";
 
 const VariantModal = ({ component, onClose, onAdd }) => {
     const options = component.options || [];
@@ -56,7 +57,7 @@ const VariantModal = ({ component, onClose, onAdd }) => {
 
                 <div className="variant-footer">
                     <div className="variant-price">
-                        {canAdd ? `$${price}` : "—"}
+                        {canAdd ? money(price) : "—"}
                     </div>
                     <button type="button" className="modal-submit" onClick={add} disabled={!canAdd}>
                         Add to build

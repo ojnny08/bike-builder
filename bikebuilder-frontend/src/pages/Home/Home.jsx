@@ -55,7 +55,7 @@ const features = [
     },
 ];
 
-const HomePage = () => {
+const Home = () => {
     const offerRef = useRef(null);
 
     useEffect(() => {
@@ -102,6 +102,7 @@ const HomePage = () => {
                     </div>
             </section>
 
+            
             <section className="home-bikestores">
                 <h2 className="home-bikestores-title">Visit Sunday Cyclery</h2>
                 <div className="home-bikestores-logos">
@@ -111,7 +112,7 @@ const HomePage = () => {
 
             <section className="home-section" ref={offerRef}>
                 <div className="home-section-head">
-                    <h2 className="home-section-title">Bikeco</h2>
+                    <h2 className="home-section-title">Bikeco Features</h2>
                 </div>
                 <div className="home-steps">
                     {features.map((f) => (
@@ -196,4 +197,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default Home;

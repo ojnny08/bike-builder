@@ -154,6 +154,8 @@
     filter: drop-shadow(0 18px 30px rgba(10, 10, 15, 0.18));
 }
 
+
+
 /* ── Content sections ───────────────────────────────────────────────────── */
 
 .home-bikestores {
@@ -229,7 +231,7 @@
 }
 
 .home-section-title {
-    font-size: 4rem;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
     font-family: var(--text-title-font);
     font-weight: var(--text-title-weight);
     letter-spacing: -0.03em;
@@ -340,7 +342,7 @@
 }
 
 .home-footer-title {
-    font-size: clamp(2rem, 4vw, 4rem);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
     font-family: var(--text-title-font);
     font-weight: var(--text-title-weight);
     letter-spacing: -0.03em;
@@ -429,7 +431,6 @@
     font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: 0.06em;
-    text-transform: uppercase;
     color: #fff;
     margin-bottom: 4px;
 }

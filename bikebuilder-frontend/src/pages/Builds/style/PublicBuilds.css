@@ -67,7 +67,7 @@
 }
 
 .featured-builds-title {
-    font-size: 3rem;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
     font-weight: 700;
     font-family: var(--text-title-font);
     letter-spacing: -0.03em;

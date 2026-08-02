@@ -7,9 +7,8 @@ import FilterBar from "../../components/Filters/FilterBar";
 import BuilderNav from "./components/BuilderNav";
 import ComponentCard, { ComponentCardSkeleton } from "../../components/BikeComponents/ComponentCard";
 import VariantModal from "../../components/BikeComponents/VariantModal";
+import { titleCase } from "../../utils/format";
 import "./style/Builds.css";
-
-const formatCat = s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
 const PartGlyph = () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4"
@@ -21,7 +20,7 @@ const PartGlyph = () => (
 
 
 
-const ComponentSelectPage = () => {
+const ComponentSelect = () => {
     const { category: paramCategory, group, mode } = useParams();
     const { build, addComponent } = useBuild();
     const navigate = useNavigate();
@@ -114,10 +113,10 @@ const ComponentSelectPage = () => {
                                         onClick={() => setCurrentPart(part)}
                                     >
                                         <span className="cs-side-part-name">
-                                            {formatCat(part)}{optional ? ' (optional)' : ''}
+                                            {titleCase(part)}{optional ? ' (optional)' : ''}
                                         </span>
                                         <span className="cs-side-part-val">
-                                            {sel ? sel.name : locked ? `Select ${formatCat(groupPrereqs[part])} first` : 'Not selected'}
+                                            {sel ? sel.name : locked ? `Select ${titleCase(groupPrereqs[part])} first` : 'Not selected'}
                                         </span>
                                     </button>
                                 </li>
@@ -137,7 +136,7 @@ const ComponentSelectPage = () => {
             <div className="cs-group-main">
             <header className="cs-head">
                 <div className="cs-head-text">
-                    <h1 className="cs-head-title"> Select A {formatCat(category)}</h1>
+                    <h1 className="cs-head-title"> Select A {titleCase(category)}</h1>
                     {!loading && (
                         <p className="cs-head-sub">
                             {compatCount} compatible
@@ -154,7 +153,7 @@ const ComponentSelectPage = () => {
                     {Array.from({ length: 10 }).map((_, i) => <ComponentCardSkeleton key={i} />)}
                 </div>
             ) : components.length === 0 ? (
-                <p className="empty-state">No {formatCat(category).toLowerCase()} components found.</p>
+                <p className="empty-state">No {titleCase(category).toLowerCase()} components found.</p>
             ) : (
                 <div className="cs-grid">
                     {components.map(comp => (
@@ -180,4 +179,4 @@ const ComponentSelectPage = () => {
     );
 };
 
-export default ComponentSelectPage;
+export default ComponentSelect;
