@@ -54,30 +54,52 @@ const Profile = () => {
     return (
         <div className="page profile-page">
             <div className="profile-view">
-                <div className="profile-header">
-                    {profile.photo_url ? (
-                        <img className="profile-avatar" src={profile.photo_url} alt={profile.display_name} />
-                    ) : (
-                        <div className="profile-avatar-placeholder">
-                            {profile.display_name?.[0] ?? "?"}
+                <div className="profile-body">
+                    <aside className="profile-side">
+                        <div className="profile-header">
+                            {profile.photo_url ? (
+                                <img className="profile-avatar" src={profile.photo_url} alt={profile.display_name} />
+                            ) : (
+                                <div className="profile-avatar-placeholder">
+                                    {profile.display_name?.[0] ?? "?"}
+                                </div>
+                            )}
+                            <span className="profile-name">{profile.display_name}</span>
                         </div>
-                    )}
-                    <h2 className="profile-name">{profile.display_name}</h2>
-                </div>
+                        <section className="profile-section">
+                            <h2 className="profile-section-label">About me</h2>
+                            <p className="profile-section-empty">Nothing here yet.</p>
+                        </section>
+                        <section className="profile-section">
+                            <h2 className="profile-section-label">Gear ratio</h2>
+                            <p className="profile-section-empty">Nothing here yet.</p>
+                        </section>
+                        <section className="profile-section">
+                            <h2 className="profile-section-label">Socials</h2>
+                            <p className="profile-section-empty">Nothing here yet.</p>
+                        </section>
+                    </aside>
 
-                <div className="profile-about">
-                    How I Ride 
-                </div>
+                    <div className="profile-builds">
+                        <div className="profile-builds-head">
+                            <h2 className="profile-builds-title">Bikes</h2>
+                        </div>
 
-                <div className="profile-build-card">
-                    {buildsList.map((build) => (
-                        <BuildsCard
-                            key={build.id}
-                            build={build}
-                            onDelete={handleDelete}
-                            onEdit={handleEdit}
-                            onUploadImage={handleUploadImage} />
-                    ))}
+                        {buildsList.length === 0 ? (
+                            <p className="profile-builds-empty">No builds shared yet.</p>
+                        ) : (
+                            <div className="profile-build-card">
+                                {buildsList.map((build) => (
+                                    <BuildsCard
+                                        key={build.id}
+                                        build={build}
+                                        onDelete={handleDelete}
+                                        onEdit={handleEdit}
+                                        onUploadImage={handleUploadImage} />
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

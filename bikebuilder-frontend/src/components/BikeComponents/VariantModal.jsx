@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../pages/Components/ImportModal.css";
+import "../../pages/Components/style/ImportModal.css";
 import "./VariantModal.css";
 import VariantOptions, { hasVariants } from "./VariantOptions";
 import { money } from "../../utils/format";

@@ -160,7 +160,7 @@ const ComponentSelect = () => {
                         <ComponentCard
                             key={comp.id}
                             comp={comp}
-                            isSelected={comp.id === currentSelectedId}
+                            isSelected={comp.id === currentSelectedId || comp.id === active?.id}
                             onSelect={setActive}
                         />
                     ))}
