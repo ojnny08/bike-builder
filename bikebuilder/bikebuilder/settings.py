@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from corsheaders.defaults import default_headers
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -164,3 +165,5 @@ FIREBASE_CREDENTIALS_PATH = BASE_DIR / 'firebase' / 'firebase-credentials.json'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  # React dev server (Vite default)
 ]
+
+CORS_ALLOW_HEADERS = (*default_headers, 'idempotency-key')

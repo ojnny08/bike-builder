@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from django.core.cache import cache
+from django.db import IntegrityError
 from django.db.models import Sum, Q
 from django.db.models.functions import Coalesce
 from django.utils import timezone
@@ -82,11 +83,20 @@ class MyBuildViewSet(ViewSet):
         return Response(BuildsSerializer(build).data)
 
     def create(self, request):
+        key = request.headers.get('Idempotency-Key')
+        if key:
+            existing = Build.objects.filter(user=request.user, idempotency_key=key).first()
+            if existing:
+                return Response(BuildsSerializer(existing).data)
         serializer = BuildsSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            serializer.save(user=request.user, idempotency_key=key)
+        except IntegrityError:
+            existing = Build.objects.get(user=request.user, idempotency_key=key)
+            return Response(BuildsSerializer(existing).data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def destroy(self, request, pk=None):
         try:

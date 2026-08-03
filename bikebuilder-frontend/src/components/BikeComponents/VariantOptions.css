@@ -1,0 +1,53 @@
+.variant-specs {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.variant-spec {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+}
+
+.variant-spec dt {
+    color: var(--text-secondary);
+}
+
+.variant-spec dd {
+    color: var(--text);
+    text-align: right;
+}
+
+.variant-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 22px;
+}
+
+.variant-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1 1 130px;
+}
+
+.variant-field-label {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+}
+
+.variant-select {
+    height: 40px;
+    padding: 0 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--border-raduis-value);
+    font-size: 0.875rem;
+    color: var(--text);
+    cursor: pointer;
+}

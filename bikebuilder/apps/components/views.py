@@ -8,16 +8,37 @@ from django.core.cache import cache
 from .serializer import (
     ComponentsSerializer, ComponentSubmissionSerializer,
     CranksetSerializer, CrankArmSerializer, ChainringSerializer, BottomBracketSerializer, TrackHubSerializer,
+    RimSerializer, StemSerializer,
+    ChainSerializer, HandlebarSerializer, BrakeSerializer, PedalsSerializer,
+    SprocketSerializer, TireSerializer, SaddleSerializer, SeatpostSerializer,
+    FrameSerializer, SingleWheelSerializer, WheelSetSerializer,
 )
-from .models import Components, ComponentType, Frame, BottomBracket, Crankset, CrankArm, Chainring, SingleWheel, Stem, Sprocket, TrackHub
+from .models import (
+    Components, ComponentType, Frame, BottomBracket, Crankset, CrankArm, Chainring,
+    SingleWheel, Stem, Sprocket, TrackHub, Rim, Chain, Handlebar, Brake, Pedals, Tire, Saddle, Seatpost,
+    WheelSet,
+)
 from .compatibility import get_compatible_queryset
 
 TYPE_MODELS = {
+    'frame': (Frame, FrameSerializer),
+    'wheel': (SingleWheel, SingleWheelSerializer),
+    'wheelset': (WheelSet, WheelSetSerializer),
     'crankset': (Crankset, CranksetSerializer),
     'crank_arm': (CrankArm, CrankArmSerializer),
     'chainring': (Chainring, ChainringSerializer),
     'bottom_bracket': (BottomBracket, BottomBracketSerializer),
     'track_hub': (TrackHub, TrackHubSerializer),
+    'rim': (Rim, RimSerializer),
+    'stem': (Stem, StemSerializer),
+    'chain': (Chain, ChainSerializer),
+    'handlebar': (Handlebar, HandlebarSerializer),
+    'brake': (Brake, BrakeSerializer),
+    'pedals': (Pedals, PedalsSerializer),
+    'sprocket': (Sprocket, SprocketSerializer),
+    'tire': (Tire, TireSerializer),
+    'saddle': (Saddle, SaddleSerializer),
+    'seatpost': (Seatpost, SeatpostSerializer),
 }
 
 

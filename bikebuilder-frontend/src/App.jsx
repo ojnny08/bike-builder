@@ -25,7 +25,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/builds/new" element={<Builds />}/>
           <Route path="/builds/new/select/:category" element={<ComponentSelect />}/>
+          <Route path="/builds/new/select/:category/:id" element={<ComponentDetails />}/>
           <Route path="/builds/new/select-group/:group/:mode" element={<ComponentSelect />}/>
+          <Route path="/builds/new/select-group/:group/:mode/:id" element={<ComponentDetails />}/>
           <Route path="/profile/:username" element={<Profile />}/>
           <Route path="/components" element={<Components />}/>
           <Route path="/components/:id" element={<ComponentDetails />}/>

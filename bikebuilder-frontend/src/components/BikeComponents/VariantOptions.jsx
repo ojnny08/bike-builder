@@ -1,28 +1,36 @@
 import { useEffect, useMemo, useState } from "react";
 import { titleCase } from "../../utils/format";
-import "./VariantModal.css";
+import "./VariantOptions.css";
+
+const withUnit = (v, unit) => {
+    const s = String(v);
+    return /^\d+(\.\d+)?$/.test(s) ? `${s}${unit}` : s;
+};
 
 const ATTR_META = {
     bb_type: { label: "threading", format: v => String(v).toUpperCase() },
     color: { label: "colour", format: v => v },
-    length_mm: { label: "length", format: v => v },
-    chainring_teeth: { label: "teeth", format: v => `${v}T` },
-    hole_count: { label: "spoke holes", format: v => `${v}h` },
+    length_mm: { label: "length", format: v => withUnit(v, "mm") },
+    width: { label: "width", format: v => withUnit(v, "mm") },
+    width_mm: { label: "width", format: v => withUnit(v, "mm") },
+    diameter_mm: { label: "diameter", format: v => withUnit(v, "mm") },
+    chainring_teeth: { label: "teeth", format: v => withUnit(v, "T") },
+    teeth: { label: "teeth", format: v => withUnit(v, "T") },
+    hole_count: { label: "spoke holes", format: v => withUnit(v, "h") },
     cog_interface: { label: "drive", format: titleCase },
+    size: { label: "size", format: v => v },
 };
 
 const metaFor = key => ATTR_META[key] || { label: key, format: v => String(v) };
 
 const isBlank = v => v === "" || v === null || v === undefined;
 
-export const attributeKeys = options => {
+const attributeKeys = options => {
     if (!options?.length) return [];
     return Object.keys(options[0])
         .filter(k => k !== "id" && k !== "price" && k !== "image_colour_url")
         .filter(k => options.some(o => !isBlank(o[k])));
 };
-
-export const hasVariants = options => attributeKeys(options).length > 0;
 
 const distinctValues = (options, key) => [...new Set(options.map(o => o[key]))];
 

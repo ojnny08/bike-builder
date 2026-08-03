@@ -6,6 +6,17 @@ import { createBuild, updateBuild as updateBuildApi, uploadBuildImage } from "..
 import { titleCase, money, sumPrice, sumWeight } from "../../utils/format";
 import "./style/Builds.css";
 
+const IDEM_STORAGE_KEY = "build-create-idempotency-key";
+
+const getCreateIdempotencyKey = () => {
+    let key = localStorage.getItem(IDEM_STORAGE_KEY);
+    if (!key) {
+        key = crypto.randomUUID();
+        localStorage.setItem(IDEM_STORAGE_KEY, key);
+    }
+    return key;
+};
+
 const PartGlyph = () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4"
         strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -77,8 +88,9 @@ const BuildSummary = () => {
         try {
             let id = build.id;
             if (id) await updateBuildApi(id, payload);
-            else id = (await createBuild(payload)).id;
+            else id = (await createBuild(payload, getCreateIdempotencyKey())).id;
             if (photoFile) await uploadBuildImage(id, photoFile);
+            localStorage.removeItem(IDEM_STORAGE_KEY);
             emptyBuild();
             navigate("/builds");
         } catch (e) {

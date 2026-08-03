@@ -454,26 +454,34 @@
 .bs-card-add:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-ring); }
 .bs-card.is-filled .bs-card-add { color: var(--accent); }
 
-.bs-mode-row {
+.bs-mode-cards {
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 8px;
+    flex-direction: row;
+    gap: 0;
+    flex-shrink: 0;
+    align-self: stretch;
+    margin: -30px -24px -30px 0;
 }
-.bs-mode {
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    padding: 4px 10px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
+.bs-mode-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    text-align: left;
+    min-width: 96px;
+    padding: 0 16px;
+    font-family: inherit;
+    border: none;
+    border-left: 1px solid var(--border);
     background: var(--surface);
-    color: var(--text-secondary);
     cursor: pointer;
+    transition: background var(--dur-fast);
 }
-.bs-mode:hover { border-color: var(--accent); color: var(--text); }
-.bs-mode.is-active { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-.bs-mode:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-ring); }
+.bs-mode-card:hover { background: var(--surface-2); }
+.bs-mode-card:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--accent-ring); }
+.bs-mode-card.is-active { background: var(--surface-2); box-shadow: inset 3px 0 0 var(--accent); }
+.bs-mode-card-title { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+.bs-mode-card-sub { font-size: 0.75rem; color: var(--text); }
 
 .bs-panel-footer {
     flex-shrink: 0;

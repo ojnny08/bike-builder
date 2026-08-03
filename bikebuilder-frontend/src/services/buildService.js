@@ -80,9 +80,11 @@ export const getBuild = async (id) => {
     }
 };
 
-export const createBuild = async (payload) => {
+export const createBuild = async (payload, idempotencyKey) => {
     try {
-        const res = await api.post("/api/builds/", payload);
+        const res = await api.post("/api/builds/", payload, {
+            headers: idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {},
+        });
         return res.data;
     } catch (error) {
         throw new Error("Failed to create build");

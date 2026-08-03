@@ -4,6 +4,11 @@ from .models import (
     Components, ComponentType, ComponentSubmission,
     Crankset, CrankOption, CrankArm, CrankArmOption, Chainring, ChainringOption,
     BottomBracket, BottomBracketOption, TrackHub, HubOption,
+    Rim, RimOptions, Stem, StemOptions,
+    Chain, Handlebar, HandlebarOptions, Brake, Pedals,
+    Sprocket, SprocketOption, Tire, TireOption,
+    Saddle, SaddleOptiosn, Seatpost, SeatPostOptions,
+    Frame, FrameOption, SingleWheel, WheelSet,
 )
 
 ALLOWED_HOSTS = {
@@ -114,7 +119,7 @@ BASE_FIELDS = ['id', 'component_type', 'name', 'brand', 'weight_grams', 'price',
 class CrankOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CrankOption
-        fields = ['id', 'color', 'length_mm', 'chainring_teeth', 'price']
+        fields = ['id', 'color', 'length_mm', 'chainring_teeth', 'price', 'image_colour_url']
 
 
 class CranksetSerializer(serializers.ModelSerializer):
@@ -128,7 +133,7 @@ class CranksetSerializer(serializers.ModelSerializer):
 class CrankArmOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CrankArmOption
-        fields = ['id', 'color', 'length_mm', 'price']
+        fields = ['id', 'color', 'length_mm', 'price', 'image_colour_url']
 
 
 class CrankArmSerializer(serializers.ModelSerializer):
@@ -136,7 +141,7 @@ class CrankArmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CrankArm
-        fields = BASE_FIELDS + ['spindle_interface_mm', 'spindle_length_mm', 'options']
+        fields = BASE_FIELDS + ['spindle_interface_mm', 'spindle_length_mm', 'bcd', 'options']
 
 
 class ChainringOptionSerializer(serializers.ModelSerializer):
@@ -156,7 +161,7 @@ class ChainringSerializer(serializers.ModelSerializer):
 class BottomBracketOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = BottomBracketOption
-        fields = ['id', 'bb_type', 'color', 'price']
+        fields = ['id', 'bb_type', 'color', 'price', 'image_colour_url']
 
 
 class BottomBracketSerializer(serializers.ModelSerializer):
@@ -170,7 +175,7 @@ class BottomBracketSerializer(serializers.ModelSerializer):
 class HubOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = HubOption
-        fields = ['id', 'color', 'hole_count', 'cog_interface', 'price']
+        fields = ['id', 'color', 'hole_count', 'cog_interface', 'price', 'image_colour_url']
 
 
 class TrackHubSerializer(serializers.ModelSerializer):
@@ -179,6 +184,157 @@ class TrackHubSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrackHub
         fields = BASE_FIELDS + ['position', 'hub_spacing', 'threading', 'options']
+
+
+class RimOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RimOptions
+        fields = ['id', 'color', 'hole_count', 'image_colour_url']
+
+
+class RimSerializer(serializers.ModelSerializer):
+    options = RimOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Rim
+        fields = BASE_FIELDS + ['wheel_size', 'max_tire_width_mm', 'options']
+
+
+class StemOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StemOptions
+        fields = ['id', 'color', 'length_mm', 'image_colour_url']
+
+
+class StemSerializer(serializers.ModelSerializer):
+    options = StemOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Stem
+        fields = BASE_FIELDS + ['bar_clamp_diameter_mm', 'steerer_clamp_diameter_mm', 'angle_degrees', 'options']
+
+
+class ChainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chain
+        fields = BASE_FIELDS + ['chain_width', 'chain_material']
+
+
+class HandlebarOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HandlebarOptions
+        fields = ['id', 'width']
+
+
+class HandlebarSerializer(serializers.ModelSerializer):
+    options = HandlebarOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Handlebar
+        fields = BASE_FIELDS + ['bar_type', 'clamp_diameter_mm', 'drop_mm', 'reach_mm', 'options']
+
+
+class BrakeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brake
+        fields = BASE_FIELDS + ['brake_type', 'mount_type', 'rotor_size_mm']
+
+
+class PedalsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pedals
+        fields = BASE_FIELDS + ['colour']
+
+
+class SprocketOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SprocketOption
+        fields = ['id', 'teeth']
+
+
+class SprocketSerializer(serializers.ModelSerializer):
+    options = SprocketOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Sprocket
+        fields = BASE_FIELDS + ['mount_type', 'sprocket_width', 'sprocket_teeth', 'options']
+
+
+class TireOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TireOption
+        fields = ['id', 'width_mm']
+
+
+class TireSerializer(serializers.ModelSerializer):
+    options = TireOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Tire
+        fields = BASE_FIELDS + ['wheel_size', 'options']
+
+
+class SaddleOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SaddleOptiosn
+        fields = ['id', 'width_mm', 'length_mm']
+
+
+class SaddleSerializer(serializers.ModelSerializer):
+    options = SaddleOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Saddle
+        fields = BASE_FIELDS + ['options']
+
+
+class SeatpostOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SeatPostOptions
+        fields = ['id', 'diameter_mm', 'length_mm']
+
+
+class SeatpostSerializer(serializers.ModelSerializer):
+    options = SeatpostOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Seatpost
+        fields = BASE_FIELDS + ['options']
+
+
+class FrameOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FrameOption
+        fields = ['id', 'size']
+
+
+class FrameSerializer(serializers.ModelSerializer):
+    options = FrameOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Frame
+        fields = BASE_FIELDS + [
+            'fork_type', 'bb_type', 'bb_width_mm', 'fork_brake_drilled',
+            'frame_brake_drilled', 'seatpost_size', 'max_tire_clearance_mm', 'options',
+        ]
+
+
+class SingleWheelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SingleWheel
+        fields = BASE_FIELDS + [
+            'wheel_size', 'max_tire_width_mm', 'hub_type', 'cog_interface',
+            'position', 'hub_spacing', 'threading',
+        ]
+
+
+class WheelSetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WheelSet
+        fields = BASE_FIELDS + [
+            'wheel_size', 'max_tire_width_mm', 'rim_name', 'hub_name',
+            'rear_hub_spacing', 'cog_interface',
+        ]
 
 
 def _is_trusted(url):

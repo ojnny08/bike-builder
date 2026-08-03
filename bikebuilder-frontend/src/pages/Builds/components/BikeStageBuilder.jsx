@@ -62,7 +62,10 @@ const PartCard = ({ category, selected, focused, locked, prereq, onFocus, onChoo
     </div>
 );
 
-const GroupCard = ({ group, groupKey, mode, parts, filled, focused, locked, prereq, onFocus, onSetMode, onChoose }) => {
+const modeSummary = modeCfg =>
+    (modeCfg.required || []).map(titleCase).join(' + ');
+
+const GroupCard = ({ group, groupKey, mode, parts, filled, focused, locked, prereq, onFocus, onChooseMode }) => {
     const total = sumPrice(parts);
     return (
         <div
@@ -72,8 +75,22 @@ const GroupCard = ({ group, groupKey, mode, parts, filled, focused, locked, prer
             aria-pressed={focused}
             aria-disabled={locked}
             onClick={locked ? undefined : onFocus}
-            onDoubleClick={locked ? undefined : onChoose}
         >
+            {focused && !locked && (
+                <div className="bs-mode-cards">
+                    {Object.entries(group.modes).map(([key, cfg]) => (
+                        <button
+                            key={key}
+                            type="button"
+                            className={`bs-mode-card${mode === key ? ' is-active' : ''}`}
+                            onClick={e => { e.stopPropagation(); onChooseMode(key); }}
+                        >
+                            <span className="bs-mode-card-title">{titleCase(key)}</span>
+                            <span className="bs-mode-card-sub">{modeSummary(cfg)}</span>
+                        </button>
+                    ))}
+                </div>
+            )}
             <div className="bs-card-main">
                 <span className="bs-card-placeholder">{group.label}</span>
 
@@ -87,35 +104,8 @@ const GroupCard = ({ group, groupKey, mode, parts, filled, focused, locked, prer
                 ) : (
                     <span className="bs-card-cat">Not Selected</span>
                 )}
-
-                {focused && !locked && (
-                    <div className="bs-mode-row">
-                        {Object.keys(group.modes).map(key => (
-                            <button
-                                key={key}
-                                type="button"
-                                className={`bs-mode${mode === key ? ' is-active' : ''}`}
-                                onClick={e => { e.stopPropagation(); onSetMode(key); }}
-                            >
-                                {titleCase(key)}
-                            </button>
-                        ))}
-                    </div>
-                )}
             </div>
             <span className="bs-card-icon"><CategoryIcon category={groupKey} /></span>
-            {!locked && focused ? (
-                <button
-                    type="button"
-                    className="bs-card-add"
-                    aria-label={`Choose ${group.label.toLowerCase()}`}
-                    onClick={e => { e.stopPropagation(); onChoose(); }}
-                >
-                    <PlusGlyph />
-                </button>
-            ) : (
-                ""
-            )}
         </div>
     );
 };
@@ -137,7 +127,8 @@ const BikeStageBuilder = () => {
 
     const allCategories = [...required, ...optional];
 
-    const activeMode = category => groups[category].modes[groupModes[category]];
+    const modeConfig = (category, mode) => groups[category].modes[mode];
+    const activeMode = category => modeConfig(category, groupModes[category]);
 
     const groupParts = category => {
         const mode = activeMode(category);
@@ -151,9 +142,8 @@ const BikeStageBuilder = () => {
         return (activeMode(category).required || []).every(t => selectedByCategory[t]);
     };
 
-    const groupRoute = category => {
-        const mode = groupModes[category];
-        const { required: req = [], optional: opt = [] } = activeMode(category);
+    const groupRoute = (category, mode) => {
+        const { required: req = [], optional: opt = [] } = modeConfig(category, mode);
         if (req.length === 1 && opt.length === 0) return `/builds/new/select/${req[0]}`;
         return `/builds/new/select-group/${category}/${mode}`;
     };
@@ -230,8 +220,10 @@ const BikeStageBuilder = () => {
                                     locked={isLocked(category)}
                                     prereq={prerequisites[category]}
                                     onFocus={() => setFocusedCategory(category)}
-                                    onSetMode={mode => setGroupModes(prev => ({ ...prev, [category]: mode }))}
-                                    onChoose={() => navigate(groupRoute(category))}
+                                    onChooseMode={mode => {
+                                        setGroupModes(prev => ({ ...prev, [category]: mode }));
+                                        navigate(groupRoute(category, mode));
+                                    }}
                                 />
                             ) : (
                                 <PartCard

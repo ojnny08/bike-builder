@@ -80,11 +80,11 @@ class Frame(Components):
     fork_brake_drilled = models.BooleanField(default=False)
     frame_brake_drilled = models.BooleanField(default=False)
     seatpost_size = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
-    max_tire_clearance_mm = models.PositiveSmallIntegerField()
+    max_tire_clearance_mm = models.PositiveSmallIntegerField(null=True, blank=True)
  
 
 class FrameOption(models.Model):
-    frame = models.ForeignKey(Frame, on_delete=models.CASCADE, related_name="sizes")
+    frame = models.ForeignKey(Frame, on_delete=models.CASCADE, related_name="options")
     size = models.CharField(max_length=20)
 
     class Meta:
@@ -116,7 +116,7 @@ class BottomBracketOption(models.Model):
     bottom_bracket = models.ForeignKey(BottomBracket, on_delete=models.CASCADE, related_name="options")
     bb_type = models.CharField(max_length=20, choices=ShellType.choices)
     color = models.CharField(max_length=40, blank=True)
-    image_colour_url = models.URLField(blank=True)
+    image_colour_url = models.URLField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
@@ -149,7 +149,7 @@ class CrankOption(models.Model):
     length_mm = models.CharField(max_length=10, choices=ArmLength.choices)
     chainring_teeth = models.PositiveSmallIntegerField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image_colour_url = models.URLField(blank=True)
+    image_colour_url = models.URLField(null=True, blank=True)
 
     class Meta:
         ordering = ["crankset", "color", "chainring_teeth", "length_mm"]
@@ -167,7 +167,7 @@ class CrankArmOption(models.Model):
     color = models.CharField(max_length=40, blank=True)
     length_mm = models.CharField(max_length=10, choices=ArmLength.choices)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image_colour_url = models.URLField(blank=True)
+    image_colour_url = models.URLField(null=True, blank=True)
 
     class Meta:
         ordering = ["crank_arm", "color", "length_mm"]
@@ -183,7 +183,7 @@ class ChainringOption(models.Model):
     color = models.CharField(max_length=40, blank=True)
     chainring_teeth = models.PositiveSmallIntegerField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image_colour_url = models.URLField(blank=True)
+    image_colour_url = models.URLField(null=True, blank=True)
 
     class Meta:
         ordering = ["chainring", "chainring_teeth", "color"]
@@ -223,14 +223,20 @@ class ThreadStandard(models.TextChoices):
 
 class WheelSpecs(models.Model):
     wheel_size = models.CharField(max_length=10, choices=WheelSize.choices)
-    max_tire_width_mm = models.PositiveSmallIntegerField()
+    max_tire_width_mm = models.PositiveSmallIntegerField(null=True, blank=True)
     
 
     class Meta:
         abstract = True
 
 class Rim(Components, WheelSpecs):
+    pass
+
+class RimOptions(models.Model):
+    rim = models.ForeignKey(Rim, on_delete=models.CASCADE, related_name="options")
+    color = models.CharField(max_length=40, blank=True)
     hole_count = models.PositiveSmallIntegerField(null=True, blank=True)
+    image_colour_url = models.URLField(null=True, blank=True)
 
 class HubSpecs(models.Model):
     position = models.CharField(max_length=10, choices=HubPosition.choices, blank=True, default="")
@@ -246,10 +252,10 @@ class TrackHub(Components, HubSpecs):
 class HubOption(models.Model):
     track_hub = models.ForeignKey(TrackHub, on_delete=models.CASCADE, related_name="options")
     color = models.CharField(max_length=40, blank=True)
-    hole_count = models.PositiveSmallIntegerField()
+    hole_count = models.PositiveSmallIntegerField(null=True, blank=True)
     cog_interface = models.CharField(max_length=20, choices=CogInterface.choices, blank=True, default="")
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image_colour_url = models.URLField(blank=True)
+    image_colour_url = models.URLField(null=True, blank=True)
 
     class Meta:
         ordering = ["track_hub", "color", "hole_count", "cog_interface"]
@@ -282,7 +288,11 @@ class Sprocket(Components):
 
     mount_type = models.CharField(max_length=10, choices=MountType.choices)
     sprocket_width = models.CharField(max_length=10, choices=Widths.choices)
-    sprocket_teeth = models.PositiveSmallIntegerField()
+    sprocket_teeth = models.PositiveSmallIntegerField(null=True, blank=True)
+
+class SprocketOption(models.Model):
+    sprocket = models.ForeignKey(Sprocket, on_delete=models.CASCADE, related_name="options")
+    teeth = models.PositiveSmallIntegerField(null=True, blank=True)
 
 class Chain(Components):
     class Widths(models.TextChoices):
@@ -304,15 +314,11 @@ class Tire(Components):
         SEVEN_HUNDRED = "700c", "700c"
         SIX_FIFTY = "650b", "650b"
 
-    class TreadType(models.TextChoices):
-        SLICK = "slick", "Slick"
-        SEMI_SLICK = "semi_slick", "Semi-Slick"
-        KNOBBY = "knobby", "Knobby"
-
     wheel_size = models.CharField(max_length=10, choices=WheelSize.choices)
-    width_mm = models.PositiveSmallIntegerField()
-    tubeless_ready = models.BooleanField(default=False)
-    tread_type = models.CharField(max_length=20, choices=TreadType.choices)
+
+class TireOption(models.Model):
+    tire = models.ForeignKey(Tire, on_delete=models.CASCADE, related_name="options")
+    width_mm = models.PositiveSmallIntegerField(null=True, blank=True)
 
 
 class Handlebar(Components):
@@ -323,18 +329,24 @@ class Handlebar(Components):
         BULLHORN = "bullhorn", "Bullhorn"
 
     bar_type = models.CharField(max_length=20, choices=BarType.choices)
-    width_mm = models.PositiveSmallIntegerField()
     clamp_diameter_mm = models.DecimalField(max_digits=4, decimal_places=1)
     drop_mm = models.PositiveSmallIntegerField(null=True, blank=True)
     reach_mm = models.PositiveSmallIntegerField(null=True, blank=True)
 
+class HandlebarOptions(models.Model):
+    handlebar = models.ForeignKey(Handlebar, on_delete=models.CASCADE, related_name="options")
+    width = models.PositiveSmallIntegerField(null=True, blank=True)
 
 class Stem(Components):
-    length_mm = models.PositiveSmallIntegerField()
     bar_clamp_diameter_mm = models.DecimalField(max_digits=4, decimal_places=1)
     steerer_clamp_diameter_mm = models.DecimalField(max_digits=4, decimal_places=1)
     angle_degrees = models.SmallIntegerField()
 
+class StemOptions(models.Model):
+    stem = models.ForeignKey(Stem, on_delete=models.CASCADE, related_name="options")
+    length_mm = models.PositiveSmallIntegerField(null=True, blank=True)
+    color = models.CharField(max_length=40, blank=True)
+    image_colour_url = models.URLField(null=True, blank=True)
 
 class Brake(Components):
     class BrakeType(models.TextChoices):
@@ -352,31 +364,29 @@ class Brake(Components):
 
 
 class Saddle(Components):
-    class RailType(models.TextChoices):
-        ROUND = "round", "Round"
-        OVAL = "oval", "Oval"
+    pass
 
-    class RailMaterial(models.TextChoices):
-        STEEL = "steel", "Steel"
-        TITANIUM = "titanium", "Titanium"
-        CARBON = "carbon", "Carbon"
-
-    width_mm = models.PositiveSmallIntegerField()
-    rail_type = models.CharField(max_length=10, choices=RailType.choices)
-    rail_material = models.CharField(max_length=20, choices=RailMaterial.choices)
+class SaddleOptiosn(models.Model):
+    saddle = models.ForeignKey(Saddle, on_delete=models.CASCADE, related_name="options")
+    width_mm = models.PositiveSmallIntegerField(null=True, blank=True)
+    length_mm = models.PositiveSmallIntegerField(null=True, blank=True)
 
 
 class Seatpost(Components):
-    class PostType(models.TextChoices):
-        STANDARD = "standard", "Standard"
-        DROPPER = "dropper", "Dropper"
+    pass
 
+class SeatPostOptions(models.Model):
+    seatpost = models.ForeignKey(Seatpost, on_delete=models.CASCADE, related_name="options")
     diameter_mm = models.DecimalField(max_digits=4, decimal_places=1)
-    length_mm = models.PositiveSmallIntegerField()
-    offset_mm = models.PositiveSmallIntegerField(default=0)
-    post_type = models.CharField(max_length=20, choices=PostType.choices, default=PostType.STANDARD)
+    length_mm = models.PositiveSmallIntegerField(null=True, blank=True)
 
+class Pedals(Components):
+    class PedalType(models.TextChoices):
+        FLAT = "flat", "Flats"
+        CLIPS = "clips", "Clips"
+        CLIPLESS = "clipless", "Clipless"
 
+    colour = models.CharField(max_length=30)
 
 class ComponentSubmission(models.Model):
     """A user-submitted product URL awaiting manual entry in the admin."""

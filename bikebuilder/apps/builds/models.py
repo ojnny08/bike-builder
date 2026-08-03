@@ -25,6 +25,7 @@ class Build(models.Model):
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.IN_PROGRESS)
     image_url = models.URLField(blank=True)
     share_token = models.CharField(max_length=12, unique=True, db_index=True, default=generate_share_token, editable=False)
+    idempotency_key = models.CharField(max_length=64, null=True, blank=True, editable=False)
     votes = GenericRelation(Vote)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -33,4 +34,7 @@ class Build(models.Model):
         ordering = ['-created_at']
         indexes = [
             models.Index(fields=['status']),
+        ]
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'idempotency_key'], name='unique_build_idempotency_key'),
         ]

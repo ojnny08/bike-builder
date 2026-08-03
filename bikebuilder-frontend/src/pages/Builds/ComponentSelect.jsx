@@ -6,7 +6,6 @@ import { useComponentFilters } from "../../hooks/useComponentFilters";
 import FilterBar from "../../components/Filters/FilterBar";
 import BuilderNav from "./components/BuilderNav";
 import ComponentCard, { ComponentCardSkeleton } from "../../components/BikeComponents/ComponentCard";
-import VariantModal from "../../components/BikeComponents/VariantModal";
 import { titleCase } from "../../utils/format";
 import "./style/Builds.css";
 
@@ -22,13 +21,15 @@ const PartGlyph = () => (
 
 const ComponentSelect = () => {
     const { category: paramCategory, group, mode } = useParams();
-    const { build, addComponent } = useBuild();
+    const { build } = useBuild();
     const navigate = useNavigate();
 
     const isGroup = !!group;
     const activeMode = isGroup ? build.bikeType.rules.groups[group].modes[mode] : null;
     const groupPrereqs = isGroup ? (activeMode.prerequisites || {}) : {};
     const groupParts = isGroup ? [...(activeMode.required || []), ...(activeMode.optional || [])] : [];
+
+    const isMultiPart = isGroup && (activeMode.required || []).length > 1;
 
     const selectedByCategory = Object.fromEntries(
         build.components.map(c => [c.component_type, c])
@@ -37,21 +38,28 @@ const ComponentSelect = () => {
     const [currentPart, setCurrentPart] = useState(() => groupParts[0]);
     const category = isGroup ? currentPart : paramCategory;
 
+    const chosen = selectedByCategory;
+
     const filters = useComponentFilters({ fixedType: category });
     const { query } = filters;
     const [components, setComponents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [active, setActive] = useState(null);
 
-    const currentSelectedId = selectedByCategory[category]?.id;
+    const openDetail = comp => navigate(
+        isGroup
+            ? `/builds/new/select-group/${group}/${mode}/${comp.id}`
+            : `/builds/new/select/${category}/${comp.id}`
+    );
+
+    const currentSelectedId = chosen[category]?.id;
     const partLocked = part => {
         const dep = groupPrereqs[part];
-        return dep && !selectedByCategory[dep];
+        return dep && !chosen[dep];
     };
-    const requiredFilled = isGroup && (activeMode.required || []).every(t => selectedByCategory[t]);
+    const requiredComplete = isGroup && (activeMode.required || []).every(t => chosen[t]);
 
     const getSelectedIds = () =>
-        Object.fromEntries(build.components.map(c => [`${c.component_type}_id`, c.id]));
+        Object.fromEntries(Object.values(chosen).map(c => [`${c.component_type}_id`, c.id]));
 
     useEffect(() => {
         const load = async () => {
@@ -76,20 +84,6 @@ const ComponentSelect = () => {
         load();
     }, [category, query.search, query.brand, query.priceMin, query.priceMax]);
 
-    const handleAdd = (comp, option) => {
-        addComponent({
-            ...comp,
-            selectedOption: option,
-            price: option ? option.price : comp.price,
-        });
-        if (!isGroup) {
-            navigate("/builds/new");
-            return;
-        }
-        const next = (activeMode.required || []).find(t => t !== category && !selectedByCategory[t]);
-        if (next) setCurrentPart(next);
-    };
-
     const compatCount = components.filter(c => c.compatible).length;
 
     return (
@@ -101,7 +95,7 @@ const ComponentSelect = () => {
                     <h2 className="cs-side-title">{build.bikeType.rules.groups[group].label}</h2>
                     <ul className="cs-side-list">
                         {groupParts.map(part => {
-                            const sel = selectedByCategory[part];
+                            const sel = chosen[part];
                             const locked = partLocked(part);
                             const optional = !(activeMode.required || []).includes(part);
                             return (
@@ -126,10 +120,10 @@ const ComponentSelect = () => {
                     <button
                         type="button"
                         className="bb-btn-primary cs-side-done"
-                        disabled={!requiredFilled}
+                        disabled={!requiredComplete}
                         onClick={() => navigate("/builds/new")}
                     >
-                        Back to builder
+                        {isMultiPart ? "Save to build" : "Back to builder"}
                     </button>
                 </aside>
             )}
@@ -160,21 +154,14 @@ const ComponentSelect = () => {
                         <ComponentCard
                             key={comp.id}
                             comp={comp}
-                            isSelected={comp.id === currentSelectedId || comp.id === active?.id}
-                            onSelect={setActive}
+                            isSelected={comp.id === currentSelectedId}
+                            onSelect={openDetail}
                         />
                     ))}
                 </div>
             )}
             </div>
         </div>
-        {active && (
-            <VariantModal
-                component={active}
-                onClose={() => setActive(null)}
-                onAdd={handleAdd}
-            />
-        )}
         </div>
     );
 };
