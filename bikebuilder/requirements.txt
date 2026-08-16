@@ -6,3 +6,4 @@ firebase-admin==7.4.0
 python-dotenv==1.2.2
 boto3==1.43.34
 django-redis==5.4.0
+Pillow==12.3.0

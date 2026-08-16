@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchComponentTypes, fetchComponentsByCategory } from "../../services/componentService";
-import "./style/BuildFilters.css";
+import "./BuildFilters.css";
 
 let rowSeq = 0;
 const newRow = () => ({ key: ++rowSeq, type: "", componentId: "" });

@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from 'react-router-dom'
-import NavBar from '../Bars/NavBar'
+import NavBar from '../NavBar/NavBar'
 import { useBuild } from '../../context/BuildContext'
 import './Layout.css'
 

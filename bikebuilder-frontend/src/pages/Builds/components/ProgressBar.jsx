@@ -1,4 +1,4 @@
-import "../style/Builds.css";
+import "../Builds.css";
 
 const ProgressBar = ({ progress = 0, filled = 0, total = 0 }) => {
 

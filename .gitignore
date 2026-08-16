@@ -1,5 +1,22 @@
-firebase/
-.env
+# Python
 __pycache__/
 *.pyc
+.venv/
 db.sqlite3
+
+# Node
+node_modules/
+dist/
+
+# Secrets & local config
+.env
+.env.*
+!.env.example
+firebase/
+
+# OS / editor
+.DS_Store
+.vscode/
+
+# Local data dumps
+bikebuilder/backups/

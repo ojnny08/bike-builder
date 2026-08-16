@@ -27,9 +27,9 @@ AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
 REDIS_URL = os.getenv("REDIS_URL")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True").lower() in ("1", "true", "yes")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [h for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h]
 
 
 # Application definition
@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'apps.core',
-    'apps.ai',
     'apps.builds',
     'apps.category',
     'apps.components',
@@ -92,11 +91,11 @@ WSGI_APPLICATION = 'bikebuilder.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bikebuilder',
-        'USER': 'jonathanli',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME', 'bikebuilder'),
+        'USER': os.getenv('DB_USER', 'jonathanli'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 

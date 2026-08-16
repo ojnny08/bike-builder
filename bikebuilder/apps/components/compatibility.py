@@ -1,5 +1,5 @@
 from .models import (
-    Components, BottomBracket, Crankset, CrankArm, Chainring, Tire, Handlebar, Stem, Sprocket, Chain
+    Components, BottomBracket, Crankset, CrankArm, Chainring, Tire, Handlebar, Sprocket, Chain
 )
 
 RULES = {

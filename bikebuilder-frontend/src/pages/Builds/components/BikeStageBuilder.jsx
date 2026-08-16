@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../../context/BuildContext";
-import BikeCanvas from "../../../threejs/3d-bike/BikeCanvas";
+import BikeCanvas from "../../../bike3d/BikeCanvas";
 import CategoryIcon from "../../../components/Icons/CategoryIcons";
-import "../style/Builds.css";
+import "../Builds.css";
 import BuilderNav from "./BuilderNav";
 import { titleCase, money, sumPrice, sumWeight } from "../../../utils/format";
 
@@ -114,7 +114,6 @@ const BikeStageBuilder = () => {
     const { build, emptyBuild } = useBuild();
     const navigate = useNavigate();
     const [focusedCategory, setFocusedCategory] = useState(null);
-    const [componentList, setComponentList] = useState(false);
     const { required = [], optional = [], prerequisites = {}, groups = {} } = build.bikeType.rules;
 
     const [groupModes, setGroupModes] = useState(() =>
@@ -172,7 +171,7 @@ const BikeStageBuilder = () => {
 
     return (
         <div className="bb-wrapper bs-wrapper">
-            <BuilderNav />
+            <BuilderNav stage />
             <div className="bs-stage-layout">
                 <div className="bs-stage-left">
                     <div className="bs-canvas">
@@ -180,7 +179,7 @@ const BikeStageBuilder = () => {
                         {!hasComponents && (
                             <div className="bs-canvas-hint">
                             <span className="bs-canvas-title">
-                                {componentList ? "" : "3D preview \n Select a part to focus the view"}
+                                {"3D preview \n Select a part to focus the view"}
                             </span>
                         </div>
                         )}

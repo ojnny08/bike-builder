@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from urllib.parse import urlparse
 from .models import (
-    Components, ComponentType, ComponentSubmission,
+    Components, ComponentSubmission,
     Crankset, CrankOption, CrankArm, CrankArmOption, Chainring, ChainringOption,
     BottomBracket, BottomBracketOption, TrackHub, HubOption,
     Rim, RimOptions, Stem, StemOptions,

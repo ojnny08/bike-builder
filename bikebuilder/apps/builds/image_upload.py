@@ -14,16 +14,20 @@ def _client():
     )
 
 
+def put_bytes(body, key, content_type):
+    _client().put_object(
+        Body=body,
+        Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+        Key=key,
+        ContentType=content_type,
+    )
+    return f"https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.{settings.AWS_S3_REGION_NAME}.amazonaws.com/{key}"
+
+
 def upload_to_s3(file, build_id):
     ext = os.path.splitext(file.name)[1]
     key = f"user-upload/{build_id}-{uuid.uuid4().hex}{ext}"
-    _client().put_object(
-        Body=file.read(),
-        Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-        Key=key,
-        ContentType=file.content_type,
-    )
-    return f"https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.{settings.AWS_S3_REGION_NAME}.amazonaws.com/{key}"
+    return put_bytes(file.read(), key, file.content_type)
 
 
 def delete_from_s3(url):

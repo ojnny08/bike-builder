@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import BikeCanvas from "../../threejs/3d-bike/BikeCanvas"
-import sundayy from "../../utils/sundayy.png";
+import BikeCanvas from "../../bike3d/BikeCanvas"
+import sundayy from "../../assets/sundayy.png";
 import "./Home.css";
 
 

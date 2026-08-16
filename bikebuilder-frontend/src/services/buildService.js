@@ -1,24 +1,6 @@
 import { api } from "../api/axios";
 import { toRenderableImage } from "../utils/image";
 
-export const fetchComponents = async (currentCategory) => {
-    try {
-        const res = await api.get("/api/components/", { params: { category: currentCategory } });
-        return res.data.results ?? res.data;
-    } catch (error) {
-        throw new Error("Failed to get components");
-    }
-};
-
-export const fetchBuilds = async (params = {}) => {
-    try {
-        const res = await api.get("/api/builds/", { params });
-        return res.data;
-    } catch (error) {
-        throw new Error("Failed to get builds");
-    }
-};
-
 // Build the query string by hand so array values (e.g. component ids) repeat
 // the key — component=12&component=45 — which Django reads with getlist().
 // Axios' default array serialization would emit component[]= and miss it.

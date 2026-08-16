@@ -1,21 +1,21 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import { fetchComponentsByCategory } from "../../services/componentService";
 import { useComponentFilters } from "../../hooks/useComponentFilters";
 import FilterSidebar from "../../components/Filters/FilterSidebar";
 import ImportModal from "./ImportModal";
 import CategoryIcon from "../../components/Icons/CategoryIcons";
-import "./style/Components.css";
+import "./Components.css";
 import ComponentCard, { ComponentCardSkeleton } from "../../components/BikeComponents/ComponentCard";
+import ComponentDetailModal from "../../components/BikeComponents/ComponentDetailModal";
 
 const Components = () => {
-    const navigate = useNavigate();
     const filters = useComponentFilters();
     const { query } = filters;
     const [components, setComponents] = useState([]);
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [importOpen, setImportOpen] = useState(false);
+    const [detailId, setDetailId] = useState(null);
     const [reloadToken, setReloadToken] = useState(0);
     const rowRef = useRef(null);
 
@@ -127,7 +127,7 @@ const Components = () => {
                                 <ComponentCard
                                     key={comp.id}
                                     comp={comp}
-                                    onSelect={() => navigate(`/components/${comp.id}`)}/>
+                                    onSelect={() => setDetailId(comp.id)}/>
                             ))}
                         </div>
                     )}
@@ -138,6 +138,13 @@ const Components = () => {
                 <ImportModal
                     onClose={() => setImportOpen(false)}
                     onImported={() => setReloadToken(t => t + 1)}
+                />
+            )}
+
+            {detailId && (
+                <ComponentDetailModal
+                    id={detailId}
+                    onClose={() => setDetailId(null)}
                 />
             )}
         </div>

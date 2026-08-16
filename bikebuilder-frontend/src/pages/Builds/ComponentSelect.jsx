@@ -6,18 +6,9 @@ import { useComponentFilters } from "../../hooks/useComponentFilters";
 import FilterBar from "../../components/Filters/FilterBar";
 import BuilderNav from "./components/BuilderNav";
 import ComponentCard, { ComponentCardSkeleton } from "../../components/BikeComponents/ComponentCard";
+import ComponentDetailModal from "../../components/BikeComponents/ComponentDetailModal";
 import { titleCase } from "../../utils/format";
-import "./style/Builds.css";
-
-const PartGlyph = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4"
-        strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="3.2" />
-        <path d="M12 2.6v3M12 18.4v3M2.6 12h3M18.4 12h3M5.4 5.4l2.1 2.1M16.5 16.5l2.1 2.1M18.6 5.4l-2.1 2.1M7.5 16.5l-2.1 2.1" />
-    </svg>
-);
-
-
+import "./Builds.css";
 
 const ComponentSelect = () => {
     const { category: paramCategory, group, mode } = useParams();
@@ -44,12 +35,12 @@ const ComponentSelect = () => {
     const { query } = filters;
     const [components, setComponents] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [detailId, setDetailId] = useState(null);
 
-    const openDetail = comp => navigate(
-        isGroup
-            ? `/builds/new/select-group/${group}/${mode}/${comp.id}`
-            : `/builds/new/select/${category}/${comp.id}`
-    );
+    const onAdded = () => {
+        setDetailId(null);
+        navigate(isGroup ? `/builds/new/select-group/${group}/${mode}` : "/builds/new");
+    };
 
     const currentSelectedId = chosen[category]?.id;
     const partLocked = part => {
@@ -149,19 +140,27 @@ const ComponentSelect = () => {
             ) : components.length === 0 ? (
                 <p className="empty-state">No {titleCase(category).toLowerCase()} components found.</p>
             ) : (
-                <div className="cs-grid">
+                <div className="product-grid">
                     {components.map(comp => (
                         <ComponentCard
                             key={comp.id}
                             comp={comp}
                             isSelected={comp.id === currentSelectedId}
-                            onSelect={openDetail}
+                            onSelect={c => setDetailId(c.id)}
                         />
                     ))}
                 </div>
             )}
             </div>
         </div>
+        {detailId && (
+            <ComponentDetailModal
+                id={detailId}
+                inBuildFlow
+                onAdded={onAdded}
+                onClose={() => setDetailId(null)}
+            />
+        )}
         </div>
     );
 };

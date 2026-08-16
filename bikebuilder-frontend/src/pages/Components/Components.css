@@ -1,0 +1,118 @@
+.components-page {
+    background: var(--bg);
+}
+
+.components-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 36px;
+}
+
+.component-quick-search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.quick-filter-row {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-top: 4px;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+}
+
+.quick-filter-row::-webkit-scrollbar {
+    display: none;
+}
+
+.quick-nav {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color var(--dur) var(--ease-out), background var(--dur) var(--ease-out);
+}
+
+.quick-nav:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
+}
+
+.quick-nav svg {
+    width: 20px;
+    height: 20px;
+}
+
+.quick-filter {
+    flex: 0 0 auto;
+    width: 120px;
+    height: 120px;
+    display: grid;
+    place-items: center;
+    padding: 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    color: var(--text);
+    cursor: pointer;
+    scroll-snap-align: start;
+    transition: color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+}
+
+.quick-filter:hover {
+    
+    transform: translateY(-2px);
+}
+
+.quick-filter.is-active {
+    border-color: var(--text);
+
+}
+
+.quick-filter svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* top row: search narrowed, Import beside it */
+.components-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    /* indent so the search lines up with the results column, past the sidebar */
+    padding-left: calc(210px + 28px);
+}
+
+.components-toolbar .filter-search {
+    flex: 1 1 auto;
+}
+
+/* two-column body: narrow sidebar + results */
+.components-body {
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+.components-title {
+    font-size: 1.5rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+}
+

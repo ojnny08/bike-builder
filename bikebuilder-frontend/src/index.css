@@ -28,7 +28,6 @@
   --accent-ring:    rgba(17, 17, 19, 0.16);
   --on-accent:      #ffffff;
 
-
   /* Motion */
   --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast:       140ms;
@@ -36,8 +35,11 @@
 
   /* Layout */
   --page-x: 64px;
-  --border-raduis-value: 999px;
-  --radius-panel: 50px;
+  --radius-pill: 999px;
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --radius-panel: var(--radius-lg);
 
 }
 
@@ -92,7 +94,7 @@ input:focus-visible,
 [tabindex]:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--accent-ring);
-  border-radius: var(--border-raduis-value);
+  border-radius: var(--radius-sm);
 }
 
 @keyframes fadeInUp {
@@ -104,9 +106,6 @@ input:focus-visible,
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-
-.anim-fade-up { animation: fadeInUp var(--dur) var(--ease-out) both; }
-.anim-fade    { animation: fadeIn var(--dur) var(--ease-out) both; }
 
 /* Respect users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {

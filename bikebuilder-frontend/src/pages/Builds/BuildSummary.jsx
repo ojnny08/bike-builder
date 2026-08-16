@@ -4,7 +4,7 @@ import { useBuild } from "../../context/BuildContext";
 import BuilderNav from "./components/BuilderNav";
 import { createBuild, updateBuild as updateBuildApi, uploadBuildImage } from "../../services/buildService";
 import { titleCase, money, sumPrice, sumWeight } from "../../utils/format";
-import "./style/Builds.css";
+import "./Builds.css";
 
 const IDEM_STORAGE_KEY = "build-create-idempotency-key";
 
@@ -105,14 +105,10 @@ const BuildSummary = () => {
             <BuilderNav hideSave />
             <div className="sm-main">
                 <header className="sm-head">
-                    <button className="bb-btn-ghost" onClick={() => navigate("/builds/new")} disabled={saving}>
-                        ← Back to parts
-                    </button>
                     <h1 className="sm-title">Review &amp; save your build</h1>
                 </header>
 
                 <div className="sm-grid">
-                    {/* Recap */}
                     <section className="sm-recap" aria-label="Build summary">
                         <div className="sm-recap-head">
                             <span className="sm-recap-type">{build.bikeType.name}</span>
@@ -141,7 +137,6 @@ const BuildSummary = () => {
                         </div>
                     </section>
 
-                    {/* Form */}
                     <section className="sm-form" aria-label="Build details">
                         <div className="sm-field">
                             <label className="sm-label" htmlFor="build-name">Build name</label>

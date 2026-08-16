@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
 import Layout from './components/Layout/Layout'
-import ProtectedRoute from './components/ProtextedRoute/ProtectedRoute'
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import Login from './pages/Login/Login'
 import Home from './pages/Home/Home'
 import Components from './pages/Components/Components'
