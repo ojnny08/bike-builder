@@ -1,10 +1,7 @@
-from django.contrib.contenttypes.models import ContentType
 from .models import Comments
 from .serializer import CommentsSerializer
-from apps.vote.models import Vote
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
-from rest_framework.decorators import action
 from rest_framework import status
 
 
@@ -45,19 +42,3 @@ class CommentViewSet(ViewSet):
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=True, methods=["post"])
-    def upvote(self, request, pk=None):
-        try:
-            comment = Comments.objects.get(pk=pk)
-        except Comments.DoesNotExist:
-            return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
-        content_type = ContentType.objects.get_for_model(Comments)
-        vote, created = Vote.objects.get_or_create(
-            user=request.user,
-            content_type=content_type,
-            object_id=comment.id,
-            defaults={"value": Vote.Value.UP},
-        )
-        if not created:
-            vote.delete()
-        return Response({"my_vote": created, "vote_count": comment.votes.count()})

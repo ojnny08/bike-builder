@@ -166,57 +166,6 @@
     border-top: none;
 }
 
-/* ---- vote rail ---- */
-.comment-vote {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    min-width: 44px;
-}
-
-.comment-upvote {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
-    background: var(--surface);
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: border-color var(--dur-fast), background var(--dur-fast), color var(--dur-fast), transform var(--dur-fast) var(--ease-out);
-}
-
-.comment-upvote:hover:not(:disabled) {
-    border-color: var(--border-strong);
-    color: var(--text);
-    transform: translateY(-1px);
-}
-
-.comment-upvote:active:not(:disabled) {
-    transform: scale(0.94);
-}
-
-.comment-upvote.is-voted {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--on-accent);
-}
-
-.comment-upvote:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.comment-vote-count {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    font-variant-numeric: tabular-nums;
-}
-
 /* ---- body ---- */
 .comment-body {
     flex: 1;
@@ -352,7 +301,6 @@
 
 @media (prefers-reduced-motion: reduce) {
     .comment-item,
-    .comment-upvote,
     .comment-submit {
         animation: none;
         transition: none;

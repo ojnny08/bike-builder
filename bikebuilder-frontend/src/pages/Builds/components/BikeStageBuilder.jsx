@@ -4,7 +4,9 @@ import { useBuild } from "../../../context/BuildContext";
 import BikeCanvas from "../../../bike3d/BikeCanvas";
 import CategoryIcon from "../../../components/Icons/CategoryIcons";
 import "../Builds.css";
-import BuilderNav from "./BuilderNav";
+import ProgressSteps from "./ProgressSteps";
+import FilterBar from "../../../components/Filters/FilterBar";
+import { useComponentFilters } from "../../../hooks/useComponentFilters";
 import { titleCase, money, sumPrice, sumWeight } from "../../../utils/format";
 
 const ASSEMBLY_ORDER = [
@@ -116,6 +118,8 @@ const BikeStageBuilder = () => {
     const [focusedCategory, setFocusedCategory] = useState(null);
     const { required = [], optional = [], prerequisites = {}, groups = {} } = build.bikeType.rules;
 
+    const filters = useComponentFilters({ fixedType: focusedCategory ?? "" });
+
     const [groupModes, setGroupModes] = useState(() =>
         Object.fromEntries(Object.entries(groups).map(([key, g]) => [key, g.default]))
     );
@@ -156,6 +160,20 @@ const BikeStageBuilder = () => {
         ...allCategories.filter(c => !ASSEMBLY_ORDER.includes(c)),
     ];
 
+    const categoryLabel = category =>
+        groups[category] ? groups[category].label : titleCase(category);
+
+    const steps = orderedCats.map(category => ({
+        key: category,
+        label: categoryLabel(category),
+        filled: isFilled(category),
+        locked: isLocked(category),
+    }));
+
+    const nextCategory = orderedCats
+        .slice(orderedCats.indexOf(focusedCategory) + 1)
+        .find(c => !isLocked(c));
+
     const requiredFilled = required.filter(isFilled).length;
     const progress = required.length ? requiredFilled / required.length : 0;
 
@@ -171,9 +189,13 @@ const BikeStageBuilder = () => {
 
     return (
         <div className="bb-wrapper bs-wrapper">
-            <BuilderNav stage />
             <div className="bs-stage-layout">
                 <div className="bs-stage-left">
+                    <ProgressSteps
+                        steps={steps}
+                        focused={focusedCategory}
+                        onFocus={setFocusedCategory}
+                    />
                     <div className="bs-canvas">
                         <BikeCanvas />
                         {!hasComponents && (
@@ -194,6 +216,9 @@ const BikeStageBuilder = () => {
                             <span className="bs-pill-label">Weight</span>
                             <span className="bs-panel-weight">{totalWeight > 0 ? `${totalWeight.toFixed(0)} g` : '—'}</span>
                         </div>
+                        <button className="bb-btn-ghost bs-startover-pill" onClick={handleStartOver}>
+                            Start Over
+                        </button>
                         <button
                             className="bb-btn-primary bs-finish-pill"
                             onClick={() => navigate("/builds/new/review")}
@@ -206,6 +231,9 @@ const BikeStageBuilder = () => {
 
                 <div className="bs-panel">
                     <div className="bs-panel-list">
+                        <div className="bs-panel-filters">
+                            <FilterBar filters={filters} iconOnly />
+                        </div>
                         {orderedCats.map(category => (
                             groups[category] ? (
                                 <GroupCard
@@ -238,6 +266,16 @@ const BikeStageBuilder = () => {
                             )
                         ))}
                     </div>
+
+                    {nextCategory && (
+                        <button
+                            type="button"
+                            className="bb-btn-primary bs-panel-next"
+                            onClick={() => setFocusedCategory(nextCategory)}
+                        >
+                            Continue to {categoryLabel(nextCategory)}
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

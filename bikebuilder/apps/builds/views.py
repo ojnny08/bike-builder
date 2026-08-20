@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,8 +5,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from django.core.cache import cache
 from django.db import IntegrityError
-from django.db.models import Sum, Q
-from django.db.models.functions import Coalesce
 from django.utils import timezone
 from .serializer import BuildsSerializer
 from .models import Build
@@ -25,12 +21,11 @@ class PublicBuildsViewSet(ViewSet):
 
         data = cache.get(key)
         if data is None:
-            cutoff = timezone.now() - timedelta(days=7)
+            # Ranked by recency until build likes land; then order by like count.
             builds = (
                 Build.objects
                 .filter(status=Build.Status.COMPLETE)
-                .annotate(score=Coalesce(Sum('votes__value', filter=Q(votes__created_at__gte=cutoff)), 0))
-                .order_by('-score', '-created_at')
+                .order_by('-created_at')
                 .prefetch_related('components')[:3]
             )
             data = BuildsSerializer(builds, many=True).data

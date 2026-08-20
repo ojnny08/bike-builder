@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import "./FilterBar.css";
 import FilterFields from "./FilterFields";
 
-const FilterBar = ({ filters, children, panel, searchPlaceholder = "Search products...", iconOnly = false, centered = false, className = "" }) => {
+const FilterBar = ({ filters, children, panel, searchPlaceholder = "Search products...", iconOnly = false, centered = false, floating = false, className = "" }) => {
     const { search, setSearch, activeCount } = filters;
     const [open, setOpen] = useState(false);
 
@@ -12,8 +12,11 @@ const FilterBar = ({ filters, children, panel, searchPlaceholder = "Search produ
         className,
     ].filter(Boolean).join(" ");
 
+    const Wrapper = floating ? "div" : Fragment;
+    const wrapperProps = floating ? { className: "filter-bar-wrap" } : {};
+
     return (
-        <>
+        <Wrapper {...wrapperProps}>
             <div className={toolbarClass}>
                 <div className="filter-search">
                     <svg className="filter-search-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -51,11 +54,15 @@ const FilterBar = ({ filters, children, panel, searchPlaceholder = "Search produ
             </div>
 
             {open && (
-                <div className="filter-panel" role="region" aria-label="Filters">
+                <div
+                    className={`filter-panel${floating ? " filter-panel--floating" : ""}`}
+                    role="region"
+                    aria-label="Filters"
+                >
                     {panel ?? <FilterFields filters={filters} />}
                 </div>
             )}
-        </>
+        </Wrapper>
     );
 };
 

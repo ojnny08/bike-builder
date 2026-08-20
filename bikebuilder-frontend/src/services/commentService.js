@@ -34,12 +34,3 @@ export const deleteComment = async (id) => {
         throw new Error("Failed to delete comment");
     }
 };
-
-export const upvoteComment = async (id) => {
-    try {
-        const res = await api.post(`/api/comments/${id}/upvote/`);
-        return res.data;
-    } catch (error) {
-        throw new Error("Failed to upvote comment");
-    }
-};

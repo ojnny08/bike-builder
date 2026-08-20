@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'apps.components',
     'apps.users',
     'apps.comments',
-    'apps.vote',
     'storages',
 ]
 

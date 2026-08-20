@@ -19,7 +19,7 @@
 - Dont make every word capatialized
 
 ## General
-- dont add comments
+- dont add comments in code
 
 
 ## Code style

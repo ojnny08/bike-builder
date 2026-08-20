@@ -35,6 +35,7 @@
 
   /* Layout */
   --page-x: 64px;
+  --nav-clearance: 80px;   /* floating navbar: 12px offset + 56px tall + gap */
   --radius-pill: 999px;
   --radius-lg: 18px;
   --radius-md: 12px;

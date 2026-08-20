@@ -6,7 +6,6 @@ import {
     createComment,
     updateComment,
     deleteComment,
-    upvoteComment,
 } from "../../services/commentService";
 import CommentItem from "./CommentItem";
 import "./Comments.css";
@@ -59,12 +58,6 @@ const Comments = ({ buildId }) => {
         setComments((prev) => prev.filter((c) => c.id !== id));
     };
 
-    const handleUpvote = async (id) => {
-        const { my_vote, vote_count } = await upvoteComment(id);
-        setComments((prev) =>
-            prev.map((c) => (c.id === id ? { ...c, my_vote, vote_count } : c))
-        );
-    };
 
     return (
         <section className="comments">
@@ -122,10 +115,8 @@ const Comments = ({ buildId }) => {
                             key={c.id}
                             comment={c}
                             isOwner={!!myUsername && c.user.username === myUsername}
-                            canVote={!!currentUser}
                             onUpdate={handleUpdate}
                             onDelete={handleDelete}
-                            onUpvote={handleUpvote}
                         />
                     ))}
                 </ul>
