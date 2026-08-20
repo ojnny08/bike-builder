@@ -164,7 +164,7 @@
     display: flex;
     flex-shrink: 0;
     width: 100%;
-    height: 46px;
+    height: 58px;
     background: var(--bg);
     overflow: hidden;
 }
@@ -176,14 +176,10 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    padding: 0 10px 0 26px;
+    padding: 0 8px 0 22px;
     margin-left: -12px;
     background: #f1f1f1;
     border: none;
-    font-family: inherit;
-    font-size: 0.74rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
     color: var(--text-muted);
     cursor: pointer;
     clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%);
@@ -200,11 +196,12 @@
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%);
 }
 
-.bs-step-label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.bs-step-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
 }
+.bs-step-icon svg { width: 100%; height: 100%; display: block; }
 
 .bs-step:hover:not(:disabled) { background: #e4e4e4; color: var(--text); }
 
