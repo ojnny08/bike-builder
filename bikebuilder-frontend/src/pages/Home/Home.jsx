@@ -1,6 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import BikeCanvas from "../../bike3d/BikeCanvas"
+import { fetchFeaturedBuilds } from "../../services/buildService";
+import BuildsCard from "../../components/Builds/BuildsCard";
 import sundayy from "../../assets/sundayy.png";
 import "./Home.css";
 
@@ -57,6 +59,8 @@ const features = [
 
 const Home = () => {
     const offerRef = useRef(null);
+    const featuresRef = useRef(null);
+    const [featuredBuilds, setFeaturedBuilds] = useState([]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -71,6 +75,26 @@ const Home = () => {
         if (offerRef.current) observer.observe(offerRef.current);
         return () => observer.disconnect();
     }, []);
+
+    useEffect(() => {
+        fetchFeaturedBuilds().then(data => setFeaturedBuilds(data));
+    }, []);
+
+    useEffect(() => {
+        const el = featuresRef.current;
+        if (!el) return;
+        el.classList.add("reveal-ready");
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry.isIntersecting) return;
+                el.classList.add("is-visible");
+                observer.disconnect();
+            },
+            { threshold: 0.2 }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [featuredBuilds]);
 
     return (
         <div className="home">
@@ -109,6 +133,19 @@ const Home = () => {
                     <img className="home-bikestores-logo" src={sundayy} alt="Sunday" />
                 </div>
             </section>
+
+            {featuredBuilds.length > 0 && (
+                <section className="featured-builds-section">
+                    <h2 className="featured-builds-title">Top Builds This Week</h2>
+                    <div className="featured-builds" ref={featuresRef}>
+                        {featuredBuilds.map((f, i) => (
+                            <div key={f.id} style={{ animationDelay: `${i * 120}ms` }}>
+                                <BuildsCard build={f} />
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
 
             <section className="home-section" ref={offerRef}>
                 <div className="home-section-head">
