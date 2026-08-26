@@ -10,7 +10,6 @@ import Builds from './pages/Builds/Builds'
 import PublicBuilds from './pages/Builds/PublicBuilds'
 import SharedBuild from './pages/Builds/SharedBuild'
 import BuildDetail from './pages/Builds/BuildDetail'
-import ComponentSelect from './pages/Builds/ComponentSelect'
 import BuildSummary from './pages/Builds/BuildSummary'
 import Profile from './pages/Profile/Profile'
 import './App.css'
@@ -24,10 +23,6 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/builds/new" element={<Builds />}/>
-          <Route path="/builds/new/select/:category" element={<ComponentSelect />}/>
-          <Route path="/builds/new/select/:category/:id" element={<ComponentDetails />}/>
-          <Route path="/builds/new/select-group/:group/:mode" element={<ComponentSelect />}/>
-          <Route path="/builds/new/select-group/:group/:mode/:id" element={<ComponentDetails />}/>
           <Route path="/profile/:username" element={<Profile />}/>
           <Route path="/components" element={<Components />}/>
           <Route path="/components/:id" element={<ComponentDetails />}/>

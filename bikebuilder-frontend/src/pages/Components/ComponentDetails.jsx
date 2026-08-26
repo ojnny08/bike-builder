@@ -3,11 +3,8 @@ import ComponentDetailView from "../../components/BikeComponents/ComponentDetail
 import "./ComponentDetails.css";
 
 const ComponentDetails = () => {
-    const { id, category, group, mode } = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
-    const inBuildFlow = Boolean(category || group);
-
-    const onAdded = () => navigate(group ? `/builds/new/select-group/${group}/${mode}` : "/builds/new");
 
     return (
         <div className="page comp-detail-page">
@@ -16,7 +13,7 @@ const ComponentDetails = () => {
                     Back
                 </button>
             </div>
-            <ComponentDetailView id={id} inBuildFlow={inBuildFlow} onAdded={onAdded} />
+            <ComponentDetailView id={id} />
         </div>
     );
 };

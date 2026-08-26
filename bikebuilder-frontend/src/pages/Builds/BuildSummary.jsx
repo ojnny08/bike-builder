@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../context/BuildContext";
-import BuilderNav from "./components/BuilderNav";
 import { createBuild, updateBuild as updateBuildApi, uploadBuildImage } from "../../services/buildService";
 import { titleCase, money, sumPrice, sumWeight } from "../../utils/format";
 import "./Builds.css";
@@ -102,7 +101,6 @@ const BuildSummary = () => {
 
     return (
         <div className="bb-wrapper">
-            <BuilderNav hideSave />
             <div className="sm-main">
                 <header className="sm-head">
                     <h1 className="sm-title">Review &amp; save your build</h1>
