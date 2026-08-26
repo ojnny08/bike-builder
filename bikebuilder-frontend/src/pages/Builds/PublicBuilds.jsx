@@ -3,7 +3,7 @@ import { fetchPublicBuilds } from "../../services/buildService";
 import BuildsCard from "../../components/Builds/BuildsCard";
 import FilterBar from "../../components/Filters/FilterBar";
 import BuildFilters from "../../components/Filters/BuildFilters";
-import "./PublicBuilds.css";
+import "../../styles/pages/Builds/PublicBuilds.css";
 
 const PublicBuilds = () => {
     const [buildsList, setBuildsList] = useState([]);

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { fetchCurrentUserProfile } from "../../services/userService";
-import "./NavBar.css";
+import "../../styles/components/NavBar/NavBar.css";
 
 const NavBar = () => {
     const { currentUser, logout } = useAuth();

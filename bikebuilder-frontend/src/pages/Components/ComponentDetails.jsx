@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import ComponentDetailView from "../../components/BikeComponents/ComponentDetailView";
-import "./ComponentDetails.css";
+import "../../styles/pages/Components/ComponentDetails.css";
 
 const ComponentDetails = () => {
     const { id } = useParams();

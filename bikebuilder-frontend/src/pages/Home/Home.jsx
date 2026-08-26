@@ -4,7 +4,7 @@ import BikeCanvas from "../../bike3d/BikeCanvas"
 import { fetchFeaturedBuilds } from "../../services/buildService";
 import BuildsCard from "../../components/Builds/BuildsCard";
 import sundayy from "../../assets/sundayy.png";
-import "./Home.css";
+import "../../styles/pages/Home/Home.css";
 
 
 const stroke = {

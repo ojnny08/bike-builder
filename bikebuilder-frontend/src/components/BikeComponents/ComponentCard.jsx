@@ -1,5 +1,5 @@
 import { money } from '../../utils/format'
-import './ComponentCard.css'
+import "../../styles/components/BikeComponents/ComponentCard.css"
 
 const ComponentCard = ({ comp, isSelected, onSelect }) => {
 

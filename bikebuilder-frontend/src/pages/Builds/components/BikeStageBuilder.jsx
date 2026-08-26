@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../../context/BuildContext";
 import BikeCanvas from "../../../bike3d/BikeCanvas";
 import CategoryIcon from "../../../components/Icons/CategoryIcons";
-import "../Builds.css";
+import "../../../styles/pages/Builds/Builds.css";
 import ProgressSteps from "./ProgressSteps";
 import FilterBar from "../../../components/Filters/FilterBar";
 import ComponentCard, { ComponentCardSkeleton } from "../../../components/BikeComponents/ComponentCard";

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getSharedBuild } from "../../services/buildService";
 import BuildsCard from "../../components/Builds/BuildsCard";
-import "./PublicBuilds.css";
+import "../../styles/pages/Builds/PublicBuilds.css";
 
 const SharedBuild = () => {
     const { token } = useParams();

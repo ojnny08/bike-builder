@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../context/BuildContext";
 import { createBuild, updateBuild as updateBuildApi, uploadBuildImage } from "../../services/buildService";
 import { titleCase, money, sumPrice, sumWeight } from "../../utils/format";
-import "./Builds.css";
+import "../../styles/pages/Builds/Builds.css";
 
 const IDEM_STORAGE_KEY = "build-create-idempotency-key";
 

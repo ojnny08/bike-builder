@@ -8,7 +8,7 @@ import {
     deleteComment,
 } from "../../services/commentService";
 import CommentItem from "./CommentItem";
-import "./Comments.css";
+import "../../styles/components/Comments/Comments.css";
 
 const Comments = ({ buildId }) => {
     const { currentUser } = useAuth();

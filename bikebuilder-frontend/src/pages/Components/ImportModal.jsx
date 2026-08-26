@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { submitProductURL } from "../../services/componentService";
-import "./ImportModal.css";
+import "../../styles/pages/Components/ImportModal.css";
 
 
 const ImportModal = ({ onClose, onImported }) => {

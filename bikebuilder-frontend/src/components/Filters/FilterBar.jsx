@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import "./FilterBar.css";
+import "../../styles/components/Filters/FilterBar.css";
 import FilterFields from "./FilterFields";
 
 const FilterBar = ({ filters, children, panel, searchPlaceholder = "Search products...", iconOnly = false, centered = false, floating = false, className = "" }) => {

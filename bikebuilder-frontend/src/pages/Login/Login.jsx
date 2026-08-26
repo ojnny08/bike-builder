@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../../api/firebase";
 import { useAuth } from "../../context/AuthContext";
 import { fetchCurrentUser } from "../../services/userService";
-import "./Login.css";
+import "../../styles/pages/Login/Login.css";
 
 const Login = () => {
     const navigate = useNavigate();

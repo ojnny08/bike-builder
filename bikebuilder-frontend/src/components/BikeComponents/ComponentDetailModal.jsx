@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import ComponentDetailView from "./ComponentDetailView";
-import "./ComponentDetailModal.css";
+import "../../styles/components/BikeComponents/ComponentDetailModal.css";
 
 const ComponentDetailModal = ({ id, inBuildFlow, onAdded, onClose }) => {
     useEffect(() => {

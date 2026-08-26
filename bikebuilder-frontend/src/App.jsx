@@ -12,7 +12,6 @@ import SharedBuild from './pages/Builds/SharedBuild'
 import BuildDetail from './pages/Builds/BuildDetail'
 import BuildSummary from './pages/Builds/BuildSummary'
 import Profile from './pages/Profile/Profile'
-import './App.css'
 
 function App() {
   return (

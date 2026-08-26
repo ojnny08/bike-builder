@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { getSharedBuild } from "../../services/buildService";
 import Comments from "../../components/Comments/Comments";
 import { titleCase, money, sumPrice } from "../../utils/format";
-import "./BuildDetail.css";
+import "../../styles/pages/Builds/BuildDetail.css";
 
 const BuildDetail = () => {
     const { token } = useParams();

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { titleCase } from "../../utils/format";
-import "./VariantOptions.css";
+import "../../styles/components/BikeComponents/VariantOptions.css";
 
 const withUnit = (v, unit) => {
     const s = String(v);

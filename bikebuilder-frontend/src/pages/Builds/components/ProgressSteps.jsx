@@ -1,5 +1,5 @@
 import CategoryIcon from "../../../components/Icons/CategoryIcons";
-import "../Builds.css";
+import "../../../styles/pages/Builds/Builds.css";
 
 const ProgressSteps = ({ steps = [], focused, onFocus }) => (
     <div className="bs-steps">

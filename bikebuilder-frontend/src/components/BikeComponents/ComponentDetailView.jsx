@@ -4,7 +4,7 @@ import { useBuild } from "../../context/BuildContext";
 import VariantOptions from "./VariantOptions";
 import ComponentSpecs from "./ComponentSpecs";
 import { money } from "../../utils/format";
-import "../../pages/Components/ComponentDetails.css";
+import "../../styles/pages/Components/ComponentDetails.css";
 
 const ComponentDetailView = ({ id, inBuildFlow, onAdded }) => {
     const { addComponent } = useBuild();

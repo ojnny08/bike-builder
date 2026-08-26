@@ -4,7 +4,7 @@ import { fetchCurrentPublicProfile } from "../../services/userService";
 import { fetchPublicBuilds, getBuild, deleteBuild, uploadBuildImage } from "../../services/buildService";
 import { useBuild } from "../../context/BuildContext";
 import BuildsCard from "../../components/Builds/BuildsCard";
-import "./Profile.css";
+import "../../styles/pages/Profile/Profile.css";
 
 const Profile = () => {
     const { username } = useParams();
