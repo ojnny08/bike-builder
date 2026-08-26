@@ -17,7 +17,7 @@ const ComponentDetailModal = ({ id, inBuildFlow, onAdded, onClose }) => {
                 aria-modal="true"
                 onMouseDown={e => e.stopPropagation()}
             >
-                <button type="button" className="modal-close" onClick={onClose} aria-label="Close">×</button>
+                <button type="button" className="comp-modal-close" onClick={onClose} aria-label="Close">×</button>
                 <ComponentDetailView id={id} inBuildFlow={inBuildFlow} onAdded={onAdded} />
             </div>
         </div>

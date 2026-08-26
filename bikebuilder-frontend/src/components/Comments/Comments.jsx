@@ -84,19 +84,19 @@ const Comments = ({ buildId }) => {
                             <div className="comment-form-actions">
                                 <button
                                     type="button"
-                                    className="comment-btn-ghost"
+                                    className="btn btn--ghost"
                                     onClick={() => { setShowForm(false); setDraft(""); }}
                                 >
                                     Cancel
                                 </button>
-                                <button type="submit" className="comment-submit" disabled={!draft.trim() || posting}>
+                                <button type="submit" className="btn btn--primary" disabled={!draft.trim() || posting}>
                                     {posting ? "Posting…" : "Post comment"}
                                 </button>
                             </div>
                         </div>
                     </form>
                 ) : (
-                    <button type="button" className="comment-add-btn" onClick={() => setShowForm(true)}>
+                    <button type="button" className="btn btn--primary mb-7" onClick={() => setShowForm(true)}>
                         Add a comment
                     </button>
                 )

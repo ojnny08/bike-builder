@@ -1,39 +1,27 @@
-.filter-sidebar {
-    position: static;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
+@reference "../../index.css";
 
-.filter-sidebar-head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+@layer components {
+    .filter-sidebar {
+        @apply static flex flex-col gap-3.5;
+    }
 
-.filter-sidebar-title {
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    color: var(--text);
-}
+    .filter-sidebar-head {
+        @apply flex items-center gap-2;
+    }
 
-.filter-sidebar-fields {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
-}
+    .filter-sidebar-title {
+        @apply text-[0.8rem] font-semibold tracking-[0.08em] text-fg;
+    }
 
-/* the shared .filter-group is sized for a row (flex: 1 1 180px);
-   in the column sidebar we want each one full-width and stacked */
-.filter-sidebar-fields .filter-group {
-    flex: none;
-    min-width: 0;
-    width: 100%;
-}
+    .filter-sidebar-fields {
+        @apply flex flex-col gap-[18px] pt-3.5 border-t border-border;
 
-.filter-sidebar-fields .filter-clear {
-    width: 100%;
+        .filter-group {
+            @apply flex-none min-w-0 w-full;
+        }
+
+        .filter-clear {
+            @apply w-full;
+        }
+    }
 }

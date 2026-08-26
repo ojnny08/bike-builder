@@ -1,234 +1,120 @@
-.build-card {
-    background: transparent;
-    overflow: hidden;
-    padding-bottom: 20px;
-    cursor: pointer;
-    border: transparent;
-    border-radius: var(--radius-md);
-    animation: fadeInUp var(--dur) var(--ease-out) both;
-    transition: transform var(--dur) var(--ease-out), box-shadow var(--dur);
-}
+@reference "../../index.css";
 
-.build-card > *:not(.build-card-image) {
-    padding-left: 24px;
-    padding-right: 24px;
-}
+@layer components {
+    .build-card {
+        @apply bg-transparent overflow-hidden pb-5 cursor-pointer
+               border-transparent rounded-md;
+        animation: fadeInUp var(--dur) var(--ease-out) both;
+        transition: transform var(--dur) var(--ease-out), box-shadow var(--dur);
 
-.build-card-image {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    position: relative;
-}
+        > *:not(.build-card-image) {
+            @apply px-6;
+        }
+    }
 
-.build-card-image-clickable { cursor: pointer; }
+    .build-card-image {
+        @apply relative w-full overflow-hidden;
+        aspect-ratio: 4 / 3;
 
-.build-card-img {
-    border: transparent;
-    border-radius: var(--radius-md);
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: opacity var(--dur-fast), transform 0.4s var(--ease-out);
-}
+        &.build-card-image-clickable {
+            @apply cursor-pointer;
 
-.build-card-image-clickable:hover .build-card-img { opacity: 0.85; }
+            &:hover {
+                .build-card-img        { @apply opacity-85; }
+                .build-card-img-prompt { @apply text-fg-secondary; }
+                .build-card-img-overlay { @apply opacity-100; }
+            }
+        }
+    }
 
-.build-card-img-placeholder {
+    .build-card-img {
+        @apply block w-full h-full object-cover border-transparent rounded-md;
+        transition: opacity var(--dur-fast), transform 0.4s var(--ease-out);
+    }
 
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .build-card-img-placeholder {
+        @apply w-full h-full flex items-center justify-center;
+    }
 
-.build-card-img-prompt {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-}
+    .build-card-img-prompt {
+        @apply inline-flex items-center gap-[7px]
+               text-[0.75rem] font-semibold text-muted tracking-[0.04em];
+    }
 
-.build-card-image-clickable:hover .build-card-img-prompt { color: var(--text-secondary); }
+    .build-card-img-overlay {
+        @apply absolute inset-0 flex items-center justify-center gap-[7px]
+               bg-scrim/50 text-on-accent
+               text-[0.75rem] font-semibold tracking-[0.04em]
+               opacity-0 transition-opacity duration-150;
+    }
 
-.build-card-img-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    background: rgba(10,10,15,0.5);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    opacity: 0;
-    transition: opacity 0.15s;
-}
+    .build-card-share {
+        @apply absolute top-2.5 right-2.5 z-[2]
+               flex items-center justify-center w-[30px] h-[30px]
+               border-none rounded-full bg-scrim/35 text-on-accent
+               cursor-pointer transition-colors duration-150;
+        backdrop-filter: blur(4px);
 
-.build-card-image-clickable:hover .build-card-img-overlay { opacity: 1; }
+        &:hover { @apply bg-scrim/60; }
 
-.build-card-share {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(10, 10, 15, 0.35);
-    backdrop-filter: blur(4px);
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.15s;
-}
+        &.is-copied { @apply bg-accent; }
+    }
 
-.build-card-share:hover { background: rgba(10, 10, 15, 0.6); }
+    .build-card-avatar {
+        @apply w-8 h-8 rounded-full object-cover shrink-0 cursor-pointer;
+    }
 
-.build-card-share.is-copied { background: var(--accent); }
+    .build-card-avatar-placeholder {
+        @apply w-8 h-8 rounded-full bg-surface-hover border border-border
+               flex items-center justify-center shrink-0 cursor-pointer
+               text-[0.75rem] font-semibold text-muted;
+    }
 
-.build-card-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-    cursor: pointer;
-}
+    .build-card-header {
+        @apply flex justify-between items-center gap-3;
+    }
 
-.build-card-avatar-placeholder {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--surface-hover);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    flex-shrink: 0;
-    cursor: pointer;
-}
+    .build-card-info {
+        @apply flex flex-col gap-1 min-w-0;
+    }
 
-.build-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-}
+    .build-card-type {
+        @apply text-sm font-semibold text-fg tracking-[-0.02em];
+    }
 
-.build-card-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 0;
-}
+    .build-card-meta {
+        @apply flex flex-col gap-0.5 mb-[18px]
+               text-[0.8rem] font-bold text-fg;
+    }
 
-.build-card-type {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: -0.02em;
-}
 
-.build-card-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 18px;
-}
+    .build-card-actions {
+        @apply flex items-center justify-end gap-2;
+    }
 
-/* ── Card actions ─────────────────────────────────────────────────────────── */
+    .build-card-menu {
+        @apply relative;
+    }
 
-.build-card-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-}
+    .build-card-dropdown {
+        @apply absolute right-0 z-[5] min-w-[150px] p-1.5
+               flex flex-col gap-0.5
+               bg-surface border border-border rounded-md shadow-lg;
+        top: calc(100% + 6px);
+    }
 
-/* Square icon-only buttons (edit / delete) */
-.icon-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: border-color var(--dur-fast), color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast) var(--ease-out);
-}
+    .build-card-dropdown-item {
+        @apply flex items-center gap-2.5 px-3 py-[9px]
+               bg-transparent border-none rounded-sm
+               text-[0.85rem] font-semibold text-fg cursor-pointer
+               transition-[background-color,color] duration-[var(--duration-fast)];
 
-.icon-btn:hover {
-    border-color: var(--border-strong);
-    color: var(--text);
-    transform: translateY(-2px);
-}
+        &:hover { @apply bg-surface-hover; }
 
-.icon-btn:active { transform: translateY(0); }
+        &.is-danger {
+            @apply text-danger;
 
-.build-card-menu {
-    position: relative;
-}
-
-.build-card-dropdown {
-    position: absolute;
-    top: calc(100% + 6px);
-    right: 0;
-    z-index: 5;
-    min-width: 150px;
-    padding: 6px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-}
-
-.build-card-dropdown-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
-    background: transparent;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text);
-    cursor: pointer;
-    transition: background var(--dur-fast), color var(--dur-fast);
-}
-
-.build-card-dropdown-item:hover {
-    background: var(--surface-hover);
-}
-
-.build-card-dropdown-item.is-danger {
-    color: var(--error);
-}
-
-.build-card-dropdown-item.is-danger:hover {
-    background: var(--error-bg);
+            &:hover { @apply bg-danger-bg; }
+        }
+    }
 }

@@ -1,221 +1,127 @@
-.nav {
-    position: fixed;
-    top: 12px;
-    left: 16px;
-    right: 16px;
-    z-index: 200;
-    display: flex;
-    flex-direction: column;
-    border-radius: var(--radius-lg);
-    background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(14px) saturate(1.4);
-    -webkit-backdrop-filter: blur(14px) saturate(1.4);
-    border: 1px solid var(--border);
-}
+@reference "../../index.css";
 
-.nav-top {
-    position: relative;
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    padding: 0 0 0 40px;
-    height: 56px;
-    background: transparent;
-}
+@layer components {
+    .nav {
+        @apply fixed top-3 left-4 right-4 z-[200] flex flex-col
+               rounded-lg bg-surface/72 border border-border;
+        backdrop-filter: blur(14px) saturate(1.4);
+        -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    }
 
-.nav-left {
-    display: flex;
-    align-items: stretch;
-    gap: 32px;
-}
+    .nav-top {
+        @apply relative flex items-stretch justify-between h-14 pl-10 bg-transparent;
+    }
 
-.nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1.05rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    color: var(--text);
-    text-decoration: none;
-}
+    .nav-left {
+        @apply flex items-stretch gap-8;
+    }
 
-.nav-brand-icon {
-    color: var(--accent);
-    display: block;
-    transition: transform var(--dur) var(--ease-out);
-}
+    .nav-brand {
+        @apply flex items-center gap-2 text-[1.05rem] font-extrabold
+               tracking-[0.06em] text-fg no-underline;
 
-.nav-brand:hover .nav-brand-icon {
-    transform: rotate(-8deg) scale(1.05);
-}
+        &:hover .nav-brand-icon {
+            transform: rotate(-8deg) scale(1.05);
+        }
+    }
 
-.nav-auth {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-right: 40px;
-}
+    .nav-brand-icon {
+        @apply block text-accent;
+        transition: transform var(--dur) var(--ease-out);
+    }
 
-.nav-auth-link {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: color 0.12s;
-}
+    .nav-auth {
+        @apply flex items-center gap-3 pr-10;
+    }
 
-.nav-auth-link:hover {
-    color: var(--text);
-}
+    .nav-auth-link {
+        @apply text-muted no-underline text-base font-medium
+               transition-colors duration-[120ms];
 
-.nav-sep {
-    color: var(--border-strong);
-    font-size: 1rem;
-}
+        &:hover { @apply text-fg; }
+    }
 
-.nav-user {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    position: relative;
-}
+    .nav-sep {
+        @apply text-border-strong text-base;
+    }
 
-.nav-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    object-fit: cover;
-}
+    .nav-user {
+        @apply relative flex items-center gap-2;
+    }
 
-.nav-avatar-fallback {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--surface-hover);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--text-muted);
-}
+    .nav-avatar {
+        @apply w-7 h-7 rounded-full object-cover;
+    }
 
-.nav-user-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-}
+    .nav-avatar-fallback {
+        @apply w-7 h-7 rounded-full bg-surface-hover border border-border
+               flex items-center justify-center
+               text-[0.7rem] font-semibold text-muted;
+    }
 
-.nav-chevron {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .nav-user-info {
+        @apply flex items-center gap-2 cursor-pointer;
+    }
 
-.nav-chevron-icon {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-right: 2px solid var(--text-muted);
-    border-bottom: 2px solid var(--text-muted);
-    transform: rotate(45deg) translateY(-3px);
-    transition: transform 0.2s, border-color 0.12s;
-}
+    .nav-chevron {
+        @apply bg-none border-none cursor-pointer p-1 flex items-center justify-center;
 
-.nav-chevron:hover .nav-chevron-icon {
-    border-color: var(--text);
-}
+        &:hover .nav-chevron-icon { @apply border-fg; }
+    }
 
-.nav-chevron-icon.open {
-    transform: rotate(225deg) translateY(-3px);
-}
+    .nav-chevron-icon {
+        @apply inline-block w-2.5 h-2.5 border-r-2 border-b-2 border-muted;
+        transform: rotate(45deg) translateY(-3px);
+        transition: transform 0.2s, border-color 0.12s;
 
-.nav-dropdown {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    min-width: 120px;
-    z-index: 100;
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    transform-origin: top right;
-    animation: fadeInUp var(--dur-fast) var(--ease-out) both;
-}
+        &.is-open {
+            transform: rotate(225deg) translateY(-3px);
+        }
+    }
 
-.nav-dropdown-item {
-    display: block;
-    width: 100%;
-    padding: 10px 16px;
-    background: none;
-    border: none;
-    text-align: left;
-    font-size: 0.8rem;
-    color: var(--text);
-    cursor: pointer;
-    transition: background 0.12s, color 0.12s;
-}
+    .nav-dropdown {
+        @apply absolute right-0 min-w-[120px] z-[100] overflow-hidden
+               bg-surface border border-border rounded-md shadow-lg;
+        top: calc(100% + 8px);
+        transform-origin: top right;
+        animation: fadeInUp var(--dur-fast) var(--ease-out) both;
+    }
 
-.nav-dropdown-item:hover {
-    background: var(--surface-hover);
-    color: var(--text-secondary);
-}
+    .nav-dropdown-item {
+        @apply block w-full px-4 py-2.5 bg-none border-none text-left
+               text-[0.8rem] text-fg cursor-pointer
+               transition-[background-color,color] duration-[120ms];
 
-.nav-links {
-    display: flex;
-    align-items: stretch;
-    height: 100%;
-}
+        &:hover { @apply bg-surface-hover text-fg-secondary; }
+    }
 
-.nav-links a {
-    position: relative;
-    display: flex;
-    align-items: center;
-    color: var(--text-muted);
-    text-decoration: none;
-    padding: 0 24px;
-    font-size: 1rem;
-    font-family: 'Jost', sans-serif;
-    font-weight: 800;
-    letter-spacing: 0.03em;
-    transition: color var(--dur-fast);
-}
+    .nav-links {
+        @apply flex items-stretch h-full;
 
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    left: 24px;
-    right: 24px;
-    bottom: 10px;
-    height: 2px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: center;
-    transition: transform var(--dur) var(--ease-out);
-}
+        a {
+            @apply relative flex items-center px-6 text-base font-extrabold
+                   tracking-[0.03em] text-muted no-underline
+                   transition-colors duration-[var(--duration-fast)];
+            font-family: 'Jost', sans-serif;
 
-.nav-links a:hover {
-    color: var(--text);
-}
+            &::after {
+                content: '';
+                @apply absolute left-6 right-6 bottom-2.5 h-0.5 bg-accent origin-center;
+                transform: scaleX(0);
+                transition: transform var(--dur) var(--ease-out);
+            }
 
-.nav-links a:hover::after {
-    transform: scaleX(0.5);
-}
+            &:hover {
+                @apply text-fg;
 
-.nav-links a.active {
-    color: var(--accent);
-    font-weight: 600;
-}
+                &::after { transform: scaleX(0.5); }
+            }
 
-.nav-links a.active::after {
-    transform: scaleX(1);
+            &.active {
+                @apply text-accent font-semibold;
+
+                &::after { transform: scaleX(1); }
+            }
+        }
+    }
 }

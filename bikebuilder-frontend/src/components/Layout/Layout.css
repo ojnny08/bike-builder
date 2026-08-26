@@ -1,6 +1,9 @@
-.page {
-    padding: 88px var(--page-x) 32px;
-    min-height: calc(100vh - 110px);
-    box-sizing: border-box;
-    background: var(--surface);
+@reference "../../index.css";
+
+@layer components {
+    .page {
+        @apply box-border bg-surface;
+        padding: 88px var(--page-x) 32px;
+        min-height: calc(100vh - 110px);
+    }
 }

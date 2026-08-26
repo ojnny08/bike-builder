@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "axios": "^1.16.1",
     "firebase": "^12.13.0",
     "heic-to": "^1.5.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.15.1",
+    "tailwindcss": "^4.3.3",
     "three": "^0.185.1"
   },
   "devDependencies": {

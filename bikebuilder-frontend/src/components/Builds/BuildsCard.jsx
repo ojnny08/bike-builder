@@ -125,7 +125,7 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
                 <div className="build-card-actions">
                     <div className="build-card-menu" ref={menuRef}>
                         <button
-                            className="icon-btn"
+                            className="btn btn--icon"
                             onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v); }}
                             aria-label="Build options"
                             aria-expanded={menuOpen}

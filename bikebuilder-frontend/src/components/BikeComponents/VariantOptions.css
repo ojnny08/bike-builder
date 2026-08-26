@@ -1,53 +1,37 @@
-.variant-specs {
-    margin-top: 18px;
-    display: flex;
-    flex-direction: column;
-}
+@reference "../../index.css";
 
-.variant-spec {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 7px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.82rem;
-}
+@layer components {
+    .variant-specs {
+        @apply mt-[18px] flex flex-col;
+    }
 
-.variant-spec dt {
-    color: var(--text-secondary);
-}
+    .variant-spec {
+        @apply flex justify-between gap-4 py-[7px]
+               border-b border-border text-[0.82rem];
 
-.variant-spec dd {
-    color: var(--text);
-    text-align: right;
-}
+        dt {
+            @apply text-fg-secondary;
+        }
 
-.variant-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 22px;
-}
+        dd {
+            @apply text-fg text-right;
+        }
+    }
 
-.variant-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1 1 130px;
-}
+    .variant-options {
+        @apply flex flex-wrap gap-3.5 mt-[22px];
+    }
 
-.variant-field-label {
-    font-size: 0.78rem;
-    color: var(--text-secondary);
-}
+    .variant-field {
+        @apply flex flex-col gap-1.5 flex-[1_1_130px];
+    }
 
-.variant-select {
-    height: 40px;
-    padding: 0 10px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 0.875rem;
-    color: var(--text);
-    cursor: pointer;
+    .variant-field-label {
+        @apply text-[0.78rem] text-fg-secondary;
+    }
+
+    .variant-select {
+        @apply h-10 px-2.5 bg-surface border border-border
+               rounded-sm text-sm text-fg cursor-pointer;
+    }
 }

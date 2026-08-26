@@ -58,7 +58,7 @@ const NavBar = () => {
 
                             </div>
                             <button className="nav-chevron" onClick={() => setDropdownOpen(prev => !prev)}>
-                                <span className={`nav-chevron-icon ${dropdownOpen ? "open" : ""}`} />
+                                <span className={`nav-chevron-icon${dropdownOpen ? " is-open" : ""}`} />
                             </button>
                             {dropdownOpen && (
                                 <div className="nav-dropdown">

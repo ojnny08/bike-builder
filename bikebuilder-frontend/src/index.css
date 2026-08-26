@@ -1,101 +1,191 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-bg:            #F7F5F2;
+  --color-surface:       #ffffff;
+  --color-surface-2:     #fafafa;
+  --color-surface-hover: #6F6860;
+  --color-navbar:        #6F6860;
+  --color-border:        #e6e6e9;
+  --color-border-strong: #cdcdd2;
+
+  --color-fg:           #363636;
+  --color-fg-secondary: #f1f1f1;
+  --color-muted:        #97979e;
+  --color-orange:       #B4543B;
+  --color-blue:         #2D2E51;
+  --font-title: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+  --color-accent:       #111113;
+  --color-accent-hover: #2c2c30;
+  --color-accent-focus: #111113;
+  --color-accent-bg:    rgba(17, 17, 19, 0.05);
+  --color-accent-ring:  rgba(17, 17, 19, 0.16);
+  --color-on-accent:    #ffffff;
+
+  --color-dark:              #1e1f22;
+  --color-step:              #e4e4e4;
+  --color-step-filled:       #4a4a4a;
+  --color-step-filled-hover: #3d3d3d;
+
+  --color-night:        #0e1525;
+  --color-night-border: #1e2739;
+  --color-night-fg:     #9aa5b8;
+  --color-night-muted:  #6b7688;
+  --color-stone:        #5f5a55;
+
+  --color-danger:    #c0362c;
+  --color-danger-bg: rgba(192, 54, 44, 0.08);
+
+  --color-scrim: #0a0a0f;
+
+  --radius-pill: 999px;
+  --radius-lg:   18px;
+  --radius-md:   12px;
+  --radius-sm:   8px;
+
+  --ease-smooth:   cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 140ms;
+  --duration-base: 220ms;
+
+  --shadow-sm:     0 1px 2px 0 rgb(0 0 0 / 0.06);
+  --shadow-md:     0 4px 12px -2px rgb(0 0 0 / 0.08);
+  --shadow-lg:     0 12px 32px -8px rgb(0 0 0 / 0.14);
+  --shadow-accent: 0 0 0 3px rgba(17, 17, 19, 0.16);
+}
 
 :root {
-  /* Canvas & surfaces — crisp white panels on a light neutral-gray canvas */
-  --bg:             #F7F5F2;
-  --surface:        #ffffff;
-  --surface-2:      #fafafa;
-  --surface-hover:  #6F6860;
-  --navbar-bg:      #6F6860;  /* cohesive navbar block */
-  --border:         #e6e6e9;
-  --border-strong:  #cdcdd2;
+  --bg:             var(--color-bg);
+  --surface:        var(--color-surface);
+  --surface-2:      var(--color-surface-2);
+  --surface-hover:  var(--color-surface-hover);
+  --navbar-bg:      var(--color-navbar);
+  --border:         var(--color-border);
+  --border-strong:  var(--color-border-strong);
 
-  /* Text — true neutral greys */
-  --text:           #363636;
-  --text-secondary: #f1f1f1;
-  --text-orange: #B4543B;
-  --text-blue: #2D2E51;
-  --text-muted:     #97979e;
+  --text:           var(--color-fg);
+  --text-secondary: var(--color-fg-secondary);
+  --text-muted:     var(--color-muted);
+  --text-orange:    var(--color-orange);
+  --text-blue:      var(--color-blue);
+
+  --accent:         var(--color-accent);
+  --accent-hover:   var(--color-accent-hover);
+  --accent-focus:   var(--color-accent-focus);
+  --accent-bg:      var(--color-accent-bg);
+  --accent-ring:    var(--color-accent-ring);
+  --on-accent:      var(--color-on-accent);
+
+  --danger:         var(--color-danger);
+  --error:          var(--color-danger);
+  --error-bg:       var(--color-danger-bg);
 
   --text-title-font: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   --text-title-weight: 600;
 
-  /* Accent — monochrome (near-black on white) */
-  --accent:         #111113;
-  --accent-hover:   #2c2c30;
-  --accent-focus:   #111113;
-  --accent-bg:      rgba(17, 17, 19, 0.05);
-  --accent-ring:    rgba(17, 17, 19, 0.16);
-  --on-accent:      #ffffff;
+  --ease-out: var(--ease-smooth);
+  --dur-fast: var(--duration-fast);
+  --dur:      var(--duration-base);
 
-  /* Motion */
-  --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-fast:       140ms;
-  --dur:            220ms;
-
-  /* Layout */
   --page-x: 64px;
-  --nav-clearance: 80px;   /* floating navbar: 12px offset + 56px tall + gap */
-  --radius-pill: 999px;
-  --radius-lg: 18px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
+  --nav-clearance: 80px;
   --radius-panel: var(--radius-lg);
-
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  outline: none;
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    outline: none;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+  }
+
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-title);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.005em;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Jost', sans-serif;
+  }
+
+  a, button {
+    cursor: pointer;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  [tabindex]:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-accent-ring);
+    border-radius: var(--radius-sm);
+  }
 }
 
-html {
-  scrollbar-gutter: stable;
-}
+@layer components {
+  .loading-text {
+    @apply text-muted text-[0.8rem];
+  }
 
-html, body, #root {
-  height: 100%;
-  width: 100%;
-}
+  .empty-state {
+    @apply text-muted text-[0.8rem];
+  }
 
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  letter-spacing: -0.005em;
-  font-size: 15px;
-  line-height: 1.5;
-}
+  .btn {
+    @apply inline-flex items-center justify-center shrink-0
+           min-h-[38px] px-4 py-2 rounded-pill
+           text-[0.8rem] font-semibold cursor-pointer
+           transition-[background-color,border-color,color,transform]
+           duration-[var(--duration-fast)] ease-smooth;
 
-.loading-text {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-}
+    &:disabled {
+      @apply opacity-45 cursor-not-allowed;
+    }
 
-.empty-state {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-}
+    &:not(:disabled):hover {
+      @apply -translate-y-px;
+    }
 
-/* ── Global interaction & motion layer ──────────────────────────────────────
-   Keeps existing layouts intact; adds keyboard-visible focus rings and a
-   shared set of entrance animations used by cards, heroes and lists.        */
+    &:not(:disabled):active {
+      @apply translate-y-0;
+    }
+  }
 
-a, button {
-  cursor: pointer;
-}
+  .btn--primary {
+    @apply bg-accent text-on-accent border-0;
 
-/* Accessible focus ring on keyboard nav only (mouse clicks stay clean) */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-[tabindex]:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--accent-ring);
-  border-radius: var(--radius-sm);
+    &:not(:disabled):hover { @apply bg-accent-hover; }
+  }
+
+  .btn--ghost {
+    @apply bg-transparent text-fg border border-border;
+
+    &:not(:disabled):hover { @apply bg-surface-2 border-border-strong; }
+  }
+
+  .btn--icon {
+    @apply w-9 h-9 min-h-0 p-0 rounded-md
+           bg-surface text-muted border border-border;
+
+    &:not(:disabled):hover { @apply text-fg border-border-strong; }
+  }
 }
 
 @keyframes fadeInUp {
@@ -108,7 +198,6 @@ input:focus-visible,
   to   { opacity: 1; }
 }
 
-/* Respect users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

@@ -43,11 +43,11 @@ export const ComponentCardSkeleton = () => (
     <div className="product-card is-skeleton" aria-hidden="true">
         <div className="product-media" />
         <div className="product-card-body">
-            <span className="skeleton-line skeleton-line--brand" />
-            <span className="skeleton-line skeleton-line--name" />
+            <span className="product-skeleton-line product-skeleton-line--brand" />
+            <span className="product-skeleton-line product-skeleton-line--name" />
         </div>
         <div className="product-card-footer">
-            <span className="skeleton-line skeleton-line--price" />
+            <span className="product-skeleton-line product-skeleton-line--price" />
         </div>
     </div>
 );

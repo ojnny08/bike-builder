@@ -1,21 +1,15 @@
-/* Layout only — visual styling (labels, selects, buttons) is reused from
-   FilterBar.css via .filter-label / .filter-select / .filter-clear. */
-.build-filters {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    width: 100%;
-}
+@reference "../../index.css";
 
-.build-filter-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    max-width: 520px;
-}
+@layer components {
+    .build-filters {
+        @apply flex flex-col items-start gap-3 w-full;
+    }
 
-.build-filter-row .filter-select {
-    flex: 1;
+    .build-filter-row {
+        @apply flex items-center gap-2.5 w-full max-w-[520px];
+
+        .filter-select {
+            @apply flex-1;
+        }
+    }
 }

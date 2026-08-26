@@ -69,8 +69,8 @@ const CommentItem = ({ comment, isOwner, onUpdate, onDelete }) => {
                             autoFocus
                         />
                         <div className="comment-edit-actions">
-                            <button className="comment-btn-ghost" onClick={handleCancel} disabled={busy}>Cancel</button>
-                            <button className="comment-submit" onClick={handleSave} disabled={!draft.trim() || busy}>
+                            <button className="btn btn--ghost" onClick={handleCancel} disabled={busy}>Cancel</button>
+                            <button className="btn btn--primary" onClick={handleSave} disabled={!draft.trim() || busy}>
                                 {busy ? "Saving…" : "Save"}
                             </button>
                         </div>
