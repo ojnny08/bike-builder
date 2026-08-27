@@ -1,8 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
 import Layout from './components/Layout/Layout'
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
-import Login from './pages/Login/Login'
 import Home from './pages/Home/Home'
 import Components from './pages/Components/Components'
 import ComponentDetails from './pages/Components/ComponentDetails'
@@ -18,7 +16,6 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/login" element={<Login />} />
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/builds/new" element={<Builds />}/>
@@ -28,10 +25,7 @@ function App() {
           <Route path="/builds" element={<PublicBuilds />}/>
           <Route path="/builds/view/:token" element={<BuildDetail />}/>
           <Route path="/builds/shared/:token" element={<SharedBuild />}/>
-          <Route element={<ProtectedRoute />}>
-            <Route path="/builds/new/review" element={<BuildSummary />}/>
-
-          </Route>
+          <Route path="/builds/new/review" element={<BuildSummary />}/>
         </Route>
       </Routes>
     </BrowserRouter>

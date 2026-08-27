@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../context/BuildContext";
 import { createBuild, updateBuild as updateBuildApi, uploadBuildImage } from "../../services/buildService";
+import { useAuth } from "../../context/AuthContext";
+import { useAuthPopUp } from "../../context/AuthPopUpContext";
 import { titleCase, money, sumPrice, sumWeight } from "../../utils/format";
 import "../../styles/pages/Builds/Builds.css";
 
@@ -33,6 +35,8 @@ const Thumb = ({ src }) => (
 const BuildSummary = () => {
     const { build, emptyBuild, updateBuild: patchBuild } = useBuild();
     const navigate = useNavigate();
+    const { currentUser } = useAuth();
+    const { promptLogin } = useAuthPopUp();
 
     const [name, setName] = useState(build.name || "");
     const [description, setDescription] = useState(build.description || "");
@@ -42,7 +46,6 @@ const BuildSummary = () => {
     const [error, setError] = useState(null);
     const fileInputRef = useRef(null);
 
-    // Reached directly without a bike type in progress — nothing to review.
     useEffect(() => {
         if (!build.bikeType) navigate("/builds/new", { replace: true });
     }, [build.bikeType, navigate]);
@@ -73,8 +76,8 @@ const BuildSummary = () => {
         setPhotoPreview(null);
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
-
     const handleSave = async () => {
+        if (!currentUser) return promptLogin();
         setSaving(true);
         setError(null);
         const payload = {
