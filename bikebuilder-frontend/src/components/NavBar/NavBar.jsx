@@ -3,11 +3,13 @@ import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { fetchCurrentUserProfile } from "../../services/userService";
 import "../../styles/components/NavBar/NavBar.css";
+import AuthPopUp from "../Auth/AuthPopUp";
 
 const NavBar = () => {
     const { currentUser, logout } = useAuth();
     const [profileUsername, setProfileUsername] = useState(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [authMode, setAuthMode] = useState(null);
     const [imgFailed, setImgFailed] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
@@ -70,9 +72,12 @@ const NavBar = () => {
                         </div>
                     ) : (
                         <>
-                            <Link to="/login" className="nav-auth-link">Log In</Link>
-                            <span className="nav-sep">|</span>
-                            <Link to="/signup" className="nav-auth-link">Sign Up</Link>
+                            <button onClick={() => setAuthMode("login")} className="nav-auth-link">Log In</button>
+                            <div className="nav-auth-link">|</div>
+                            <button onClick={() => setAuthMode("signup")} className="nav-auth-link">Sign Up</button>
+                            {authMode && (
+                                <AuthPopUp onSelect={() => setAuthMode(null)} isSignUp={authMode === "signup"}/>
+                            )}
                         </>
                     )}
                 </div>

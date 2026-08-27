@@ -1,94 +1,86 @@
-import { useState, useEffect } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { auth, googleProvider } from "../../api/firebase";
-import { useAuth } from "../../context/AuthContext";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
+import { googleProvider, auth } from "../../api/firebase"
 import { fetchCurrentUser } from "../../services/userService";
-import "../../styles/pages/Login/Login.css";
+import { useState } from "react";
+import { createPortal } from "react-dom";
+import "../../styles/components/Auth/AuthPopUp.css";
 
-const Login = () => {
-    const navigate = useNavigate();
-    const { currentUser, loading } = useAuth();
-    const [isRegister, setIsRegister] = useState(false);
+const AuthPopUp = ({ onSelect, isSignUp }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [register, setRegister] = useState(isSignUp);
     const [error, setError] = useState("");
+    const [submitting, setSubmitting] = useState(false);
 
-    useEffect(() => {
-        if (currentUser) navigate('/');
-    }, [currentUser]);
-
-    if (loading) return (
-        <div>loading</div>
-    );
+    const close = () => onSelect?.(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setSubmitting(true);
         try {
-            if (isRegister) {
+            if (register) {
                 await createUserWithEmailAndPassword(auth, email, password);
             } else {
                 await signInWithEmailAndPassword(auth, email, password);
             }
             await fetchCurrentUser();
+            close();
         } catch (err) {
             if (err.code === "auth/email-already-in-use") setError("An account with this email already exists.");
             else if (err.code === "auth/weak-password") setError("Password must be at least 6 characters.");
             else setError("Invalid email or password.");
+        } finally {
+            setSubmitting(false);
         }
-    };
+    }
 
     const handleGoogleLogin = async () => {
+        setError("");
         try {
             await signInWithPopup(auth, googleProvider);
-            await api.get('/api/users/me/');
+            await fetchCurrentUser();
+            close();
         } catch {
             setError("Google sign-in failed");
         }
-    };
+    }
 
-    return (
-        <div className="login-page">
-            <div className="login-hero">
-                <h1>Welcome to<br />BikeBuilder.</h1>
-                <p>Plan, spec, and build your dream bike — all in one place.</p>
-            </div>
+    return createPortal(
+        <div className="auth-modal-overlay" onClick={close}>
+            <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
+                <button className="auth-modal-close" onClick={close} aria-label="Close">×</button>
 
-            <div className="login-form-panel">
-                <h2>{isRegister ? "Create account" : "Sign in"}</h2>
-                <p className="login-subtitle">
-                    {isRegister ? "Already have an account? " : "Don't have an account? "}
-                    <button className="btn-toggle" onClick={() => { setIsRegister(!isRegister); setError(""); }}>
-                        {isRegister ? "Sign in" : "Register"}
-                    </button>
+                <h2 className="auth-modal-title">Welcome to Bikco</h2>
+                <p className="auth-modal-subtitle">
+                    {register ? "Join Bikco for free to show off your bikes" : "Log in to explore more"}
                 </p>
 
-                {error && <div className="login-error">{error}</div>}
+                {error && <div className="auth-error">{error}</div>}
 
-                <form className="login-form" onSubmit={handleSubmit}>
+                <form className="auth-form" onSubmit={handleSubmit}>
                     <input
                         type="email"
-                        placeholder="Email"
                         value={email}
+                        placeholder="Email"
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                     <input
                         type="password"
-                        placeholder="Password"
                         value={password}
+                        placeholder="Password"
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button className="btn-primary" type="submit">
-                        {isRegister ? "Create account" : "Sign in"}
+                    <button className="auth-submit" type="submit" disabled={submitting}>
+                        {register ? "Sign up" : "Log in"}
                     </button>
                 </form>
 
-                <div className="login-divider">or</div>
+                <div className="auth-divider">or</div>
 
-                <button className="btn-google" onClick={handleGoogleLogin}>
+                <button className="auth-google" onClick={handleGoogleLogin}>
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -97,9 +89,20 @@ const Login = () => {
                     </svg>
                     Continue with Google
                 </button>
-            </div>
-        </div>
-    );
-};
 
-export default Login;
+                <p className="auth-switch">
+                    {register ? "Already have an account? " : "Dont have an account? "}
+                    <button
+                        className="auth-toggle"
+                        onClick={() => { setRegister(!register); setError(""); }}
+                    >
+                        {register ? "Log in" : "Sign up"}
+                    </button>
+                </p>
+            </div>
+        </div>,
+        document.body
+    )
+}
+
+export default AuthPopUp;

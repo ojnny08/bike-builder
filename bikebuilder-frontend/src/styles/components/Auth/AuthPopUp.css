@@ -1,0 +1,118 @@
+@reference "../../index.css";
+
+@layer components {
+    .auth-modal-overlay {
+        @apply fixed inset-0 z-[1000] grid place-items-center p-6 bg-black/50;
+        animation: fadeIn var(--dur-fast) var(--ease-out) both;
+    }
+
+    .auth-modal {
+        @apply relative w-full max-w-[420px] p-10
+               bg-surface border border-border shadow-lg;
+        border-radius: var(--radius-panel);
+        animation: fadeInUp var(--dur) var(--ease-out) both;
+    }
+
+    .auth-modal-close {
+        @apply absolute top-3.5 right-4 w-[30px] h-[30px] grid place-items-center
+               bg-none border-none rounded-md text-[1.4rem] leading-none
+               text-muted cursor-pointer
+               transition-[background-color,color] duration-[var(--duration-fast)];
+
+        &:hover {
+            @apply bg-surface-2 text-fg;
+        }
+    }
+
+    .auth-modal-title {
+        @apply text-[1.3rem] font-semibold tracking-[-0.03em] text-fg mb-1.5;
+    }
+
+    .auth-modal-subtitle {
+        @apply text-[0.8rem] text-muted mb-8;
+    }
+
+    .auth-form {
+        @apply flex flex-col gap-2.5;
+
+        input {
+            @apply w-full px-3.5 py-2.5 text-[0.875rem] font-[inherit]
+                   bg-surface text-fg border border-border rounded-sm outline-none
+                   transition-[border-color,box-shadow] duration-[var(--duration-fast)];
+        }
+
+        input::placeholder {
+            @apply text-muted;
+        }
+
+        input:focus {
+            @apply border-accent;
+            box-shadow: 0 0 0 3px var(--accent-ring);
+        }
+    }
+
+    .auth-submit {
+        @apply w-full mt-1 py-2.5 rounded-pill
+               text-[0.875rem] font-semibold font-[inherit]
+               bg-accent text-on-accent border-none shadow-sm cursor-pointer
+               transition-[background-color,transform,box-shadow]
+               duration-[var(--duration-fast)] ease-smooth;
+
+        &:hover {
+            @apply bg-accent-hover -translate-y-0.5;
+            box-shadow: var(--shadow-accent);
+        }
+
+        &:active {
+            @apply translate-y-0 shadow-sm;
+        }
+
+        &:disabled {
+            @apply opacity-45 cursor-not-allowed translate-y-0 shadow-sm bg-accent;
+        }
+    }
+
+    .auth-divider {
+        @apply flex items-center gap-3 my-[18px] text-[0.75rem] text-muted;
+
+        &::before,
+        &::after {
+            @apply flex-1 h-px bg-border content-[''];
+        }
+    }
+
+    .auth-google {
+        @apply w-full py-2.5 flex items-center justify-center gap-2.5 rounded-pill
+               text-[0.875rem] font-medium font-[inherit]
+               bg-surface text-fg border border-border cursor-pointer
+               transition-[background-color,border-color] duration-[var(--duration-fast)];
+
+        &:hover {
+            @apply bg-surface-2 border-border-strong;
+        }
+
+        svg {
+            @apply w-[18px] h-[18px] shrink-0;
+        }
+    }
+
+    .auth-switch {
+        @apply mt-5 text-center text-[0.8rem] text-muted;
+    }
+
+    .auth-toggle {
+        @apply p-0 bg-none border-none font-[inherit] text-[0.8rem] font-semibold
+               text-accent underline underline-offset-2 cursor-pointer;
+    }
+
+    .auth-error {
+        @apply mb-3 px-3.5 py-2.5 text-[0.8rem] rounded-sm
+               text-danger bg-danger-bg border border-danger/25;
+    }
+
+    @media (max-width: 480px) {
+        .auth-modal {
+            @apply p-7;
+        }
+    }
+}
