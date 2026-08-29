@@ -1,6 +1,7 @@
 import firebase_admin
 from firebase_admin import auth, credentials
 from django.conf import settings
+from django.db import IntegrityError
 from django.utils.text import slugify
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
@@ -10,6 +11,16 @@ from apps.users.models import User
 if not firebase_admin._apps:
     cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS_PATH)
     firebase_admin.initialize_app(cred)
+
+
+def build_username(display_name, email):
+    base = (slugify(display_name) or slugify(email.split("@")[0]) or "user")[:45]
+    slug = base
+    n = 1
+    while User.objects.filter(username=slug).exists():
+        slug = f"{base}-{n}"
+        n += 1
+    return slug
 
 
 class FirebaseAuthentication(BaseAuthentication):
@@ -35,23 +46,20 @@ class FirebaseAuthentication(BaseAuthentication):
         display_name = decoded_token.get("name", "")
         photo_url = decoded_token.get("picture", "")
 
-        user, created = User.objects.get_or_create(
-            firebase_uid=firebase_uid,
-            defaults={
-                "email": email,
-                "display_name": display_name,
-                "photo_url": photo_url,
-            },
-        )
+        try:
+            user, _ = User.objects.get_or_create(
+                firebase_uid=firebase_uid,
+                defaults={
+                    "email": email,
+                    "display_name": display_name,
+                    "photo_url": photo_url,
+                },
+            )
+        except IntegrityError:
+            raise AuthenticationFailed("An account already exists for this email")
 
-        if created and display_name:
-            base = slugify(display_name)[:45]
-            slug = base
-            n = 1
-            while User.objects.filter(username=slug).exists():
-                slug = f"{base}-{n}"
-                n += 1
-            user.username = slug
+        if not user.username:
+            user.username = build_username(display_name, email)
             user.save(update_fields=["username"])
-    
+
         return (user, None)
