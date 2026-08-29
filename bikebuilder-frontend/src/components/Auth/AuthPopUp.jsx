@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, validatePassword } from "firebase/auth"
 import { googleProvider, auth } from "../../api/firebase"
-import { fetchCurrentUser } from "../../services/userService";
+import { fetchCurrentUserProfile } from "../../services/userService";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import "../../styles/components/Auth/AuthPopUp.css";
@@ -47,7 +47,7 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
             } else {
                 await signInWithEmailAndPassword(auth, email, password);
             }
-            await fetchCurrentUser();
+            await fetchCurrentUserProfile();
             close();
         } catch (err) {
             if (err.code === "auth/email-already-in-use") setError("An account with this email already exists.");
@@ -62,7 +62,7 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
         setError("");
         try {
             await signInWithPopup(auth, googleProvider);
-            await fetchCurrentUser();
+            await fetchCurrentUserProfile();
             close();
         } catch {
             setError("Google sign-in failed");
