@@ -110,6 +110,10 @@
                text-danger bg-danger-bg border border-danger/25;
     }
 
+    .auth-notice {
+        @apply -mt-1 px-1 text-[0.75rem] text-muted list-disc list-inside;
+    }
+
     @media (max-width: 480px) {
         .auth-modal {
             @apply p-7;

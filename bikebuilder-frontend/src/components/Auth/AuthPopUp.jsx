@@ -1,22 +1,45 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, validatePassword } from "firebase/auth"
 import { googleProvider, auth } from "../../api/firebase"
 import { fetchCurrentUser } from "../../services/userService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import "../../styles/components/Auth/AuthPopUp.css";
+
+const passwordPolicyCheck = (status) => {
+    if (status.isValid) return [];
+    const missing = [];
+    if (status.meetsMinPasswordLength === false) missing.push("more characters");
+    if (status.containsLowercaseLetter === false) missing.push("a lowercase letter");
+    if (status.containsUppercaseLetter === false) missing.push("an uppercase letter");
+    if (status.containsNumericCharacter === false) missing.push("a number");
+    if (status.containsNonAlphanumericCharacter === false) missing.push("a symbol");
+    return missing;
+};
 
 const AuthPopUp = ({ onSelect, isSignUp }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [register, setRegister] = useState(isSignUp);
     const [error, setError] = useState("");
     const [submitting, setSubmitting] = useState(false);
+    const [passwordNotice, setPasswordNotice] = useState([]);
 
     const close = () => onSelect?.(false);
+
+    useEffect(() => {
+        if (!register || !password) return;
+        let cancelled = false;
+        validatePassword(auth, password)
+            .then((status) => { if (!cancelled) setPasswordNotice(passwordPolicyCheck(status)); })
+            .catch(() => { if (!cancelled) setPasswordNotice([]); });
+        return () => { cancelled = true; };
+    }, [password, register]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        if (register && password !== confirmPassword) return setError("Passwords do not match")
         setSubmitting(true);
         try {
             if (register) {
@@ -73,6 +96,19 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
+                    {register && password && passwordNotice.length > 0 && (
+                        <ul className="auth-notice">
+                            {passwordNotice.map((m) => <li key={m}>{m}</li>)}
+                        </ul>
+                    )}
+                    {register && (
+                        <input 
+                            type="password"
+                            value={confirmPassword}
+                            placeholder="Confirm Password"
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required/>
+                    ) }
                     <button className="auth-submit" type="submit" disabled={submitting}>
                         {register ? "Sign up" : "Log in"}
                     </button>
@@ -94,7 +130,7 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
                     {register ? "Already have an account? " : "Dont have an account? "}
                     <button
                         className="auth-toggle"
-                        onClick={() => { setRegister(!register); setError(""); }}
+                        onClick={() => { setRegister(!register); setError(""); setConfirmPassword(""); }}
                     >
                         {register ? "Log in" : "Sign up"}
                     </button>
