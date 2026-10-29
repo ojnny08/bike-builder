@@ -85,7 +85,106 @@
 .profile-section-empty {
     font-size: 0.95rem;
     line-height: 1.5;
+    color: var(--text-muted);
+}
+
+.profile-section-text {
+    font-size: 0.95rem;
+    line-height: 1.55;
     color: var(--text);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.profile-edit {
+    max-width: 640px;
+    margin: 48px auto 48px;
+    animation: fadeInUp var(--dur) var(--ease-out) both;
+}
+
+.profile-edit-head {
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+}
+
+.profile-edit-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+}
+
+.profile-edit-note {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+    max-width: 52ch;
+}
+
+.profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.profile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-field-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text);
+}
+
+.profile-input {
+    width: 100%;
+    padding: 8px 2px;
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-strong);
+    transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.profile-input::placeholder { color: var(--text-muted); }
+
+.profile-input:focus {
+    border-bottom-color: var(--accent);
+    box-shadow: none;
+}
+
+.profile-textarea {
+    resize: vertical;
+    min-height: 96px;
+    line-height: 1.55;
+}
+
+.profile-edit-error {
+    font-size: 0.85rem;
+    color: var(--error);
+}
+
+.profile-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
 }
 
 .profile-builds {
@@ -140,7 +239,8 @@
 
 @media (prefers-reduced-motion: reduce) {
     .profile-side,
-    .profile-builds {
+    .profile-builds,
+    .profile-edit {
         animation: none;
     }
 }

@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
+from firebase_admin import auth
 from .serializer import UserSerializer, UserPublicSerializer
 from .models import User
 
@@ -15,7 +16,16 @@ class UserProfileViewSet(ViewSet):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+    def destroy(self, request):
+        try:
+            auth.delete_user(request.user.firebase_uid)
+        except auth.UserNotFoundError:
+            pass
+        request.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class PublicProfileViewSet(ViewSet):
 
     def retrieve(self, request, username=None):

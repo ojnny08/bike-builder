@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, validatePassword } from "firebase/auth"
+import { createUserWithEmailAndPassword, GoogleAuthProvider, linkWithCredential, signInWithEmailAndPassword, signInWithPopup, signOut, validatePassword } from "firebase/auth"
 import { googleProvider, auth } from "../../api/firebase"
 import { fetchCurrentUserProfile } from "../../services/userService";
 import { useEffect, useState } from "react";
@@ -16,6 +16,18 @@ const passwordPolicyCheck = (status) => {
     return missing;
 };
 
+const authErrorMessage = (err) => {
+    const response = err.cause?.response;
+    if (response) {
+        const detail = response.data?.detail;
+        if ((response.status === 401 || response.status === 403) && detail) return detail;
+        return "We could not load your account. Please try again.";
+    }
+    if (err.code === "auth/email-already-in-use") return "An account with this email already exists.";
+    if (err.code === "auth/weak-password") return "Password must be at least 6 characters.";
+    return "Invalid email or password.";
+};
+
 const AuthPopUp = ({ onSelect, isSignUp }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -24,8 +36,21 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
     const [error, setError] = useState("");
     const [submitting, setSubmitting] = useState(false);
     const [passwordNotice, setPasswordNotice] = useState([]);
+    const [pendingCredential, setPendingCredential] = useState(null);
 
-    const close = () => onSelect?.(false);
+    const close = () => {
+        setPendingCredential(null);
+        onSelect?.(false);
+    };
+
+    const loadProfileOrSignOut = async () => {
+        try {
+            await fetchCurrentUserProfile();
+        } catch (err) {
+            await signOut(auth);
+            throw err;
+        }
+    };
 
     useEffect(() => {
         if (!register || !password) return;
@@ -39,6 +64,25 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+
+        if (pendingCredential) {
+            setSubmitting(true);
+            try {
+                const { user } = await signInWithEmailAndPassword(auth, email, password);
+                await linkWithCredential(user, pendingCredential);
+                setPendingCredential(null);
+                await loadProfileOrSignOut();
+                close();
+            } catch (err) {
+                setError(err.cause?.response
+                    ? authErrorMessage(err)
+                    : "That password is not correct. Try again to connect Google.");
+            } finally {
+                setSubmitting(false);
+            }
+            return;
+        }
+
         if (register && password !== confirmPassword) return setError("Passwords do not match")
         setSubmitting(true);
         try {
@@ -47,12 +91,10 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
             } else {
                 await signInWithEmailAndPassword(auth, email, password);
             }
-            await fetchCurrentUserProfile();
+            await loadProfileOrSignOut();
             close();
         } catch (err) {
-            if (err.code === "auth/email-already-in-use") setError("An account with this email already exists.");
-            else if (err.code === "auth/weak-password") setError("Password must be at least 6 characters.");
-            else setError("Invalid email or password.");
+            setError(authErrorMessage(err));
         } finally {
             setSubmitting(false);
         }
@@ -62,9 +104,18 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
         setError("");
         try {
             await signInWithPopup(auth, googleProvider);
-            await fetchCurrentUserProfile();
+            await loadProfileOrSignOut();
             close();
-        } catch {
+        } catch (err) {
+            if (err.code === "auth/account-exists-with-different-credential") {
+                setPendingCredential(GoogleAuthProvider.credentialFromError(err));
+                setEmail(err.customData?.email ?? "");
+                setPassword("");
+                setError("This email already has an account. Enter your password to connect Google.");
+                return;
+            }
+            if (err.cause?.response) return setError(authErrorMessage(err));
+            await signOut(auth);
             setError("Google sign-in failed");
         }
     }
@@ -74,9 +125,13 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
             <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
                 <button className="auth-modal-close" onClick={close} aria-label="Close">×</button>
 
-                <h2 className="auth-modal-title">Welcome to Bikco</h2>
+                <h2 className="auth-modal-title">
+                    {pendingCredential ? "Connect Google" : "Welcome to Bikco"}
+                </h2>
                 <p className="auth-modal-subtitle">
-                    {register ? "Join Bikco for free to show off your bikes" : "Log in to explore more"}
+                    {pendingCredential
+                        ? "You already signed up with this email. Enter your password once and Google will work from now on."
+                        : register ? "Join Bikco for free to show off your bikes" : "Log in to explore more"}
                 </p>
 
                 {error && <div className="auth-error">{error}</div>}
@@ -87,6 +142,7 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
                         value={email}
                         placeholder="Email"
                         onChange={(e) => setEmail(e.target.value)}
+                        readOnly={Boolean(pendingCredential)}
                         required
                     />
                     <input
@@ -96,13 +152,13 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    {register && password && passwordNotice.length > 0 && (
+                    {!pendingCredential && register && password && passwordNotice.length > 0 && (
                         <ul className="auth-notice">
                             {passwordNotice.map((m) => <li key={m}>{m}</li>)}
                         </ul>
                     )}
-                    {register && (
-                        <input 
+                    {!pendingCredential && register && (
+                        <input
                             type="password"
                             value={confirmPassword}
                             placeholder="Confirm Password"
@@ -110,10 +166,11 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
                             required/>
                     ) }
                     <button className="auth-submit" type="submit" disabled={submitting}>
-                        {register ? "Sign up" : "Log in"}
+                        {pendingCredential ? "Connect Google" : register ? "Sign up" : "Log in"}
                     </button>
                 </form>
 
+                {!pendingCredential && <>
                 <div className="auth-divider">or</div>
 
                 <button className="auth-google" onClick={handleGoogleLogin}>
@@ -135,6 +192,7 @@ const AuthPopUp = ({ onSelect, isSignUp }) => {
                         {register ? "Log in" : "Sign up"}
                     </button>
                 </p>
+                </>}
             </div>
         </div>,
         document.body

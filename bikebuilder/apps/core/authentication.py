@@ -32,7 +32,7 @@ class FirebaseAuthentication(BaseAuthentication):
 
         token = auth_header.split("Bearer ")[1]
 
-        try:
+        try: 
             decoded_token = auth.verify_id_token(token)
         except auth.ExpiredIdTokenError:
             raise AuthenticationFailed("Firebase token has expired")

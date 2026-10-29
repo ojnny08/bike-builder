@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import UserProfileViewSet, PublicProfileViewSet
 
-profile = UserProfileViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update'})
+profile = UserProfileViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update', 'delete': 'destroy' })
 public_profile = PublicProfileViewSet.as_view({'get': 'retrieve'})
 
 urlpatterns = [
