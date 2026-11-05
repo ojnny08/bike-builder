@@ -99,6 +99,7 @@
 }
 
 .comp-view-weight {
+    margin-left: auto;
     font-size: 0.85rem;
     color: var(--text);
 }

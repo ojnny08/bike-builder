@@ -129,14 +129,6 @@
     cursor: pointer;
   }
 
-  a:focus-visible,
-  button:focus-visible,
-  input:focus-visible,
-  [tabindex]:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px var(--color-accent-ring);
-    border-radius: var(--radius-sm);
-  }
 }
 
 @layer components {
@@ -151,40 +143,24 @@
   .btn {
     @apply inline-flex items-center justify-center shrink-0
            min-h-[38px] px-4 py-2 rounded-sm
-           text-[0.8rem] font-semibold cursor-pointer
-           transition-[background-color,border-color,color,transform]
-           duration-[var(--duration-fast)] ease-smooth;
+           text-[0.8rem] font-semibold cursor-pointer;
 
     &:disabled {
       @apply opacity-45 cursor-not-allowed;
-    }
-
-    &:not(:disabled):hover {
-      @apply -translate-y-px;
-    }
-
-    &:not(:disabled):active {
-      @apply translate-y-0;
     }
   }
 
   .btn--primary {
     @apply bg-accent text-on-accent border-0;
-
-    &:not(:disabled):hover { @apply bg-accent-hover; }
   }
 
   .btn--ghost {
     @apply bg-transparent text-fg border border-border;
-
-    &:not(:disabled):hover { @apply bg-surface-2 border-border-strong; }
   }
 
   .btn--icon {
     @apply w-9 h-9 min-h-0 p-0 rounded-sm
            bg-surface text-muted border border-border;
-
-    &:not(:disabled):hover { @apply text-fg border-border-strong; }
   }
 
   .page {
@@ -192,6 +168,16 @@
     padding: 88px var(--page-x) 32px;
     min-height: calc(100vh - 110px);
   }
+
+  .skeleton {
+    @apply block rounded-sm bg-surface-hover;
+    animation: skeletonPulse 1.4s var(--ease-out) infinite;
+  }
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }
 
 @keyframes fadeInUp {

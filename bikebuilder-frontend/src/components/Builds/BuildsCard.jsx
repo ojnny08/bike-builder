@@ -86,14 +86,49 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
             {onUploadImage && build.image_url && (
                 <div className="build-card-img-overlay"><CameraIcon /> Change Photo</div>
             )}
-            <button
-                className={`build-card-share${copied ? ' is-copied' : ''}`}
-                onClick={handleShare}
-                aria-label="Share build"
-            >
-                {copied ? <CheckIcon /> : <ShareIcon />}
-            </button>
         </div>
+    );
+
+    const isOwner = Boolean(onDelete || onEdit);
+
+    const ownerMenu = (
+        <div className="build-card-menu" ref={menuRef}>
+            <button
+                className="build-card-corner-btn"
+                onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v); }}
+                aria-label="Build options"
+                aria-expanded={menuOpen}
+            >
+                <MoreIcon />
+            </button>
+            {menuOpen && (
+                <div className="build-card-dropdown">
+                    <button className="build-card-dropdown-item" onClick={handleShare}>
+                        {copied ? <CheckIcon /> : <ShareIcon />} {copied ? "Link copied" : "Share"}
+                    </button>
+                    {onEdit && (
+                        <button className="build-card-dropdown-item" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onEdit(build.id); }}>
+                            <EditIcon /> Edit
+                        </button>
+                    )}
+                    {onDelete && (
+                        <button className="build-card-dropdown-item is-danger" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onDelete(build.id); }}>
+                            <TrashIcon /> Delete
+                        </button>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+
+    const shareButton = (
+        <button
+            className={`build-card-corner-btn${copied ? ' is-copied' : ''}`}
+            onClick={handleShare}
+            aria-label="Share build"
+        >
+            {copied ? <CheckIcon /> : <ShareIcon />}
+        </button>
     );
 
     return (
@@ -102,6 +137,9 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
                 onClick={() => navigate(`/builds/view/${build.share_token}`)}
             >
                 {imageBlock}
+                <div className="build-card-corner">
+                    {isOwner ? ownerMenu : shareButton}
+                </div>
                 {onUploadImage && (
                     <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
                 )}
@@ -118,41 +156,25 @@ const BuildsCard = ({ build, onDelete, onEdit, onUploadImage }) => {
             </div>
 
             <div className="build-card-meta">
-                <span>{frame ? `${frame.brand} ${frame.name}` : "No frame"}</span>
-                <span>{crank ? `${crank.brand} ${crank.name}` : "No crank"}</span>
+                <span>Build: {frame ? `${frame.brand}` : "No frame"} &</span>
+                <span>{crank ? `${crank.brand}` : "No crank"}</span>
             </div>
-            {(onDelete || onEdit) && (
-                <div className="build-card-actions">
-                    <div className="build-card-menu" ref={menuRef}>
-                        <button
-                            className="btn btn--icon"
-                            onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v); }}
-                            aria-label="Build options"
-                            aria-expanded={menuOpen}
-                        >
-                            <MoreIcon />
-                        </button>
-                        {menuOpen && (
-                            <div className="build-card-dropdown">
-                                {onEdit && (
-                                    <button className="build-card-dropdown-item" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onEdit(build.id); }}>
-                                        <EditIcon /> Edit
-                                    </button>
-                                )}
-                                {onDelete && (
-                                    <button className="build-card-dropdown-item is-danger" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onDelete(build.id); }}>
-                                        <TrashIcon /> Delete
-                                    </button>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-
         </div>
 
     );
 };
+
+export const BuildsCardSkeleton = () => (
+    <div className="build-card is-skeleton" aria-hidden="true">
+        <div className="build-card-image skeleton" />
+        <div className="build-card-header">
+            <span className="skeleton build-skeleton-line build-skeleton-line--name" />
+            <span className="skeleton build-skeleton-avatar" />
+        </div>
+        <div className="build-card-meta">
+            <span className="skeleton build-skeleton-line build-skeleton-line--meta" />
+        </div>
+    </div>
+);
 
 export default BuildsCard;

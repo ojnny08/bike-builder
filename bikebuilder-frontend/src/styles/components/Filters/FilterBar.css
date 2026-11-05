@@ -27,30 +27,19 @@
 
     .filter-search-input {
         @apply w-full h-11 pl-10 pr-3.5 bg-surface border border-border rounded-sm
-               text-sm font-semibold text-fg
-               transition-[border-color,box-shadow] duration-[var(--duration-fast)];
+               text-sm font-semibold text-fg;
 
         &::placeholder { @apply text-muted; }
-
-        &:hover { @apply border-border-strong; }
-
-        &:focus,
-        &:focus-visible { @apply outline-none; }
     }
 
     .filter-toggle {
         @apply shrink-0 inline-flex items-center gap-2 h-11 px-4
                bg-orange border border-orange rounded-sm
-               text-sm font-bold text-fg-secondary cursor-pointer
-               transition-[border-color,box-shadow] duration-[var(--duration-fast)];
+               text-sm font-bold text-fg-secondary cursor-pointer;
 
         svg { @apply w-[18px] h-[18px]; }
 
-        &:hover,
         &.is-open { @apply border-border-strong; }
-
-        &:focus,
-        &:focus-visible { @apply outline-none; }
 
         &.filter-toggle--icon {
             @apply relative w-11 p-0 gap-0 rounded-full justify-center;
@@ -94,13 +83,7 @@
     .filter-input,
     .filter-select {
         @apply w-full h-11 px-3 bg-surface border border-border rounded-sm
-               text-sm text-fg
-               transition-[border-color,box-shadow] duration-[var(--duration-fast)];
-
-        &:hover { @apply border-border-strong; }
-
-        &:focus,
-        &:focus-visible { @apply outline-none; }
+               text-sm text-fg;
     }
 
     .filter-input::placeholder {
@@ -124,13 +107,7 @@
     .filter-clear {
         @apply flex-auto h-11 px-3.5 py-2
                bg-orange border border-border rounded-pill
-               font-semibold text-fg-secondary cursor-pointer
-               transition-[border-color,color] duration-[var(--duration-fast)];
-
-        &:hover { @apply border-border-strong text-fg; }
-
-        &:focus,
-        &:focus-visible { @apply outline-none; }
+               font-semibold text-fg-secondary cursor-pointer;
     }
 
     .filter-combo {
@@ -145,10 +122,7 @@
     }
 
     .filter-combo-option {
-        @apply px-2.5 py-2 rounded-sm text-sm text-fg cursor-pointer
-               transition-[background-color] duration-[var(--duration-fast)];
-
-        &:hover { @apply bg-surface-hover; }
+        @apply px-2.5 py-2 rounded-sm text-sm text-fg cursor-pointer;
 
         &.is-selected { @apply bg-accent-bg font-semibold; }
     }

@@ -41,12 +41,6 @@
     border-radius: 50%;
     color: var(--text);
     cursor: pointer;
-    transition: border-color var(--dur) var(--ease-out), background var(--dur) var(--ease-out);
-}
-
-.quick-nav:hover {
-    border-color: var(--border-strong);
-    background: var(--surface-hover);
 }
 
 .quick-nav svg {
@@ -67,12 +61,6 @@
     color: var(--text);
     cursor: pointer;
     scroll-snap-align: start;
-    transition: color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
-}
-
-.quick-filter:hover {
-    
-    transform: translateY(-2px);
 }
 
 .quick-filter.is-active {

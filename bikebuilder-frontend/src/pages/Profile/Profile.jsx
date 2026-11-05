@@ -4,14 +4,16 @@ import { fetchCurrentPublicProfile, fetchCurrentUserProfile, updateCurrentUserPr
 import { fetchPublicBuilds, getBuild, deleteBuild, uploadBuildImage } from "../../services/buildService";
 import { useBuild } from "../../context/BuildContext";
 import { useAuth } from "../../context/AuthContext";
-import BuildsCard from "../../components/Builds/BuildsCard";
+import BuildsCard, { BuildsCardSkeleton } from "../../components/Builds/BuildsCard";
 import "../../styles/pages/Profile/Profile.css";
+
+const BIO_MAX = 52;
 
 const Profile = () => {
     const { username } = useParams();
     const [profile, setProfile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [form, setForm] = useState({ display_name: "", bio: "" });
+    const [form, setForm] = useState({ display_name: "", bio: "", gear_ratio: "", strava: ""});
     const [saving, setSaving] = useState(false);
     const [saveError, setSaveError] = useState("");
     const [buildsList, setBuildsList] = useState([]);
@@ -20,16 +22,18 @@ const Profile = () => {
     const { currentUser, loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [buildsLoading, setBuildsLoading] = useState(true);
 
     useEffect(() => {
         if (authLoading) return;
-        Promise.all([
-            fetchCurrentPublicProfile(username),
-            fetchPublicBuilds({ username }),
-        ]).then(([profileData, buildsData]) => {
-            setProfile(profileData);
-            setBuildsList(buildsData);
-        }).finally(() => setLoading(false));
+        setLoading(true);
+        setBuildsLoading(true);
+        fetchCurrentPublicProfile(username)
+            .then(setProfile)
+            .finally(() => setLoading(false));
+        fetchPublicBuilds({ username })
+            .then(setBuildsList)
+            .finally(() => setBuildsLoading(false));
     }, [username, authLoading]);
 
     useEffect(() => {
@@ -54,7 +58,12 @@ const Profile = () => {
     };
 
     const openEditProfile = () => {
-        setForm({ display_name: profile.display_name ?? "", bio: profile.bio ?? "" });
+        setForm({
+            display_name: profile.display_name ?? "",
+            bio: profile.bio ?? "",
+            gear_ratio: profile.gear_ratio ?? "",
+            strava: profile.strava ?? "",
+        });
         setSaveError("");
         setIsEditing(true);
     };
@@ -65,7 +74,13 @@ const Profile = () => {
         setSaveError("");
         try {
             const updated = await updateCurrentUserProfile(form);
-            setProfile((prev) => ({ ...prev, display_name: updated.display_name, bio: updated.bio }));
+            setProfile((prev) => ({
+                ...prev,
+                display_name: updated.display_name,
+                bio: updated.bio,
+                gear_ratio: form.gear_ratio,
+                strava: form.strava,
+            }));
             setIsEditing(false);
         } catch {
             setSaveError("Could not save your changes. Please try again.");
@@ -97,7 +112,7 @@ const Profile = () => {
                 <header className="profile-edit-head">
                     <h1 className="profile-edit-title">Edit profile</h1>
                     <p className="profile-edit-note">
-                        Information added here is visible to anyone who views your profile. Keep personal details private.
+                        Information added here is public. Keep personal details private.
                     </p>
                 </header>
 
@@ -108,7 +123,7 @@ const Profile = () => {
                             id="display_name"
                             className="profile-input"
                             type="text"
-                            maxLength={150}
+                            maxLength={25}
                             value={form.display_name}
                             placeholder="Your name"
                             onChange={(e) => setForm({ ...form, display_name: e.target.value })}
@@ -117,13 +132,40 @@ const Profile = () => {
 
                     <div className="profile-field">
                         <label className="profile-field-label" htmlFor="bio">About me</label>
-                        <textarea
+                        <input
                             id="bio"
-                            className="profile-input profile-textarea"
-                            rows={5}
+                            className="profile-input"
+                            type="text"
+                            maxLength={BIO_MAX}
                             value={form.bio}
                             placeholder="Write something about you"
                             onChange={(e) => setForm({ ...form, bio: e.target.value })}
+                        />
+                        <span className="profile-field-count">{form.bio.length}/{BIO_MAX}</span>
+                    </div>
+
+                    <div className="profile-field">
+                        <label className="profile-field-label" htmlFor="gear_ratio">Gear ratio</label>
+                        <input
+                            id="gear_ratio"
+                            className="profile-input"
+                            type="text"
+                            maxLength={20}
+                            value={form.gear_ratio}
+                            placeholder="48x17"
+                            onChange={(e) => setForm({ ...form, gear_ratio: e.target.value })}
+                        />
+                    </div>
+
+                    <div className="profile-field">
+                        <label className="profile-field-label" htmlFor="strava">Strava</label>
+                        <input
+                            id="strava"
+                            className="profile-input"
+                            type="url"
+                            value={form.strava}
+                            placeholder="https://www.strava.com/athletes/..."
+                            onChange={(e) => setForm({ ...form, strava: e.target.value })}
                         />
                     </div>
 
@@ -148,8 +190,8 @@ const Profile = () => {
                 <div className="profile-body">
                     <aside className="profile-side">
                         <div className="profile-header">
-                            {profile.photo_url ? (
-                                <img className="profile-avatar" src={profile.photo_url} alt={profile.display_name} />
+                            {currentUser.photoURL ? (
+                                <img className="profile-avatar" src={currentUser.photoURL} alt={profile.display_name} />
                             ) : (
                                 <div className="profile-avatar-placeholder">
                                     {profile.display_name?.[0] ?? "?"}
@@ -167,11 +209,19 @@ const Profile = () => {
                         </section>
                         <section className="profile-section">
                             <h2 className="profile-section-label">Gear ratio</h2>
-                            <p className="profile-section-empty">Nothing here yet.</p>
+                            {profile.gear_ratio ? (
+                                <p className="profile-section-text">{profile.gear_ratio}</p>
+                            ) : (
+                                <p className="profile-section-empty">Nothing here yet.</p>
+                            )}
                         </section>
                         <section className="profile-section">
                             <h2 className="profile-section-label">Socials</h2>
-                            <p className="profile-section-empty">Nothing here yet.</p>
+                            {profile.strava ? (
+                                <a className="profile-section-text" href={profile.strava} target="_blank" rel="noreferrer">Strava</a>
+                            ) : (
+                                <p className="profile-section-empty">Nothing here yet.</p>
+                            )}
                         </section>
                         <section className="profile-actions">
                             {isOwner && (
@@ -186,7 +236,11 @@ const Profile = () => {
                             <h2 className="profile-builds-title">Bikes</h2>
                         </div>
 
-                        {buildsList.length === 0 ? (
+                        {buildsLoading ? (
+                            <div className="profile-build-card">
+                                {Array.from({ length: 3 }).map((_, i) => <BuildsCardSkeleton key={i} />)}
+                            </div>
+                        ) : buildsList.length === 0 ? (
                             <p className="profile-builds-empty">No builds shared yet.</p>
                         ) : (
                             <div className="profile-build-card">
@@ -194,9 +248,9 @@ const Profile = () => {
                                     <BuildsCard
                                         key={build.id}
                                         build={build}
-                                        onDelete={handleDelete}
-                                        onEdit={handleEdit}
-                                        onUploadImage={handleUploadImage} />
+                                        onDelete={isOwner ? handleDelete : undefined}
+                                        onEdit={isOwner ? handleEdit : undefined}
+                                        onUploadImage={isOwner ? handleUploadImage : undefined} />
                                 ))}
                             </div>
                         )}

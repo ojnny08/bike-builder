@@ -2,14 +2,32 @@
 
 @layer components {
     .build-card {
-        @apply bg-transparent overflow-hidden pb-5 cursor-pointer
+        @apply relative bg-transparent overflow-hidden pb-5 cursor-pointer
                border-transparent rounded-sm;
-        animation: fadeInUp var(--dur) var(--ease-out) both;
         transition: transform var(--dur) var(--ease-out), box-shadow var(--dur);
 
-        > *:not(.build-card-image) {
+        > *:not(.build-card-image):not(.build-card-corner) {
             @apply px-6;
         }
+    }
+
+    .build-card.is-skeleton {
+        @apply cursor-default pointer-events-none;
+    }
+
+    .build-skeleton-line {
+        @apply h-3.5;
+
+        &.build-skeleton-line--name { @apply w-[45%]; }
+        &.build-skeleton-line--meta { @apply w-[60%] h-3 mt-1.5; }
+    }
+
+    .build-skeleton-avatar {
+        @apply w-8 h-8 rounded-full shrink-0;
+    }
+
+    .build-card-corner {
+        @apply absolute top-2.5 right-2.5 z-[3];
     }
 
     .build-card-image {
@@ -48,9 +66,8 @@
                opacity-0 transition-opacity duration-150;
     }
 
-    .build-card-share {
-        @apply absolute top-2.5 right-2.5 z-[2]
-               flex items-center justify-center w-[30px] h-[30px]
+    .build-card-corner-btn {
+        @apply flex items-center justify-center w-[30px] h-[30px]
                border-none rounded-full bg-scrim/35 text-on-accent
                cursor-pointer transition-colors duration-150;
         backdrop-filter: blur(4px);
@@ -83,14 +100,10 @@
     }
 
     .build-card-meta {
-        @apply flex flex-col gap-0.5 mb-[18px]
+        @apply flex flex-wrap gap-x-1.5 gap-y-0.5 mb-[18px]
                text-[0.8rem] font-bold text-fg;
     }
 
-
-    .build-card-actions {
-        @apply flex items-center justify-end gap-2;
-    }
 
     .build-card-menu {
         @apply relative;
@@ -106,15 +119,10 @@
     .build-card-dropdown-item {
         @apply flex items-center gap-2.5 px-3 py-[9px]
                bg-transparent border-none rounded-sm
-               text-[0.85rem] font-semibold text-fg cursor-pointer
-               transition-[background-color,color] duration-[var(--duration-fast)];
-
-        &:hover { @apply bg-surface-hover; }
+               text-[0.85rem] font-semibold text-fg cursor-pointer;
 
         &.is-danger {
             @apply text-danger;
-
-            &:hover { @apply bg-danger-bg; }
         }
     }
 }

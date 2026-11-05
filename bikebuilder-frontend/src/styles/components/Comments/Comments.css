@@ -15,13 +15,7 @@
     }
 
     .comment-form {
-        @apply bg-surface border border-border rounded-sm p-3.5 mb-7 shadow-sm
-               transition-[border-color,box-shadow] duration-[var(--duration-fast)];
-
-        &:focus-within {
-            @apply border-border-strong;
-            box-shadow: 0 0 0 3px var(--color-accent-ring);
-        }
+        @apply bg-surface border border-border rounded-sm p-3.5 mb-7 shadow-sm;
     }
 
     .comment-input {
@@ -104,11 +98,6 @@
     .comment-edit {
         .comment-input {
             @apply border border-border rounded-sm p-2.5 bg-surface;
-
-            &:focus {
-                @apply border-border-strong;
-                box-shadow: 0 0 0 3px var(--color-accent-ring);
-            }
         }
     }
 

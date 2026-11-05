@@ -23,10 +23,9 @@ const ComponentCard = ({ comp, isSelected, onSelect }) => {
             </div>
             <div className="product-card-body">
                 <h1 className="product-brand">{comp.brand}</h1>
-                <p className="product-name">{comp.name}</p>
-                <div className="product-meta">
+                <div className="product-name-row">
+                    <p className="product-name">{comp.name}</p>
                     <div className="product-price">{money(comp.price)}</div>
-                    <div className="product-weight">{comp.weight_grams}g</div>
                 </div>
 
                 {comp.description && (
@@ -43,11 +42,11 @@ export const ComponentCardSkeleton = () => (
     <div className="product-card is-skeleton" aria-hidden="true">
         <div className="product-media" />
         <div className="product-card-body">
-            <span className="product-skeleton-line product-skeleton-line--brand" />
-            <span className="product-skeleton-line product-skeleton-line--name" />
+            <span className="skeleton product-skeleton-line product-skeleton-line--brand" />
+            <span className="skeleton product-skeleton-line product-skeleton-line--name" />
         </div>
         <div className="product-card-footer">
-            <span className="product-skeleton-line product-skeleton-line--price" />
+            <span className="skeleton product-skeleton-line product-skeleton-line--price" />
         </div>
     </div>
 );

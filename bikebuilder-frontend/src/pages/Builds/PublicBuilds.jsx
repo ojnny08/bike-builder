@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchPublicBuilds } from "../../services/buildService";
-import BuildsCard from "../../components/Builds/BuildsCard";
+import BuildsCard, { BuildsCardSkeleton } from "../../components/Builds/BuildsCard";
 import FilterBar from "../../components/Filters/FilterBar";
 import BuildFilters from "../../components/Filters/BuildFilters";
 import "../../styles/pages/Builds/PublicBuilds.css";
@@ -38,7 +38,9 @@ const PublicBuilds = () => {
             />
 
             {loading ? (
-                <p className="loading-text">Loading...</p>
+                <div className="builds-grid">
+                    {Array.from({ length: 6 }).map((_, i) => <BuildsCardSkeleton key={i} />)}
+                </div>
             ) : buildsList.length === 0 ? (
                 <p className="loading-text">No builds match these filters.</p>
             ) : (

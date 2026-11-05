@@ -37,17 +37,11 @@
 
         input {
             @apply w-full px-3.5 py-2.5 text-[0.875rem] font-[inherit]
-                   bg-surface text-fg border border-border rounded-sm outline-none
-                   transition-[border-color,box-shadow] duration-[var(--duration-fast)];
+                   bg-surface text-fg border border-border rounded-sm outline-none;
         }
 
         input::placeholder {
             @apply text-muted;
-        }
-
-        input:focus {
-            @apply border-accent;
-            box-shadow: 0 0 0 3px var(--accent-ring);
         }
     }
 
