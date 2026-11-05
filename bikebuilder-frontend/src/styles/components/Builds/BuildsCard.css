@@ -3,7 +3,7 @@
 @layer components {
     .build-card {
         @apply bg-transparent overflow-hidden pb-5 cursor-pointer
-               border-transparent rounded-md;
+               border-transparent rounded-sm;
         animation: fadeInUp var(--dur) var(--ease-out) both;
         transition: transform var(--dur) var(--ease-out), box-shadow var(--dur);
 
@@ -28,7 +28,7 @@
     }
 
     .build-card-img {
-        @apply block w-full h-full object-cover border-transparent rounded-md;
+        @apply block w-full h-full object-cover border-transparent rounded-sm;
         transition: opacity var(--dur-fast), transform 0.4s var(--ease-out);
     }
 
@@ -99,7 +99,7 @@
     .build-card-dropdown {
         @apply absolute right-0 z-[5] min-w-[150px] p-1.5
                flex flex-col gap-0.5
-               bg-surface border border-border rounded-md shadow-lg;
+               bg-surface border border-border rounded-sm shadow-lg;
         top: calc(100% + 6px);
     }
 

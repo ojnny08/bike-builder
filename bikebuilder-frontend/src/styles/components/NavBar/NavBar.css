@@ -3,7 +3,7 @@
 @layer components {
     .nav {
         @apply fixed top-3 left-4 right-4 z-[200] flex flex-col
-               rounded-lg bg-surface/72 border border-border;
+               rounded-sm bg-surface/72 border border-border;
         backdrop-filter: blur(14px) saturate(1.4);
         -webkit-backdrop-filter: blur(14px) saturate(1.4);
     }
@@ -19,15 +19,10 @@
     .nav-brand {
         @apply flex items-center gap-2 text-[1.05rem] font-extrabold
                tracking-[0.06em] text-fg no-underline;
-
-        &:hover .nav-brand-icon {
-            transform: rotate(-8deg) scale(1.05);
-        }
     }
 
     .nav-brand-icon {
         @apply block text-accent;
-        transition: transform var(--dur) var(--ease-out);
     }
 
     .nav-auth {
@@ -35,10 +30,7 @@
     }
 
     .nav-auth-link {
-        @apply text-muted no-underline text-base font-medium
-               transition-colors duration-[120ms];
-
-        &:hover { @apply text-fg; }
+        @apply text-fg no-underline text-base font-medium;
     }
 
     .nav-sep {
@@ -63,65 +55,14 @@
         @apply flex items-center gap-2 cursor-pointer;
     }
 
-    .nav-chevron {
-        @apply bg-none border-none cursor-pointer p-1 flex items-center justify-center;
-
-        &:hover .nav-chevron-icon { @apply border-fg; }
-    }
-
-    .nav-chevron-icon {
-        @apply inline-block w-2.5 h-2.5 border-r-2 border-b-2 border-muted;
-        transform: rotate(45deg) translateY(-3px);
-        transition: transform 0.2s, border-color 0.12s;
-
-        &.is-open {
-            transform: rotate(225deg) translateY(-3px);
-        }
-    }
-
-    .nav-dropdown {
-        @apply absolute right-0 min-w-[120px] z-[100] overflow-hidden
-               bg-surface border border-border rounded-md shadow-lg;
-        top: calc(100% + 8px);
-        transform-origin: top right;
-        animation: fadeInUp var(--dur-fast) var(--ease-out) both;
-    }
-
-    .nav-dropdown-item {
-        @apply block w-full px-4 py-2.5 bg-none border-none text-left
-               text-[0.8rem] text-fg cursor-pointer
-               transition-[background-color,color] duration-[120ms];
-
-        &:hover { @apply bg-surface-hover text-fg-secondary; }
-    }
 
     .nav-links {
         @apply flex items-stretch h-full;
 
         a {
-            @apply relative flex items-center px-6 text-base font-extrabold
-                   tracking-[0.03em] text-muted no-underline
-                   transition-colors duration-[var(--duration-fast)];
+            @apply relative flex items-center px-6 text-base font-bold
+                   tracking-[0.03em] text-fg no-underline;
             font-family: 'Jost', sans-serif;
-
-            &::after {
-                content: '';
-                @apply absolute left-6 right-6 bottom-2.5 h-0.5 bg-accent origin-center;
-                transform: scaleX(0);
-                transition: transform var(--dur) var(--ease-out);
-            }
-
-            &:hover {
-                @apply text-fg;
-
-                &::after { transform: scaleX(0.5); }
-            }
-
-            &.active {
-                @apply text-accent font-semibold;
-
-                &::after { transform: scaleX(1); }
-            }
         }
     }
 }

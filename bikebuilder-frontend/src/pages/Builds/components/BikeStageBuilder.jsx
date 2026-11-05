@@ -298,13 +298,15 @@ const BikeStageBuilder = () => {
                     </div>
 
                     {nextCategory && (
-                        <button
-                            type="button"
-                            className="bb-btn-primary bs-panel-next"
-                            onClick={() => setFocusedCategory(nextCategory)}
-                        >
-                            Continue to {categoryLabel(nextCategory)}
-                        </button>
+                        <div className="bs-panel-next-bar">
+                            <button
+                                type="button"
+                                className="bb-btn-primary bs-panel-next"
+                                onClick={() => setFocusedCategory(nextCategory)}
+                            >
+                                Continue to {categoryLabel(nextCategory)}
+                            </button>
+                        </div>
                     )}
                 </div>
             </div>

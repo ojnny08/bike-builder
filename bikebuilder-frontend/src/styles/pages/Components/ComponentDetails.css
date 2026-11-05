@@ -34,7 +34,7 @@
 
 .comp-view-img {
     width: 100%;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     margin-bottom: 20px;
 }
 

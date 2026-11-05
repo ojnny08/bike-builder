@@ -9,7 +9,7 @@
     .comp-modal {
         @apply relative w-full max-w-[960px] max-h-[90vh] overflow-y-auto
                p-12 bg-surface border border-border shadow-lg;
-        border-radius: var(--radius-panel);
+        border-radius: var(--radius-sm);
         animation: fadeInUp var(--dur) var(--ease-out) both;
 
         .comp-view {
@@ -19,7 +19,7 @@
 
     .comp-modal-close {
         @apply absolute top-3.5 right-4 w-[30px] h-[30px] grid place-items-center
-               bg-none border-none rounded-md text-[1.4rem] leading-none
+               bg-none border-none rounded-sm text-[1.4rem] leading-none
                text-muted cursor-pointer z-[1]
                transition-[background-color,color] duration-[var(--duration-fast)];
 

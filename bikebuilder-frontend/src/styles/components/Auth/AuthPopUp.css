@@ -9,13 +9,13 @@
     .auth-modal {
         @apply relative w-full max-w-[420px] p-10
                bg-surface border border-border shadow-lg;
-        border-radius: var(--radius-panel);
+        border-radius: var(--radius-sm);
         animation: fadeInUp var(--dur) var(--ease-out) both;
     }
 
     .auth-modal-close {
         @apply absolute top-3.5 right-4 w-[30px] h-[30px] grid place-items-center
-               bg-none border-none rounded-md text-[1.4rem] leading-none
+               bg-none border-none rounded-sm text-[1.4rem] leading-none
                text-muted cursor-pointer
                transition-[background-color,color] duration-[var(--duration-fast)];
 
@@ -52,7 +52,7 @@
     }
 
     .auth-submit {
-        @apply w-full mt-1 py-2.5 rounded-pill
+        @apply w-full mt-1 py-2.5 rounded-sm
                text-[0.875rem] font-semibold font-[inherit]
                bg-accent text-on-accent border-none shadow-sm cursor-pointer
                transition-[background-color,transform,box-shadow]
@@ -82,7 +82,7 @@
     }
 
     .auth-google {
-        @apply w-full py-2.5 flex items-center justify-center gap-2.5 rounded-pill
+        @apply w-full py-2.5 flex items-center justify-center gap-2.5 rounded-sm
                text-[0.875rem] font-medium font-[inherit]
                bg-surface text-fg border border-border cursor-pointer
                transition-[background-color,border-color] duration-[var(--duration-fast)];

@@ -15,7 +15,7 @@
     }
 
     .comment-form {
-        @apply bg-surface border border-border rounded-lg p-3.5 mb-7 shadow-sm
+        @apply bg-surface border border-border rounded-sm p-3.5 mb-7 shadow-sm
                transition-[border-color,box-shadow] duration-[var(--duration-fast)];
 
         &:focus-within {
@@ -51,7 +51,7 @@
     }
 
     .comments-empty {
-        @apply text-center border border-dashed border-border rounded-md px-[18px] py-8;
+        @apply text-center border border-dashed border-border rounded-sm px-[18px] py-8;
     }
 
     .comment-list {
@@ -88,7 +88,7 @@
     }
 
     .comment-badge {
-        @apply px-1.5 py-0.5 rounded-pill bg-accent-bg
+        @apply px-1.5 py-0.5 rounded-sm bg-accent-bg
                text-[0.66rem] font-semibold tracking-[0.04em] text-fg-secondary;
     }
 
@@ -122,7 +122,7 @@
 
     .comment-action {
         @apply inline-flex items-center gap-[5px] px-2.5 py-1.5
-               bg-transparent border-none rounded-pill
+               bg-transparent border-none rounded-sm
                text-muted text-[0.76rem] font-medium cursor-pointer
                transition-[background-color,color] duration-[var(--duration-fast)];
 

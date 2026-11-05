@@ -150,7 +150,7 @@
 
   .btn {
     @apply inline-flex items-center justify-center shrink-0
-           min-h-[38px] px-4 py-2 rounded-pill
+           min-h-[38px] px-4 py-2 rounded-sm
            text-[0.8rem] font-semibold cursor-pointer
            transition-[background-color,border-color,color,transform]
            duration-[var(--duration-fast)] ease-smooth;
@@ -181,7 +181,7 @@
   }
 
   .btn--icon {
-    @apply w-9 h-9 min-h-0 p-0 rounded-md
+    @apply w-9 h-9 min-h-0 p-0 rounded-sm
            bg-surface text-muted border border-border;
 
     &:not(:disabled):hover { @apply text-fg border-border-strong; }

@@ -117,7 +117,7 @@
     width: 100%;
     display: flex;
     border: 1px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     margin-bottom: 20px;
 
 }
