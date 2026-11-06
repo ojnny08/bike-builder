@@ -13,7 +13,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bikebuilder.settings")
 django.setup()
 
 from apps.components.models import (
-    WheelSet, SingleWheel, WheelSize, HubSpacing, CogInterface, ThreadStandard,
+    WheelSet, FrontSingleWheel, RearWheel, WheelSize, HubSpacing, CogInterface, ThreadStandard,
 )
 
 WHEEL_JSON = os.path.join(os.path.dirname(__file__), "extracted", "wheel.json")
@@ -150,16 +150,24 @@ def load():
 
     singles = 0
     for g in collapse(single_rows, lambda r: (r["source_url"], single_position(r["name"]))):
-        position = single_position(g["name"])
-        SingleWheel.objects.update_or_create(
+        if single_position(g["name"]) == "front":
+            FrontSingleWheel.objects.update_or_create(
+                import_url=g["source_url"],
+                defaults=dict(
+                    component_type="front_wheel",
+                    hub_spacing=HubSpacing.FRONT_100MM,
+                    **base(g),
+                ),
+            )
+            singles += 1
+            continue
+        RearWheel.objects.update_or_create(
             import_url=g["source_url"],
-            position=position,
             defaults=dict(
-                component_type="wheel",
-                position=position,
-                hub_spacing=HubSpacing.FRONT_100MM if position == "front" else HubSpacing.REAR_120MM,
+                component_type="rear_wheel",
+                hub_spacing=HubSpacing.REAR_120MM,
                 threading=threading_of(g),
-                cog_interface=cog_of(g) if position == "rear" else "",
+                cog_interface=cog_of(g),
                 **base(g),
             ),
         )

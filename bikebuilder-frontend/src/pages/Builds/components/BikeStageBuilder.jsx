@@ -2,17 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBuild } from "../../../context/BuildContext";
 import BikeCanvas from "../../../bike3d/BikeCanvas";
-import CategoryIcon from "../../../components/Icons/CategoryIcons";
 import "../../../styles/pages/Builds/Builds.css";
 import ProgressSteps from "./ProgressSteps";
 import FilterBar from "../../../components/Filters/FilterBar";
 import ComponentCard, { ComponentCardSkeleton } from "../../../components/BikeComponents/ComponentCard";
 import { useComponentFilters } from "../../../hooks/useComponentFilters";
 import { titleCase, money, sumPrice, sumWeight } from "../../../utils/format";
-import { fetchComponentsByCategory, fetchCompatibleComponents } from "../../../services/componentService";
+import { fetchComponentsByCategory, fetchCompatibleComponents, createCustomWheel } from "../../../services/componentService";
 
 const ASSEMBLY_ORDER = [
-    "frame", "bottom_bracket", "crank", "crankset", "wheels", "wheel", "wheelset",
+    "frame", "bottom_bracket", "crank", "crankset", "wheels", "front_wheel", "rear_wheel", "wheelset",
     "chainring", "sprocket", "chain", "tire", "seatpost", "saddle", "stem", "brake",
     "handlebar", "pedals",
 ];
@@ -20,40 +19,21 @@ const ASSEMBLY_ORDER = [
 const modeSummary = modeCfg =>
     (modeCfg.required || []).map(titleCase).join(' + ');
 
-const GroupCard = ({ group, groupKey, mode, parts, filled, locked, prereq, onChooseMode }) => {
-    const total = sumPrice(parts);
+const GroupModes = ({ group, mode, locked, prereq, onChooseMode }) => {
+    if (locked) return <p className="bs-group-locked">Select {titleCase(prereq).toLowerCase()} first</p>;
     return (
-        <div className={`bs-card is-focused${filled ? ' is-filled' : ''}${locked ? ' is-locked' : ''}`}>
-            {!locked && (
-                <div className="bs-mode-cards">
-                    {Object.entries(group.modes).map(([key, cfg]) => (
-                        <button
-                            key={key}
-                            type="button"
-                            className={`bs-mode-card${mode === key ? ' is-active' : ''}`}
-                            onClick={() => onChooseMode(key)}
-                        >
-                            <span className="bs-mode-card-title">{titleCase(key)}</span>
-                            <span className="bs-mode-card-sub">{modeSummary(cfg)}</span>
-                        </button>
-                    ))}
-                </div>
-            )}
-            <div className="bs-card-main">
-                <span className="bs-card-placeholder">{group.label}</span>
-
-                {filled ? (
-                    <span className="bs-card-name">
-                        {parts.map(p => p.name).join(' + ')}
-                        <span className="bs-card-meta"> · {money(total)}</span>
-                    </span>
-                ) : locked ? (
-                    <span className="bs-card-cat">Select {titleCase(prereq)} first</span>
-                ) : (
-                    <span className="bs-card-cat">Not Selected</span>
-                )}
-            </div>
-            <span className="bs-card-icon"><CategoryIcon category={groupKey} /></span>
+        <div className="bs-mode-cards">
+            {Object.entries(group.modes).map(([key, cfg]) => (
+                <button
+                    key={key}
+                    type="button"
+                    className={`bs-mode-card${mode === key ? ' is-active' : ''}`}
+                    onClick={() => onChooseMode(key)}
+                >
+                    <span className="bs-mode-card-title">{cfg.label ?? titleCase(key)}</span>
+                    <span className="bs-mode-card-sub">{modeSummary(cfg)}</span>
+                </button>
+            ))}
         </div>
     );
 };
@@ -99,17 +79,62 @@ const BikeStageBuilder = () => {
         : modeParts.find(p => !partLocked(p) && !selectedByCategory[p])
             ?? modeParts.find(p => !partLocked(p));
 
-    const selectingCategory = activeGroup ? activePart : activeCategory;
+    const [customHub, setCustomHub] = useState(null);
+    const isCustom = activeMode?.builder === "custom";
+    const wheelPosition = activePart === "front_wheel" ? "front" : "rear";
+    const customType = customHub ? "rim" : "track_hub";
+
+    const selectingCategory = !activeGroup
+        ? activeCategory
+        : isCustom && activePart ? customType : activePart;
+
+    const selectedId = isCustom
+        ? customHub && selectingCategory === "track_hub" ? customHub.id : null
+        : selectedByCategory[selectingCategory]?.id;
+
+    const endLabel = wheelPosition === "front" ? "Front" : "Rear";
+
+    const selectTitle = isCustom
+        ? `${endLabel} ${customType === "rim" ? "rim" : "hub"}`
+        : titleCase(selectingCategory);
+
+    const choosePart = part => {
+        setGroupPart(part);
+        setCustomHub(null);
+    };
+
+    const nextPart = () => modeParts[modeParts.indexOf(activePart) + 1] ?? null;
+
+    const handleSelect = async comp => {
+        if (!isCustom) {
+            addComponent(comp);
+            if (activeGroup) setGroupPart(nextPart());
+            return;
+        }
+        if (!customHub) {
+            setCustomHub(comp);
+            return;
+        }
+        try {
+            const wheel = await createCustomWheel({ position: wheelPosition, hubId: customHub.id, rimId: comp.id });
+            addComponent(wheel);
+            choosePart(nextPart());
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
     const filters = useComponentFilters({ fixedType: selectingCategory || "" });
     const { query } = filters;
     const [components, setComponents] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const getSelectedIds = () =>
-        Object.fromEntries(
+    const getSelectedIds = () => ({
+        ...Object.fromEntries(
             Object.values(selectedByCategory).map(c => [`${c.component_type}_id`, c.id])
-        );
+        ),
+        ...(isCustom && { position: wheelPosition, custom_hub_id: customHub?.id }),
+    });
 
     const modeOf = category => groups[category].modes[groupModes[category]];
 
@@ -171,7 +196,7 @@ const BikeStageBuilder = () => {
             }
         };
         load();
-    }, [selectingCategory, query.search, query.brand, query.priceMin, query.priceMax]);
+    }, [selectingCategory, activePart, query.search, query.brand, query.priceMin, query.priceMax]);
 
     return (
         <div className="bb-wrapper bs-wrapper">
@@ -222,17 +247,14 @@ const BikeStageBuilder = () => {
                         </div>
                         {activeGroup && (
                             <>
-                                <GroupCard
+                                <GroupModes
                                     group={activeGroup}
-                                    groupKey={activeCategory}
                                     mode={groupModes[activeCategory]}
-                                    parts={modeParts.map(t => selectedByCategory[t]).filter(Boolean)}
-                                    filled={isFilled(activeCategory)}
                                     locked={isLocked(activeCategory)}
                                     prereq={prerequisites[activeCategory]}
                                     onChooseMode={mode => {
                                         setGroupModes(prev => ({ ...prev, [activeCategory]: mode }));
-                                        setGroupPart(null);
+                                        choosePart(null);
                                     }}
                                 />
                                 {modeParts.length > 1 && (
@@ -246,7 +268,7 @@ const BikeStageBuilder = () => {
                                                     type="button"
                                                     className={`bs-part-tab${part === activePart ? ' is-active' : ''}${sel ? ' is-filled' : ''}`}
                                                     disabled={locked}
-                                                    onClick={() => setGroupPart(part)}
+                                                    onClick={() => choosePart(part)}
                                                 >
                                                     <span className="bs-part-tab-name">{titleCase(part)}</span>
                                                     <span className="bs-part-tab-val">
@@ -257,13 +279,33 @@ const BikeStageBuilder = () => {
                                         })}
                                     </div>
                                 )}
+                                {isCustom && activePart && (
+                                    <div className="bs-part-tabs">
+                                        <button
+                                            type="button"
+                                            className={`bs-part-tab${customType === "track_hub" ? ' is-active' : ' is-filled'}`}
+                                            onClick={() => setCustomHub(null)}
+                                        >
+                                            <span className="bs-part-tab-name">{endLabel} hub</span>
+                                            <span className="bs-part-tab-val">{customHub ? customHub.name : 'Not selected'}</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`bs-part-tab${customType === "rim" ? ' is-active' : ''}`}
+                                            disabled={!customHub}
+                                        >
+                                            <span className="bs-part-tab-name">{endLabel} rim</span>
+                                            <span className="bs-part-tab-val">{customHub ? 'Not selected' : 'Select a hub first'}</span>
+                                        </button>
+                                    </div>
+                                )}
                             </>
                         )}
                         {!selectingCategory ? null : (
                             <>
                                 <div className="bs-select-head">
                                     <div className="bs-select-title">
-                                        {titleCase(selectingCategory)}
+                                        {selectTitle}
                                         {!loading && (
                                             <span className="bs-select-count">
                                                 {compatCount} compatible
@@ -284,11 +326,8 @@ const BikeStageBuilder = () => {
                                             <ComponentCard
                                                 key={comp.id}
                                                 comp={comp}
-                                                isSelected={comp.id === selectedByCategory[selectingCategory]?.id}
-                                                onSelect={c => {
-                                                    addComponent(c);
-                                                    if (activeGroup) setGroupPart(modeParts[modeParts.indexOf(selectingCategory) + 1] ?? null);
-                                                }}
+                                                isSelected={comp.id === selectedId}
+                                                onSelect={handleSelect}
                                             />
                                         ))}
                                     </div>

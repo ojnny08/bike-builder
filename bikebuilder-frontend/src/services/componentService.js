@@ -43,3 +43,9 @@ export const submitProductURL = async (link) => {
     const res = await api.post("/api/components/import_url/", { url: link });
     return res.data;
 };
+export const createCustomWheel = async ({ position, rimId, hubId }) => {
+    const res = await api.post("/api/components/custom_wheel/", {
+        position, rim_id: rimId, hub_id: hubId,
+    });
+    return res.data;
+};

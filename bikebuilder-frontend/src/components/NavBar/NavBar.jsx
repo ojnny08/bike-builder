@@ -29,6 +29,13 @@ const NavBar = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const handleLogout = async () => {
+        setDropdownOpen(false);
+        await logout();
+        navigate("/");
+        setAuthMode("login");
+    };
+
     return (
         <nav className="nav">
             <div className="nav-top">
@@ -64,7 +71,7 @@ const NavBar = () => {
                             </button>
                             {dropdownOpen && (
                                 <div className="nav-dropdown">
-                                    <button className="nav-dropdown-item" onClick={() => { logout(); setDropdownOpen(false); }}>
+                                    <button className="nav-dropdown-item" onClick={handleLogout}>
                                         Log Out
                                     </button>
                                 </div>

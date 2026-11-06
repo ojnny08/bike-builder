@@ -49,20 +49,7 @@ const ComponentDetailView = ({ id, inBuildFlow, onAdded }) => {
                     {mainImage && <img src={mainImage} alt={comp.name} className="comp-view-img" />}
                 </div>
 
-                {images.length > 1 && (
-                    <div className="comp-view-thumbs">
-                        {images.map((src, i) => (
-                            <button
-                                key={src}
-                                type="button"
-                                className={`comp-view-thumb${i === imgIndex && !resolved?.image_colour_url ? " is-active" : ""}`}
-                                onClick={() => setImgIndex(i)}
-                            >
-                                <img src={src} alt="" />
-                            </button>
-                        ))}
-                    </div>
-                )}
+                
             </div>
 
             <div className="comp-view-specs">

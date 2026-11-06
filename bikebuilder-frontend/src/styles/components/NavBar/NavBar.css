@@ -53,6 +53,30 @@
         @apply flex items-center gap-2 cursor-pointer;
     }
 
+    .nav-chevron {
+        @apply bg-none border-none cursor-pointer p-1 flex items-center justify-center;
+    }
+
+    .nav-chevron-icon {
+        @apply inline-block w-2.5 h-2.5 border-r-2 border-b-2 border-muted;
+        transform: rotate(45deg) translateY(-3px);
+
+        &.is-open {
+            transform: rotate(225deg) translateY(-3px);
+        }
+    }
+
+    .nav-dropdown {
+        @apply absolute right-0 min-w-[120px] z-[100] overflow-hidden
+               bg-surface border border-border rounded-sm shadow-lg;
+        top: calc(100% + 8px);
+    }
+
+    .nav-dropdown-item {
+        @apply block w-full px-4 py-2.5 bg-none border-none text-left
+               text-[0.8rem] text-fg cursor-pointer;
+    }
+
 
     .nav-links {
         @apply flex items-stretch h-full;

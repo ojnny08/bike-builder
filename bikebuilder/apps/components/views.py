@@ -11,18 +11,21 @@ from .serializer import (
     RimSerializer, StemSerializer,
     ChainSerializer, HandlebarSerializer, BrakeSerializer, PedalsSerializer,
     SprocketSerializer, TireSerializer, SaddleSerializer, SeatpostSerializer,
-    FrameSerializer, SingleWheelSerializer, WheelSetSerializer,
+    FrameSerializer, FrontSingleWheelSerializer, RearWheelSerializer, WheelSetSerializer,
+    CustomWheelSerializer,
 )
 from .models import (
     Components, ComponentType, Frame, BottomBracket, Crankset, CrankArm, Chainring,
-    SingleWheel, Stem, Sprocket, TrackHub, Rim, Chain, Handlebar, Brake, Pedals, Tire, Saddle, Seatpost,
+    FrontSingleWheel, RearWheel, Stem, Sprocket, TrackHub, Rim, Chain, Handlebar, Brake, Pedals, Tire, Saddle, Seatpost,
     WheelSet,
 )
 from .compatibility import get_compatible_queryset
+from .signal import _clear_query_caches
 
 TYPE_MODELS = {
     'frame': (Frame, FrameSerializer),
-    'wheel': (SingleWheel, SingleWheelSerializer),
+    'front_wheel': (FrontSingleWheel, FrontSingleWheelSerializer),
+    'rear_wheel': (RearWheel, RearWheelSerializer),
     'wheelset': (WheelSet, WheelSetSerializer),
     'crankset': (Crankset, CranksetSerializer),
     'crank_arm': (CrankArm, CrankArmSerializer),
@@ -71,7 +74,7 @@ class ComponentsViewSet(ViewSet):
     permission_classes = [AllowAny]
 
     def get_permissions(self):
-        if self.action == "import_url":
+        if self.action in ("import_url", "custom_wheel"):
             return [IsAuthenticated()]
         return super().get_permissions()
 
@@ -146,13 +149,58 @@ class ComponentsViewSet(ViewSet):
             'bottom_bracket': _fetch(BottomBracket, request, 'bottom_bracket_id'),
             'crankset': _fetch(Crankset, request, 'crankset_id'),
             'crank_arm': _fetch(CrankArm, request, 'crank_arm_id'),
-            'wheel': _fetch(SingleWheel, request, 'wheel_id'),
+            'front_wheel': _fetch(FrontSingleWheel, request, 'front_wheel_id'),
+            'rear_wheel': _fetch(RearWheel, request, 'rear_wheel_id'),
+            'custom_hub': _fetch(TrackHub, request, 'custom_hub_id'),
+            'position': request.query_params.get('position'),
             'stem': _fetch(Stem, request, 'stem_id'),
             'sprocket': _fetch(Sprocket, request, 'sprocket_id'),
         }
 
         queryset = get_compatible_queryset(component_type, selected)
         return Response(ComponentsSerializer(queryset, many=True).data)
+
+    @action(detail=False, methods=['post'])
+    def custom_wheel(self, request):
+        serializer = CustomWheelSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        position = serializer.validated_data['position']
+        rim = serializer.validated_data['rim']
+        hub = serializer.validated_data['hub']
+
+        defaults = {
+            'name': f"{rim} / {hub}",
+            'brand': "Custom",
+            'price': rim.price + hub.price,
+            'weight_grams': rim.weight_grams + hub.weight_grams,
+            'image_url': rim.image_url,
+            'wheel_size': rim.wheel_size,
+            'max_tire_width_mm': rim.max_tire_width_mm,
+            'hub_spacing': hub.hub_spacing,
+        }
+
+        if position == 'front':
+            model, serializer_class = FrontSingleWheel, FrontSingleWheelSerializer
+            defaults['component_type'] = ComponentType.FRONT_WHEEL
+        else:
+            model, serializer_class = RearWheel, RearWheelSerializer
+            option = hub.options.exclude(cog_interface="").first()
+            cog_interface = option.cog_interface if option else ""
+            defaults.update(
+                component_type=ComponentType.REAR_WHEEL,
+                threading=hub.threading,
+                cog_interface=cog_interface,
+                hub_type="spline" if cog_interface == "splined" else "threaded",
+            )
+
+        wheel, _ = model.objects.update_or_create(
+            custom_rim=rim, custom_hub=hub,
+            defaults=defaults,
+            create_defaults={**defaults, 'submitted_by': request.user},
+        )
+        cache.delete(f"components:detail:{wheel.pk}")
+        _clear_query_caches()
+        return Response(serializer_class(wheel).data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'])
     def import_url(self, request):

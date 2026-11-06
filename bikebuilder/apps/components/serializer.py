@@ -8,11 +8,10 @@ from .models import (
     Chain, Handlebar, HandlebarOptions, Brake, Pedals,
     Sprocket, SprocketOption, Tire, TireOption,
     Saddle, SaddleOptiosn, Seatpost, SeatPostOptions,
-    Frame, FrameOption, SingleWheel, WheelSet,
+    Frame, FrameOption, FrontSingleWheel, RearWheel, WheelSet,
 )
 
 ALLOWED_HOSTS = {
-    # --- Major online bike retailers ---
     "amazon.com",
     "chainreactioncycles.com",
     "wiggle.com",
@@ -183,7 +182,7 @@ class TrackHubSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TrackHub
-        fields = BASE_FIELDS + ['position', 'hub_spacing', 'threading', 'options']
+        fields = BASE_FIELDS + ['hub_spacing', 'threading', 'options']
 
 
 class RimOptionSerializer(serializers.ModelSerializer):
@@ -319,13 +318,32 @@ class FrameSerializer(serializers.ModelSerializer):
         ]
 
 
-class SingleWheelSerializer(serializers.ModelSerializer):
+CUSTOM_WHEEL_FIELDS = ['custom_rim', 'custom_hub', 'created_by']
+
+
+class FrontSingleWheelSerializer(serializers.ModelSerializer):
+    created_by = serializers.CharField(source='submitted_by.username', read_only=True, default=None)
+
     class Meta:
-        model = SingleWheel
+        model = FrontSingleWheel
+        fields = BASE_FIELDS + ['wheel_size', 'max_tire_width_mm', 'hub_spacing'] + CUSTOM_WHEEL_FIELDS
+
+
+class RearWheelSerializer(serializers.ModelSerializer):
+    created_by = serializers.CharField(source='submitted_by.username', read_only=True, default=None)
+
+    class Meta:
+        model = RearWheel
         fields = BASE_FIELDS + [
-            'wheel_size', 'max_tire_width_mm', 'hub_type', 'cog_interface',
-            'position', 'hub_spacing', 'threading',
-        ]
+            'wheel_size', 'max_tire_width_mm', 'hub_spacing', 'threading',
+            'hub_type', 'cog_interface',
+        ] + CUSTOM_WHEEL_FIELDS
+
+
+class CustomWheelSerializer(serializers.Serializer):
+    position = serializers.ChoiceField(choices=["front", "rear"])
+    rim_id = serializers.PrimaryKeyRelatedField(queryset=Rim.objects.all(), source='rim')
+    hub_id = serializers.PrimaryKeyRelatedField(queryset=TrackHub.objects.all(), source='hub')
 
 
 class WheelSetSerializer(serializers.ModelSerializer):

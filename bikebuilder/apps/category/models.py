@@ -9,7 +9,7 @@ class BikeType(models.Model):
       RULES = { 
           "fixed": {
               "required": ["frame", "bottom_bracket", "crank", "wheels", "sprocket",
-                           "chain", "tire", "stem", "handlebar", "seatpost", "saddle"],
+                           "chain", "tire", "stem", "handlebar", "seatpost", "saddle", "pedals"],
               "optional": ["brake"],
               "groups": {
                   "crank": {"label": "Crank", "default": "crankset", "modes": {
@@ -18,11 +18,11 @@ class BikeType(models.Model):
                                    "prerequisites": {"chainring": "crank_arm"}},
                   }},
                   "wheels": {"label": "Wheels", "default": "wheelset", "modes": {
-                      "wheelset": {"required": ["wheelset"], "optional": ["track_hub"],
+                      "wheelset": {"label": "Wheelset", "required": ["wheelset"], "optional": ["track_hub"],
                                    "prerequisites": {"track_hub": "wheelset"}},
-                      "single":   {"required": ["wheel"]},
-                      "custom":   {"required": ["rim", "track_hub"],
-                                   "prerequisites": {"track_hub": "rim"}},
+                      "mixed":    {"label": "Mixed wheel", "required": ["front_wheel", "rear_wheel"]},
+                      "custom":   {"label": "Custom wheel", "required": ["front_wheel", "rear_wheel"],
+                                   "builder": "custom"},
                   }},
               },
               "prerequisites": {
@@ -36,11 +36,11 @@ class BikeType(models.Model):
               },
           },
           "road-gravel": {
-              "required": ["frame", "bottom_bracket", "crankset", "wheel", "sprocket", "chain", "tire", "stem", "handlebar", "seatpost", "saddle"],
+              "required": ["frame", "bottom_bracket", "crankset", "wheelset", "sprocket", "chain", "tire", "stem", "handlebar", "seatpost", "saddle"],
               "optional": ["brake"],
           },
           "mountain": {
-              "required": ["frame", "bottom_bracket", "crankset", "wheel", "sprocket", "chain", "tire", "stem", "handlebar", "seatpost", "saddle"],
+              "required": ["frame", "bottom_bracket", "crankset", "wheelset", "sprocket", "chain", "tire", "stem", "handlebar", "seatpost", "saddle"],
               "optional": ["brake"],
           },
       }

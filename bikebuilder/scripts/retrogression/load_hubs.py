@@ -127,7 +127,6 @@ def load():
                 weight_grams=int(g["weight_grams"]),
                 description=g["description"],
                 image_url=g["image_url"],
-                position=position,
                 hub_spacing=spacing_of(g, position),
                 threading=threading_of(g, position),
             ),

@@ -53,7 +53,7 @@ const icons = {
             <path fillRule="evenodd" d="M35.53 30.29L44.29 21.53A2.7 2.7 0 0 0 40.47 17.71L31.71 26.47A2.7 2.7 0 0 0 35.53 30.29ZM36.53 26.97A1.5 1.5 0 1 0 33.53 26.97A1.5 1.5 0 1 0 36.53 26.97ZM42.47 21.03A1.5 1.5 0 1 0 39.47 21.03A1.5 1.5 0 1 0 42.47 21.03Z"/>
         </>
     ),
-    wheel: (
+    front_wheel: (
         <>
             <path fillRule="evenodd" d="M61 32A29 29 0 1 0 3 32A29 29 0 1 0 61 32ZM58.4 32A26.4 26.4 0 1 0 5.6 32A26.4 26.4 0 1 0 58.4 32Z"/>
             <path fillRule="evenodd" d="M37.2 32A5.2 5.2 0 1 0 26.8 32A5.2 5.2 0 1 0 37.2 32ZM34.2 32A2.2 2.2 0 1 0 29.8 32A2.2 2.2 0 1 0 34.2 32Z"/>
@@ -140,6 +140,8 @@ const generic = (
         <path d="M32 22v20M22 32h20"/>
     </g>
 );
+
+icons.rear_wheel = icons.front_wheel;
 
 const CategoryIcon = ({ category }) => (
     <svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">

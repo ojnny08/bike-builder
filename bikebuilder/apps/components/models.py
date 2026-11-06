@@ -11,7 +11,8 @@ class ComponentType(models.TextChoices):
     CHAINRING = "chainring", "Chainring"
     SPROCKET = "sprocket", "Sprocket"
     CHAIN = "chain", "Chain"
-    WHEEL = "wheel", "Wheel"
+    FRONT_WHEEL = "front_wheel", "Front Wheel"
+    REAR_WHEEL = "rear_wheel", "Rear Wheel"
     WHEELSET = "wheelset", "Wheelset"
     RIM = "rim", "Rim"
     TRACKHUB = "track_hub", "Track Hub"
@@ -238,15 +239,25 @@ class RimOptions(models.Model):
     image_colour_url = models.URLField(null=True, blank=True)
 
 class HubSpecs(models.Model):
-    position = models.CharField(max_length=10, choices=HubPosition.choices, blank=True, default="")
     hub_spacing = models.CharField(max_length=6, choices=HubSpacing.choices, blank=True, default="")
+
+    class Meta:
+        abstract = True
+
+class RearHubSpecs(HubSpecs):
+    class HubType(models.TextChoices):
+        THREADED = "threaded", "Threaded"
+        SPLINE = "spline", "Spline"
+
     threading = models.CharField(max_length=25, choices=ThreadStandard.choices, blank=True, default="")
+    hub_type = models.CharField(max_length=10, choices=HubType.choices, default="threaded")
+    cog_interface = models.CharField(max_length=20, choices=CogInterface.choices, blank=True, default="")
 
     class Meta:
         abstract = True
 
 class TrackHub(Components, HubSpecs):
-    pass
+    threading = models.CharField(max_length=25, choices=ThreadStandard.choices, blank=True, default="")
 
 class HubOption(models.Model):
     track_hub = models.ForeignKey(TrackHub, on_delete=models.CASCADE, related_name="options")
@@ -262,13 +273,19 @@ class HubOption(models.Model):
     def __str__(self):
         return f"{self.track_hub} — {self.color} {self.hole_count}h {self.cog_interface}".strip()
 
-class SingleWheel(Components, WheelSpecs, HubSpecs):
-    class HubType(models.TextChoices):
-        THREADED = "threaded", "Threaded"
-        SPLINE = "spline", "Spline"
+class FrontSingleWheel(Components, WheelSpecs, HubSpecs):
+    custom_rim = models.ForeignKey(Rim, on_delete=models.PROTECT, null=True, blank=True, related_name="front_wheels")
+    custom_hub = models.ForeignKey(TrackHub, on_delete=models.PROTECT, null=True, blank=True, related_name="front_wheels")
 
-    hub_type = models.CharField(max_length=10, choices=HubType.choices, default="threaded")
-    cog_interface = models.CharField(max_length=20, choices=CogInterface.choices, blank=True, default="")
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["custom_rim", "custom_hub"], name="unique_front_wheel_rim_hub")]
+
+class RearWheel(Components, WheelSpecs, RearHubSpecs):
+    custom_rim = models.ForeignKey(Rim, on_delete=models.PROTECT, null=True, blank=True, related_name="rear_wheels")
+    custom_hub = models.ForeignKey(TrackHub, on_delete=models.PROTECT, null=True, blank=True, related_name="rear_wheels")
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["custom_rim", "custom_hub"], name="unique_rear_wheel_rim_hub")]
 
 class WheelSet(Components, WheelSpecs):
     rim_name = models.CharField(max_length=200, blank=True)
