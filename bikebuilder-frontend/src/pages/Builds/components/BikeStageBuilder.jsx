@@ -162,6 +162,11 @@ const BikeStageBuilder = () => {
         .slice(orderedCats.indexOf(activeCategory) + 1)
         .find(c => !isLocked(c));
 
+    const prevCategory = orderedCats
+        .slice(0, orderedCats.indexOf(activeCategory))
+        .reverse()
+        .find(c => !isLocked(c));
+
     const totalPrice = sumPrice(build.components);
     const totalWeight = sumWeight(build.components);
 
@@ -336,15 +341,26 @@ const BikeStageBuilder = () => {
                         )}
                     </div>
 
-                    {nextCategory && (
+                    {(prevCategory || nextCategory) && (
                         <div className="bs-panel-next-bar">
-                            <button
-                                type="button"
-                                className="bb-btn-primary bs-panel-next"
-                                onClick={() => setFocusedCategory(nextCategory)}
-                            >
-                                Continue to {categoryLabel(nextCategory)}
-                            </button>
+                            {prevCategory && (
+                                <button
+                                    type="button"
+                                    className="bb-btn-primary bs-panel-next"
+                                    onClick={() => setFocusedCategory(prevCategory)}
+                                >
+                                    Back to {categoryLabel(prevCategory)}
+                                </button>
+                            )}
+                            {nextCategory && (
+                                <button
+                                    type="button"
+                                    className="bb-btn-primary bs-panel-next"
+                                    onClick={() => setFocusedCategory(nextCategory)}
+                                >
+                                    Continue to {categoryLabel(nextCategory)}
+                                </button>
+                            )}
                         </div>
                     )}
                 </div>

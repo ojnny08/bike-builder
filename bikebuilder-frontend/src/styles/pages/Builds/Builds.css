@@ -256,6 +256,7 @@
     flex-shrink: 0;
     display: flex;
     justify-content: center;
+    gap: 8px;
     margin-top: 12px;
     padding: 14px 16px;
     border: 1px solid var(--border);
@@ -263,11 +264,14 @@
     background: var(--surface);
 }
 .bs-panel-next {
+    flex: 1 1 0;
+    min-width: 0;
     padding: 10px 14px;
     border-radius: var(--radius-sm);
     font-size: 0.9rem;
     font-weight: 600;
-    white-space: nowrap;
+    line-height: 1.25;
+    text-align: center;
 }
 
 .bs-group-locked {
