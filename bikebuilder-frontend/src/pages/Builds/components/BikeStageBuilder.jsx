@@ -5,7 +5,7 @@ import BikeCanvas from "../../../bike3d/BikeCanvas";
 import "../../../styles/pages/Builds/Builds.css";
 import ProgressSteps from "./ProgressSteps";
 import FilterBar from "../../../components/Filters/FilterBar";
-import ComponentCard, { ComponentCardSkeleton } from "../../../components/BikeComponents/ComponentCard";
+import ComponentCard, { ComponentCardSkeleton, PlaceholderCard } from "../../../components/BikeComponents/ComponentCard";
 import { useComponentFilters } from "../../../hooks/useComponentFilters";
 import { titleCase, money, sumPrice, sumWeight } from "../../../utils/format";
 import { fetchComponentsByCategory, fetchCompatibleComponents, createCustomWheel } from "../../../services/componentService";
@@ -40,7 +40,9 @@ const GroupModes = ({ group, mode, locked, prereq, onChooseMode }) => {
 };
 
 const BikeStageBuilder = () => {
-    const { build, emptyBuild, addComponent } = useBuild();
+    const { build, emptyBuild, addComponent, markCategory } = useBuild();
+    const skipped = build.skipped ?? [];
+    const unknown = build.unknown ?? [];
     const [componentDetailID, setComponentDetailID] = useState(null);
     const navigate = useNavigate();
     const [focusedCategory, setFocusedCategory] = useState(null);
@@ -53,6 +55,8 @@ const BikeStageBuilder = () => {
     const selectedByCategory = Object.fromEntries(
         build.components.map(c => [c.component_type, c])
     );
+
+    const isKnownOrMarked = type => !!selectedByCategory[type] || unknown.includes(type);
 
     const allCategories = [...required, ...optional];
 
@@ -71,7 +75,7 @@ const BikeStageBuilder = () => {
 
     const partLocked = part => {
         const dep = (activeMode.prerequisites || {})[part];
-        return !!dep && !selectedByCategory[dep];
+        return !!dep && !isKnownOrMarked(dep);
     };
 
     const [groupPart, setGroupPart] = useState(null);
@@ -145,8 +149,9 @@ const BikeStageBuilder = () => {
     const modeOf = category => groups[category].modes[groupModes[category]];
 
     const isFilled = category => {
-        if (!groups[category]) return !!selectedByCategory[category];
-        return (modeOf(category).required || []).every(t => selectedByCategory[t]);
+        if (skipped.includes(category)) return true;
+        if (!groups[category]) return isKnownOrMarked(category);
+        return (modeOf(category).required || []).every(isKnownOrMarked);
     };
 
     const isLocked = category => {
@@ -161,6 +166,8 @@ const BikeStageBuilder = () => {
         key: category,
         label: categoryLabel(category),
         filled: isFilled(category),
+        skipped: skipped.includes(category),
+        unknown: unknown.includes(category),
         locked: isLocked(category),
     }));
 
@@ -172,6 +179,34 @@ const BikeStageBuilder = () => {
         .slice(0, orderedCats.indexOf(activeCategory))
         .reverse()
         .find(c => !isLocked(c));
+
+    const canSkip = optional.includes(activeCategory) && !groups[activeCategory];
+    const isSkipped = skipped.includes(activeCategory);
+
+    const canMarkUnknown = !isCustom && !!selectingCategory && selectingCategory !== "frame";
+    const isUnknown = unknown.includes(selectingCategory);
+    const otherUnknown = unknown.filter(t => t !== selectingCategory);
+
+    const goToNextCategory = () => {
+        const next = orderedCats
+            .slice(orderedCats.indexOf(activeCategory) + 1)
+            .find(c => prerequisites[c] === activeCategory || !isLocked(c));
+        if (next) setFocusedCategory(next);
+    };
+
+    const handleSkip = () => {
+        markCategory(activeCategory, "skipped");
+        goToNextCategory();
+    };
+
+    const handleUnknown = () => {
+        markCategory(selectingCategory, "unknown");
+        if (activeGroup) {
+            setGroupPart(nextPart());
+            return;
+        }
+        goToNextCategory();
+    };
 
     const totalPrice = sumPrice(build.components);
     const totalWeight = sumWeight(build.components);
@@ -283,7 +318,7 @@ const BikeStageBuilder = () => {
                                                 >
                                                     <span className="bs-part-tab-name">{titleCase(part)}</span>
                                                     <span className="bs-part-tab-val">
-                                                        {sel ? sel.name : locked ? `Select ${titleCase(activeMode.prerequisites[part])} first` : 'Not selected'}
+                                                        {sel ? sel.name : unknown.includes(part) ? 'Unknown' : locked ? `Select ${titleCase(activeMode.prerequisites[part])} first` : 'Not selected'}
                                                     </span>
                                                 </button>
                                             );
@@ -324,15 +359,36 @@ const BikeStageBuilder = () => {
                                             </span>
                                         )}
                                     </div>
+                                    {otherUnknown.length > 0 && (
+                                        <p className="bs-select-warning">
+                                            {otherUnknown.map(t => `${titleCase(t)} unknown`).join(", ")}: check fit yourself
+                                        </p>
+                                    )}
                                 </div>
                                 {loading ? (
                                     <div className="bs-product-grid">
                                         {Array.from({ length: 4 }).map((_, i) => <ComponentCardSkeleton key={i} />)}
                                     </div>
-                                ) : components.length === 0 ? (
+                                ) : components.length === 0 && !canSkip && !canMarkUnknown ? (
                                     <p className="empty-state">No {titleCase(selectingCategory).toLowerCase()} components found.</p>
                                 ) : (
                                     <div className="bs-product-grid">
+                                        {canSkip && (
+                                            <PlaceholderCard
+                                                category={activeCategory}
+                                                kind="skipped"
+                                                isSelected={isSkipped}
+                                                onClick={handleSkip}
+                                            />
+                                        )}
+                                        {canMarkUnknown && (
+                                            <PlaceholderCard
+                                                category={selectingCategory}
+                                                kind="unknown"
+                                                isSelected={isUnknown}
+                                                onClick={handleUnknown}
+                                            />
+                                        )}
                                         {components.map(comp => (
                                             <ComponentCard
                                                 key={comp.id}

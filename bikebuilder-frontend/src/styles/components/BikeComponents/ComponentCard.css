@@ -35,6 +35,22 @@
         }
     }
 
+    .product-skip-icon {
+        @apply relative w-1/3;
+        color: var(--text-muted);
+        aspect-ratio: 1;
+
+        svg { @apply absolute inset-0 w-full h-full; }
+    }
+
+    .product-skip-cross {
+        @apply text-danger;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 4;
+        stroke-linecap: round;
+    }
+
     .product-badge-blocked {
         @apply absolute top-2.5 left-2.5 px-[9px] py-1
                bg-danger text-on-accent rounded-sm

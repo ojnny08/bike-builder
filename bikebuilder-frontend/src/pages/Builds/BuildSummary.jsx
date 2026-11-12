@@ -55,7 +55,8 @@ const BuildSummary = () => {
     const selectedByCategory = Object.fromEntries(
         build.components.map(c => [c.component_type, c])
     );
-    const requiredFilled = required.filter(t => selectedByCategory[t]).length;
+    const unknown = build.unknown ?? [];
+    const requiredFilled = required.filter(t => selectedByCategory[t] || unknown.includes(t)).length;
     const allRequiredFilled = required.length > 0 && requiredFilled === required.length;
 
     const totalPrice = sumPrice(build.components);
@@ -85,6 +86,8 @@ const BuildSummary = () => {
             description: description.trim(),
             bikeType: build.bikeType.id,
             components: build.components.map(c => c.id),
+            skipped: build.skipped ?? [],
+            unknown,
             status: allRequiredFilled ? "complete" : "in_progress",
         };
         try {
@@ -118,7 +121,7 @@ const BuildSummary = () => {
                             </span>
                         </div>
                         <ul className="sm-recap-list">
-                            {build.components.length === 0 && (
+                            {build.components.length === 0 && !build.skipped?.length && !unknown.length && (
                                 <li className="sm-recap-empty">No components added yet.</li>
                             )}
                             {build.components.map(c => (
@@ -129,6 +132,26 @@ const BuildSummary = () => {
                                         <span className="sm-recap-name">{c.name}<span className="bb-row-brand"> · {c.brand}</span></span>
                                     </div>
                                     <span className="sm-recap-price">{c.price ? money(c.price) : '—'}</span>
+                                </li>
+                            ))}
+                            {unknown.map(type => (
+                                <li key={type} className="sm-recap-row is-skipped">
+                                    <Thumb />
+                                    <div className="sm-recap-info">
+                                        <span className="sm-recap-cat">{titleCase(type)}</span>
+                                        <span className="sm-recap-name">Unknown {titleCase(type).toLowerCase()}</span>
+                                    </div>
+                                    <span className="sm-recap-price">—</span>
+                                </li>
+                            ))}
+                            {(build.skipped ?? []).map(type => (
+                                <li key={type} className="sm-recap-row is-skipped">
+                                    <Thumb />
+                                    <div className="sm-recap-info">
+                                        <span className="sm-recap-cat">{titleCase(type)}</span>
+                                        <span className="sm-recap-name">No {titleCase(type).toLowerCase()}</span>
+                                    </div>
+                                    <span className="sm-recap-price">—</span>
                                 </li>
                             ))}
                         </ul>

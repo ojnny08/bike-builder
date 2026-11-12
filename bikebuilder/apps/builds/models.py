@@ -24,6 +24,8 @@ class Build(models.Model):
     image_url = models.URLField(blank=True)
     share_token = models.CharField(max_length=12, unique=True, db_index=True, default=generate_share_token, editable=False)
     idempotency_key = models.CharField(max_length=64, null=True, blank=True, editable=False)
+    skipped = models.JSONField(default=list, blank=True)
+    unknown = models.JSONField(default=list, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

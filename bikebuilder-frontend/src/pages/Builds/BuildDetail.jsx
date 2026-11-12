@@ -66,6 +66,20 @@ const BuildDetail = () => {
                                 </span>
                             </li>
                         ))}
+                        {(build.unknown ?? []).map(type => (
+                            <li key={type} className="build-view-component is-skipped">
+                                <span className="build-view-part-cat">{titleCase(type)}</span>
+                                <span className="build-view-part-name">Unknown {titleCase(type).toLowerCase()}</span>
+                                <span className="build-view-part-price">—</span>
+                            </li>
+                        ))}
+                        {(build.skipped ?? []).map(type => (
+                            <li key={type} className="build-view-component is-skipped">
+                                <span className="build-view-part-cat">{titleCase(type)}</span>
+                                <span className="build-view-part-name">No {titleCase(type).toLowerCase()}</span>
+                                <span className="build-view-part-price">—</span>
+                            </li>
+                        ))}
                     </ul>
                     <div className="build-view-total">
                         <span>Total</span>

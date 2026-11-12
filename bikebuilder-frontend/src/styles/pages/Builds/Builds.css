@@ -150,6 +150,14 @@
     color: var(--on-accent);
 }
 
+.bs-step.is-skipped .bs-step-icon {
+    opacity: 0.45;
+}
+
+.bs-step.is-unknown .bs-step-icon {
+    opacity: 0.7;
+}
+
 .bs-step.is-locked {
     opacity: 0.4;
     cursor: not-allowed;
@@ -250,6 +258,17 @@
     font-size: 0.8rem;
     font-weight: 400;
     color: var(--text-muted);
+}
+
+.bs-select-head:has(.bs-select-warning) {
+    flex-wrap: wrap;
+}
+
+.bs-select-warning {
+    flex-basis: 100%;
+    margin: 4px 0 0;
+    font-size: 0.8rem;
+    color: var(--color-danger);
 }
 
 .bs-panel-next-bar {
@@ -567,3 +586,7 @@
     .sm-main { padding: 24px 24px 56px; }
 }
 
+
+.sm-recap-row.is-skipped .sm-recap-name {
+    color: var(--text-muted);
+}

@@ -9,6 +9,8 @@ const EMPTY_BUILD = {
     bikeType: null,
     steps: null,
     components: [],
+    skipped: [],
+    unknown: [],
     status: null
 };
 export const BuildProvider = ({ children }) => {
@@ -27,11 +29,27 @@ export const BuildProvider = ({ children }) => {
                 ...prev.components.filter((c) => c.component_type !== component.component_type),
                 component,
             ],
+            skipped: (prev.skipped ?? []).filter((t) => t !== component.component_type),
+            unknown: (prev.unknown ?? []).filter((t) => t !== component.component_type),
         }));
     };
 
+    const markCategory = (type, kind) => {
+        setBuild((prev) => {
+            const skipped = (prev.skipped ?? []).filter((t) => t !== type);
+            const unknown = (prev.unknown ?? []).filter((t) => t !== type);
+            const lists = { skipped, unknown };
+            return {
+                ...prev,
+                components: prev.components.filter((c) => c.component_type !== type),
+                ...lists,
+                [kind]: [...lists[kind], type],
+            };
+        });
+    };
+
     return (
-        <BuildContext.Provider value={{ build, emptyBuild, updateBuild, addComponent, editBuild }}>
+        <BuildContext.Provider value={{ build, emptyBuild, updateBuild, addComponent, markCategory, editBuild }}>
             {children}
         </BuildContext.Provider>
     );
