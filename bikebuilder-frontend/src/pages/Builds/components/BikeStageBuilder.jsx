@@ -9,6 +9,7 @@ import ComponentCard, { ComponentCardSkeleton } from "../../../components/BikeCo
 import { useComponentFilters } from "../../../hooks/useComponentFilters";
 import { titleCase, money, sumPrice, sumWeight } from "../../../utils/format";
 import { fetchComponentsByCategory, fetchCompatibleComponents, createCustomWheel } from "../../../services/componentService";
+import ComponentDetailModal from "../../../components/BikeComponents/ComponentDetailModal";
 
 const ASSEMBLY_ORDER = [
     "frame", "bottom_bracket", "crank", "crankset", "wheels", "front_wheel", "rear_wheel", "wheelset",
@@ -40,6 +41,7 @@ const GroupModes = ({ group, mode, locked, prereq, onChooseMode }) => {
 
 const BikeStageBuilder = () => {
     const { build, emptyBuild, addComponent } = useBuild();
+    const [componentDetailID, setComponentDetailID] = useState(null);
     const navigate = useNavigate();
     const [focusedCategory, setFocusedCategory] = useState(null);
     const { required = [], optional = [], prerequisites = {}, groups = {} } = build.bikeType.rules;
@@ -107,8 +109,7 @@ const BikeStageBuilder = () => {
 
     const handleSelect = async comp => {
         if (!isCustom) {
-            addComponent(comp);
-            if (activeGroup) setGroupPart(nextPart());
+            setComponentDetailID(comp.id);
             return;
         }
         if (!customHub) {
@@ -122,6 +123,11 @@ const BikeStageBuilder = () => {
         } catch (e) {
             console.error(e);
         }
+    };
+
+    const handleAdded = () => {
+        setComponentDetailID(null);
+        if (activeGroup) setGroupPart(nextPart());
     };
 
     const filters = useComponentFilters({ fixedType: selectingCategory || "" });
@@ -365,6 +371,15 @@ const BikeStageBuilder = () => {
                     )}
                 </div>
             </div>
+
+            {componentDetailID && (
+                <ComponentDetailModal
+                    id={componentDetailID}
+                    inBuildFlow
+                    onAdded={handleAdded}
+                    onClose={() => setComponentDetailID(null)}
+                />
+            )}
         </div>
     );
 };
